@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "542106607758",
+    "firebase_url": "https://share-recipes-20fcc-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "share-recipes-20fcc",
+    "storage_bucket": "share-recipes-20fcc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542106607758:android:a03cc209e97806eb9829df",
+        "android_client_info": {
+          "package_name": "doan.npnm.sharerecipe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg9MxDwV-ygUzyTzGnPrUcP-yA1ofgRPg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

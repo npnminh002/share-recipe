@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="my_gradient_colors">
+        <item>@color/lightgray</item>
+        <item>@color/lightgray</item>
+    </string-array>
+</resources>

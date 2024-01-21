@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomLinearLayout">
+        <attr name="cornerRadius" format="dimension"/>
+        <attr name="strokeWidth" format="dimension"/>
+        <attr name="strokeColor" format="color"/>
+        <attr name="gradientColors" format="reference"/>
+        <attr name="backgroundColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="CheckBoxImageView">
+        <attr name="default_img" format="integer"/>
+        <attr name="checked_img" format="integer"/>
+        <attr name="checked" format="boolean"/>
+    </declare-styleable>
+</resources>
