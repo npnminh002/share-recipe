@@ -6,8 +6,9 @@ import android.graphics.Path
 import android.graphics.Point
 import android.graphics.PointF
 import android.graphics.RectF
+import android.util.TypedValue
 import android.view.MotionEvent
-
+import doan.npnm.sharerecipe.lib.context.AppContext
 
 
 import kotlin.math.roundToInt
@@ -21,6 +22,19 @@ fun getFirstValueDecimal(number: Double): Double {
     return (number * 10.0).toInt() / 10.0
 }
 
+
+fun Int.toPx(): Float = TypedValue.applyDimension(
+    TypedValue.COMPLEX_UNIT_DIP,
+    this.toFloat(),
+    AppContext.getContext().resources.displayMetrics
+)
+
+
+fun Float.toPx(): Float = TypedValue.applyDimension(
+    TypedValue.COMPLEX_UNIT_DIP,
+    this,
+    AppContext.getContext().resources.displayMetrics
+)
 
 fun Canvas.drawTriangle(
     borderPaint: Paint,

@@ -1,4 +1,4 @@
-package dong.project.chart.base
+package doan.npnm.sharerecipe.lib.widget
 
 import android.R.attr.maxHeight
 import android.R.attr.maxWidth
@@ -10,7 +10,7 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.core.view.setPadding
-import dong.project.chart.R
+import doan.npnm.sharerecipe.R
 
 abstract class BaseChart @JvmOverloads constructor(
     context: Context,
