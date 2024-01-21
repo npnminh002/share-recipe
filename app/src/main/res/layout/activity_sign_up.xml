@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+
+    android:padding="@dimen/_12sdp"
+    tools:context=".activity.start.SignUpActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_main_app" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_12sdp"
+            android:fontFamily="@font/worksans_bold"
+            android:text="Wellcome "
+            android:textAlignment="center"
+            android:textColor="@color/appcolor"
+            android:textSize="@dimen/_24sdp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_3sdp"
+            android:background="@drawable/bg_input_start"
+            android:padding="@dimen/_4sdp">
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/worksans_medium"
+                android:hint="Name"
+                android:textColor="@color/black"
+                android:textColorHint="@color/darkgray" />
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_3sdp"
+            android:background="@drawable/bg_input_start"
+            android:padding="@dimen/_4sdp">
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/worksans_medium"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:textColorHint="@color/darkgray" />
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_3sdp"
+            android:background="@drawable/bg_input_start"
+            android:padding="@dimen/_4sdp">
+
+            <EditText
+                android:id="@+id/passs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/worksans_medium"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:textColorHint="@color/darkgray" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/signUpApp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_12sdp"
+            android:layout_marginHorizontal="@dimen/_24sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:background="@drawable/bg_input_start"
+            android:backgroundTint="#EFEDED"
+            android:fontFamily="@font/worksans_bold"
+            android:gravity="center"
+            android:padding="@dimen/_12sdp"
+            android:text="Sign Up"
+            android:textColor="#03A9F4" />
+
+
+        <TextView
+            android:id="@+id/signIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/worksans_medium"
+            android:text="Don't have account Sign In"
+            android:textAlignment="center"
+            android:textColor="@color/darkgray" />
+    </LinearLayout>
+</ScrollView>

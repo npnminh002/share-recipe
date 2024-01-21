@@ -1,4 +1,4 @@
-package doan.npnm.sharerecipe.lib.context;
+package doan.npnm.sharerecipe.app.context;
 
 import android.app.Application;
 import android.content.Context;

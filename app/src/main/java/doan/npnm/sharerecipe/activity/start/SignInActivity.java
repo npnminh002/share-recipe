@@ -1,0 +1,57 @@
+package doan.npnm.sharerecipe.activity.start;
+
+import android.content.Intent;
+import android.text.TextUtils;
+import android.view.View;
+
+import doan.npnm.sharerecipe.activity.MainActivity;
+import doan.npnm.sharerecipe.base.BaseActivity;
+import doan.npnm.sharerecipe.databinding.ActivitySignInBinding;
+
+public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
+
+    @Override
+    protected ActivitySignInBinding getViewBinding() {
+        return ActivitySignInBinding.inflate(getLayoutInflater());
+    }
+
+    @Override
+    protected void createView() {
+        appViewModel.getUsers().observe(this,users -> {
+            startActivity(new Intent(SignInActivity.this, MainActivity.class));
+            finish();
+        });
+
+        binding.signIn.setOnClickListener(v -> {
+            startActivity(new Intent(SignInActivity.this,SignUpActivity.class));
+            finish();
+        });
+        binding.signInApp.setOnClickListener(v -> {
+
+            String email = binding.email.getText().toString();
+            String pass = binding.passs.getText().toString();
+
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pass)) {
+                showToast("Please input all values");
+            } else {
+                signIn(email, pass);
+            }
+        });
+    }
+
+
+    private void signIn(String email, String pass) {
+        auth.signInWithEmailAndPassword(email, pass)
+                .addOnSuccessListener(authResult -> {
+                    appViewModel.getDataFromUser(authResult.getUser().getUid());
+
+                    showToast("Sign-in successful");
+                })
+                .addOnFailureListener(e -> {
+                    // If sign in fails, display a message to the user.
+                    showToast("Authentication failed: " + e.getMessage());
+                });
+
+
+    }
+}

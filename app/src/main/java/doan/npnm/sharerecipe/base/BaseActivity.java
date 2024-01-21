@@ -12,7 +12,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewbinding.ViewBinding;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -20,14 +26,19 @@ import java.util.Date;
 import java.util.Locale;
 
 import doan.npnm.sharerecipe.R;
+import doan.npnm.sharerecipe.app.AppViewModel;
 
 public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActivity {
 
-
-    private static final String TAG = BaseActivity.class.getName();
+    public FirebaseAuth auth = FirebaseAuth.getInstance();
+    public FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    public FirebaseStorage storage = FirebaseStorage.getInstance();
+    public StorageReference storageReference = storage.getReference();
+    public AppViewModel appViewModel;
+    public static final String TAG = BaseActivity.class.getName();
     protected V binding;
-    private boolean onFullscreen = false;
-    private View decorView;
+    public boolean onFullscreen = false;
+    public View decorView;
 
 
     @Override
@@ -36,7 +47,7 @@ public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActiv
         binding = getViewBinding();
 
         setContentView(binding.getRoot());
-
+        appViewModel= new ViewModelProvider(this).get(AppViewModel.class);
         decorView = getWindow().getDecorView();
         createView();
 

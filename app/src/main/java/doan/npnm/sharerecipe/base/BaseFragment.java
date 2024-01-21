@@ -1,14 +1,10 @@
 package doan.npnm.sharerecipe.base;
 
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -17,20 +13,26 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewbinding.ViewBinding;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.lib.shared_preference.SharedPreference;
 
 public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
 
+    public FirebaseAuth auth = FirebaseAuth.getInstance();
+    public FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    public FirebaseStorage storage = FirebaseStorage.getInstance();
+    public StorageReference storageReference = storage.getReference();
     protected T binding;
-
-    private OnBackPressedCallback callback;
+    public OnBackPressedCallback callback;
     public SharedPreference preference = new SharedPreference();
 
     public void handlerBackPressed() {
@@ -69,7 +71,6 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = getBinding(inflater, container);
-
         return binding.getRoot();
     }
 
@@ -96,6 +97,7 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
         }
         ((BaseActivity<?>) requireActivity()).replaceFragment(fragment, viewId, addToBackStack);
     }
+
     public String getTimeNow() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
         return sdf.format(new Date());

@@ -7,8 +7,7 @@ import android.graphics.Point
 import android.graphics.PointF
 import android.graphics.RectF
 import android.util.TypedValue
-import android.view.MotionEvent
-import doan.npnm.sharerecipe.lib.context.AppContext
+import doan.npnm.sharerecipe.app.context.AppContext
 
 
 import kotlin.math.roundToInt
