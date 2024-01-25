@@ -19,8 +19,6 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import com.google.firebase.storage.StorageReference;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,7 +29,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import doan.npnm.sharerecipe.lib.context.AppContext;
+import doan.npnm.sharerecipe.app.context.AppContext;
 
 public class BitmapUtils {
 

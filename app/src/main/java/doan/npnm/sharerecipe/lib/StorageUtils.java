@@ -6,7 +6,7 @@ import android.webkit.MimeTypeMap;
 
 import com.google.firebase.storage.StorageReference;
 
-import doan.npnm.sharerecipe.lib.context.AppContext;
+import doan.npnm.sharerecipe.app.context.AppContext;
 
 public class StorageUtils {
 
