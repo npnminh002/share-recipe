@@ -1,4 +1,4 @@
-package doan.npnm.sharerecipe.activity;
+package doan.npnm.sharerecipe.activity.user;
 
 
 import androidx.annotation.NonNull;
@@ -13,6 +13,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     protected ActivityMainBinding getViewBinding() {
         return ActivityMainBinding.inflate(getLayoutInflater());
     }
+
+    int count = 0;
 
     @Override
     protected void createView() {

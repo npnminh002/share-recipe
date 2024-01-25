@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="BaseChart"></declare-styleable>
+    <declare-styleable name="BaseChart">
+        <attr name="chartBackground" format="color" />
+        <attr name="radius" format="dimension" />
+        <attr name="borderColor" format="color" />
+        <attr name="borderWidth" format="dimension" />
+
+    </declare-styleable>
+    <declare-styleable name="ProgressCustom">
+        <attr name="progressBackground" format="color" />
+        <attr name="progressTint" format="color" />
+        <attr name="maxValue" format="float" />
+        <attr name="minValue" format="float" />
+        <attr name="currentValue" format="float" />
+        <attr name="autoAnimate" format="boolean"/>
+        <attr name="gradientStart" format="color" />
+        <attr name="gradientEnd" format="color" />
+        <attr name="gradient" format="boolean" />
+        <attr name="timeAnim" format="integer" />
+    </declare-styleable>
 </resources>

@@ -3,7 +3,7 @@ package doan.npnm.sharerecipe.lib.shared_preference;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import doan.npnm.sharerecipe.lib.context.AppContext;
+import doan.npnm.sharerecipe.app.context.AppContext;
 
 public class SharedPreference {
     private SharedPreferences sharedPreferences;
