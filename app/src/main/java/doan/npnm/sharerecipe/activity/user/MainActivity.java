@@ -14,10 +14,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         return ActivityMainBinding.inflate(getLayoutInflater());
     }
 
-    int count = 0;
-
     @Override
     protected void createView() {
 
+//       binding.bottomNavigationViewLinear.setNavigationChangeListener(new BubbleNavigationChangeListener() {
+//            @Override
+//            public void onNavigationChanged(View view, int position) {
+//                //navigation changed, do something
+//            }
+//        });
     }
 }

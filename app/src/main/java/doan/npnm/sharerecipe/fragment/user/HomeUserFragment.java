@@ -1,38 +1,27 @@
-package doan.npnm.sharerecipe.fragment.admin;
-
-import androidx.lifecycle.ViewModelProvider;
-
-import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+package doan.npnm.sharerecipe.fragment.user;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.UsersAdapter;
 import doan.npnm.sharerecipe.app.AppViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.databinding.FragmentHomeBinding;
+import doan.npnm.sharerecipe.databinding.FragmentHomeUserBinding;
 import doan.npnm.sharerecipe.model.Users;
 
-public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
+public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
 
     public AppViewModel homeviewModel;
 
-    public HomeFragment(AppViewModel appViewModel) {
+    public HomeUserFragment(AppViewModel appViewModel) {
         this.homeviewModel=appViewModel;
     }
 
     @Override
-    protected FragmentHomeBinding getBinding(LayoutInflater inflater, ViewGroup container) {
-        return FragmentHomeBinding.inflate(getLayoutInflater());
+    protected FragmentHomeUserBinding getBinding(LayoutInflater inflater, ViewGroup container) {
+        return FragmentHomeUserBinding.inflate(getLayoutInflater());
     }
 
     @Override
