@@ -5,21 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-
-    android:padding="@dimen/_12sdp"
-    tools:context=".activity.start.SignUpActivity">
+    android:padding="@dimen/_12sdp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:layout_marginHorizontal="@dimen/_16sdp"
-            android:scaleType="centerCrop"
+            android:layout_marginHorizontal="@dimen/_40sdp"
+            android:maxHeight="@dimen/_60sdp"
+            android:scaleType="centerInside"
             android:src="@drawable/img_main_app" />
 
         <TextView
@@ -32,61 +30,50 @@
             android:textColor="@color/appcolor"
             android:textSize="@dimen/_24sdp" />
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_3sdp"
             android:background="@drawable/bg_input_start"
-            android:padding="@dimen/_4sdp">
+            android:fontFamily="@font/worksans_medium"
+            android:hint="Name"
+            android:inputType="textAutoComplete"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/darkgray"
+            android:textSize="@dimen/_14sdp" />
 
-            <EditText
-                android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/worksans_medium"
-                android:hint="Name"
-                android:textColor="@color/black"
-                android:textColorHint="@color/darkgray" />
-        </LinearLayout>
-
-        <LinearLayout
-
+        <EditText
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_3sdp"
             android:background="@drawable/bg_input_start"
-            android:padding="@dimen/_4sdp">
+            android:fontFamily="@font/worksans_medium"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/darkgray"
+            android:textSize="@dimen/_14sdp" />
 
-            <EditText
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/worksans_medium"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/black"
-                android:textColorHint="@color/darkgray" />
-        </LinearLayout>
-
-        <LinearLayout
-
+        <EditText
+            android:id="@+id/passs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_3sdp"
             android:background="@drawable/bg_input_start"
-            android:padding="@dimen/_4sdp">
-
-            <EditText
-                android:id="@+id/passs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/worksans_medium"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:textColor="@color/black"
-                android:textColorHint="@color/darkgray" />
-        </LinearLayout>
-
+            android:fontFamily="@font/worksans_medium"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/darkgray"
+            android:textSize="@dimen/_14sdp" />
 
         <TextView
             android:id="@+id/signUpApp"
@@ -96,13 +83,12 @@
             android:layout_marginHorizontal="@dimen/_24sdp"
             android:layout_marginTop="@dimen/_12sdp"
             android:background="@drawable/bg_input_start"
-            android:backgroundTint="#EFEDED"
+            android:backgroundTint="#D1D1D1"
             android:fontFamily="@font/worksans_bold"
             android:gravity="center"
             android:padding="@dimen/_12sdp"
             android:text="Sign Up"
-            android:textColor="#03A9F4" />
-
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/signIn"

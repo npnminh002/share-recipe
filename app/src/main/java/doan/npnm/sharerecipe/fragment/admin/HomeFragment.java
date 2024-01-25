@@ -1,4 +1,4 @@
-package doan.npnm.sharerecipe.fragment;
+package doan.npnm.sharerecipe.fragment.admin;
 
 import androidx.lifecycle.ViewModelProvider;
 

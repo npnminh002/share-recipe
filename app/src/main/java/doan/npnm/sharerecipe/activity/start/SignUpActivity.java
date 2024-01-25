@@ -1,17 +1,11 @@
 package doan.npnm.sharerecipe.activity.start;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
-
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 
 import java.util.Date;
 
-import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.activity.MainActivity;
+import doan.npnm.sharerecipe.activity.user.MainActivity;
 import doan.npnm.sharerecipe.base.BaseActivity;
 import doan.npnm.sharerecipe.databinding.ActivitySignUpBinding;
 import doan.npnm.sharerecipe.model.Users;
@@ -71,7 +65,7 @@ public class SignUpActivity extends BaseActivity<ActivitySignUpBinding> {
                             .addOnSuccessListener(getTokenResult -> {
                                 String idToken = getTokenResult.getToken();
                                 Users user = new Users(authResult.getUser().getUid(), name,
-                                        email, pass, idToken, "", new Date().toString());
+                                        email, pass, idToken, "", new Date().toString(),0);
                                 firestore.collection(Constant.KEY_USER)
                                         .document(user.UserID)
                                         .set(user)

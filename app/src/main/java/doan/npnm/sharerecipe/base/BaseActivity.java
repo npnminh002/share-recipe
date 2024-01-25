@@ -27,6 +27,7 @@ import java.util.Locale;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.lib.shared_preference.SharedPreference;
 
 public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActivity {
 
@@ -40,12 +41,13 @@ public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActiv
     public boolean onFullscreen = false;
     public View decorView;
 
+    public SharedPreference sharedPreference= new SharedPreference();
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = getViewBinding();
-
         setContentView(binding.getRoot());
         appViewModel= new ViewModelProvider(this).get(AppViewModel.class);
         decorView = getWindow().getDecorView();

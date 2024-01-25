@@ -2,9 +2,8 @@ package doan.npnm.sharerecipe.activity.start;
 
 import android.content.Intent;
 import android.text.TextUtils;
-import android.view.View;
 
-import doan.npnm.sharerecipe.activity.MainActivity;
+import doan.npnm.sharerecipe.activity.user.MainActivity;
 import doan.npnm.sharerecipe.base.BaseActivity;
 import doan.npnm.sharerecipe.databinding.ActivitySignInBinding;
 
