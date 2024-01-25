@@ -14,7 +14,6 @@ import doan.npnm.sharerecipe.model.Users;
 public class HomeAdminFragment extends BaseFragment<FragmentHomeUserBinding> {
 
     public AppViewModel homeviewModel;
-
     public HomeAdminFragment(AppViewModel appViewModel) {
         this.homeviewModel=appViewModel;
     }
