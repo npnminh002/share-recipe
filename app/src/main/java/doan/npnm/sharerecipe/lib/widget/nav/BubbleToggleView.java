@@ -1,6 +1,6 @@
 
 
-package com.gauravk.bubblenavigation;
+package doan.npnm.sharerecipe.lib.widget.nav;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -22,7 +22,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 
-import com.gauravk.bubblenavigation.util.ViewUtils;
+import doan.npnm.sharerecipe.lib.widget.nav.util.ViewUtils;
 
 import org.jetbrains.annotations.Nullable;
 

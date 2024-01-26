@@ -1,5 +1,5 @@
 
-package com.gauravk.bubblenavigation.util;
+package doan.npnm.sharerecipe.lib.widget.nav.util;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
