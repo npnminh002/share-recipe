@@ -11,39 +11,35 @@
         See the License for the specific language governing permissions and
         limitations under the License.
 */
-package com.gauravk.bubblenavigation;
+package doan.npnm.sharerecipe.lib.widget.nav;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 
-import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
+import doan.npnm.sharerecipe.lib.widget.nav.listener.BubbleNavigationChangeListener;
 
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-import doan.npnm.sharerecipe.R;
-
+/**
+ * BubbleNavigationLinearView
+ *
+ * @author Gaurav Kumar
+ */
 
 @SuppressWarnings("unused")
-public class BubbleNavigationConstraintView extends ConstraintLayout implements View.OnClickListener, IBubbleNavigation {
-
-    enum DisplayMode {
-        SPREAD,
-        INSIDE,
-        PACKED
-    }
+public class BubbleNavigationLinearView extends LinearLayout implements View.OnClickListener, IBubbleNavigation {
 
     //constants
     private static final String TAG = "BNLView";
@@ -56,9 +52,6 @@ public class BubbleNavigationConstraintView extends ConstraintLayout implements 
     private int currentActiveItemPosition = 0;
     private boolean loadPreviousState;
 
-    //default display mode
-    private DisplayMode displayMode = DisplayMode.SPREAD;
-
     private Typeface currentTypeface;
 
     private SparseArray<String> pendingBadgeUpdate;
@@ -66,17 +59,17 @@ public class BubbleNavigationConstraintView extends ConstraintLayout implements 
     /**
      * Constructors
      */
-    public BubbleNavigationConstraintView(@NonNull Context context) {
+    public BubbleNavigationLinearView(@NonNull Context context) {
         super(context);
         init(context, null);
     }
 
-    public BubbleNavigationConstraintView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BubbleNavigationLinearView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public BubbleNavigationConstraintView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public BubbleNavigationLinearView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
@@ -101,20 +94,20 @@ public class BubbleNavigationConstraintView extends ConstraintLayout implements 
         super.onRestoreInstanceState(state);
     }
 
-    private void init(Context context, AttributeSet attrs) {
-        int mode = 0;
-        if (attrs != null) {
-            TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BubbleNavigationConstraintView, 0, 0);
-            try {
-                mode = ta.getInteger(R.styleable.BubbleNavigationConstraintView_bnc_mode, mode);
-            } finally {
-                ta.recycle();
-            }
-        }
+    /////////////////////////////////////////
+    // PRIVATE METHODS
+    /////////////////////////////////////////
 
-        //sets appropriate display node
-        if (mode >= 0 && mode < DisplayMode.values().length)
-            displayMode = DisplayMode.values()[mode];
+    /**
+     * Initialize
+     *
+     * @param context current context
+     * @param attrs   custom attributes
+     */
+    private void init(Context context, AttributeSet attrs) {
+
+        setOrientation(HORIZONTAL);
+        setGravity(Gravity.CENTER);
 
         post(new Runnable() {
             @Override
@@ -122,25 +115,6 @@ public class BubbleNavigationConstraintView extends ConstraintLayout implements 
                 updateChildNavItems();
             }
         });
-    }
-
-    /**
-     * Get the chain type from the display mode
-     *
-     * @param mode display mode
-     * @return the constraint chain mode
-     */
-    private int getChainTypeFromMode(DisplayMode mode) {
-        switch (mode) {
-            case SPREAD:
-                return ConstraintSet.CHAIN_SPREAD;
-            case INSIDE:
-                return ConstraintSet.CHAIN_SPREAD_INSIDE;
-            case PACKED:
-                return ConstraintSet.CHAIN_PACKED;
-        }
-
-        return ConstraintSet.CHAIN_SPREAD;
     }
 
     /**
@@ -167,8 +141,8 @@ public class BubbleNavigationConstraintView extends ConstraintLayout implements 
         setClickListenerForItems();
         setInitialActiveState();
         updateMeasurementForItems();
-        createChains();
 
+        //update the typeface
         if (currentTypeface != null)
             setTypeface(currentTypeface);
 
@@ -178,35 +152,6 @@ public class BubbleNavigationConstraintView extends ConstraintLayout implements 
                 setBadgeValue(pendingBadgeUpdate.keyAt(i), pendingBadgeUpdate.valueAt(i));
             pendingBadgeUpdate.clear();
         }
-    }
-
-    /**
-     * Creates the chains to spread the {@link #bubbleNavItems} based on the {@link #displayMode}
-     */
-    private void createChains() {
-        ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(this);
-
-        int[] chainIdsList = new int[bubbleNavItems.size()];
-        float[] chainWeightList = new float[bubbleNavItems.size()];
-
-        for (int i = 0; i < bubbleNavItems.size(); i++) {
-            int id = bubbleNavItems.get(i).getId();
-            chainIdsList[i] = id;
-            chainWeightList[i] = 0.0f;
-            //set the top and bottom constraint for each items
-            constraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0);
-            constraintSet.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
-        }
-
-        //create an horizontal chain
-        constraintSet.createHorizontalChain(getId(), ConstraintSet.LEFT,
-                getId(), ConstraintSet.RIGHT,
-                chainIdsList, chainWeightList,
-                getChainTypeFromMode(displayMode));
-
-        //apply the constraint
-        constraintSet.applyTo(this);
     }
 
     /**
@@ -251,7 +196,7 @@ public class BubbleNavigationConstraintView extends ConstraintLayout implements 
     }
 
     /**
-     * Sets {@link OnClickListener} for the child views
+     * Sets {@link android.view.View.OnClickListener} for the child views
      */
     private void setClickListenerForItems() {
         for (BubbleToggleView btv : bubbleNavItems)
@@ -332,6 +277,12 @@ public class BubbleNavigationConstraintView extends ConstraintLayout implements 
         btv.performClick();
     }
 
+    /**
+     * Sets the badge value
+     *
+     * @param position current position change
+     * @param value    value to be set in the badge
+     */
     @Override
     public void setBadgeValue(int position, String value) {
         if (bubbleNavItems != null) {
@@ -358,6 +309,8 @@ public class BubbleNavigationConstraintView extends ConstraintLayout implements 
                 currentActiveToggleView.toggle();
             if (newActiveToggleView != null)
                 newActiveToggleView.toggle();
+
+            //changed the current active position
             currentActiveItemPosition = changedPosition;
 
             if (navigationChangeListener != null)

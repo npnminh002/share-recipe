@@ -80,6 +80,10 @@ public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActiv
         Toast.makeText(this, mess, Toast.LENGTH_LONG).show();
     }
 
+    public void showToast(Object mess) {
+        Toast.makeText(this, mess.toString(), Toast.LENGTH_LONG).show();
+    }
+
     protected abstract V getViewBinding();
 
     protected abstract void createView();

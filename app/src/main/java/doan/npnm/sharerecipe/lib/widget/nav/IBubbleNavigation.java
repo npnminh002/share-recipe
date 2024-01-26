@@ -1,7 +1,7 @@
-package com.gauravk.bubblenavigation;
+package doan.npnm.sharerecipe.lib.widget.nav;
 
 import android.graphics.Typeface;
-import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
+import doan.npnm.sharerecipe.lib.widget.nav.listener.BubbleNavigationChangeListener;
 
 @SuppressWarnings("unused")
 public interface IBubbleNavigation {

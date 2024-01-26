@@ -1,5 +1,5 @@
 
-package com.gauravk.bubblenavigation;
+package doan.npnm.sharerecipe.lib.widget.nav;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
