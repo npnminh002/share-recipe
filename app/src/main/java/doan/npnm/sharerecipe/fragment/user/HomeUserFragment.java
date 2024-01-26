@@ -32,6 +32,6 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
 
         binding.rcvData.setAdapter(us);
 
-    //    us.setItems(listUser);
+       us.setItems(listUser);
     }
 }
