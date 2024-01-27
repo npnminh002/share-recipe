@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Share Recipe</string>
+    <string name="hello_blank_fragment">Xin chào fragment trống</string>
+    <string name="username">Tên người dùng</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="notifications">Thông báo</string>
+    <string name="edit_profile_information">Chỉnh sửa thông tin hồ sơ</string>
+    <string name="help_support"><![CDATA[Hỗ trợ & Hướng dẫn]]></string>
+    <string name="privacy_policy">Chính sách bảo mật</string>
+    <string name="save">Lưu</string>
+    <string name="update_info">Cập nhật thông tin</string>
+    <string name="profile">Thông tin</string>
+</resources>

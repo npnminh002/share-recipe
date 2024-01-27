@@ -19,6 +19,11 @@ public class HomeAdminFragment extends BaseFragment<FragmentHomeUserBinding> {
     }
 
     @Override
+    public void OnClick() {
+
+    }
+
+    @Override
     protected FragmentHomeUserBinding getBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentHomeUserBinding.inflate(getLayoutInflater());
     }

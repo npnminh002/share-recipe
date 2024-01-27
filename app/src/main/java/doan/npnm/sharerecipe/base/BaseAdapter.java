@@ -15,7 +15,7 @@ public abstract class BaseAdapter<T, VB extends ViewBinding> extends RecyclerVie
     private final ArrayList<T> listItem = new ArrayList<>();
     private VB binding;
 
-    private int currentPosition = RecyclerView.NO_POSITION;
+    public int currentPosition = RecyclerView.NO_POSITION;
 
     protected abstract VB createBinding(LayoutInflater inflater, ViewGroup parent, int viewType);
 

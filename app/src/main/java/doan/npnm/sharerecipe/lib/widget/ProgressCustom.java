@@ -70,10 +70,6 @@ public class ProgressCustom extends BaseChart {
         endColor = typedArray.getColor(R.styleable.ProgressCustom_gradientEnd, endColor);
 
         typedArray.recycle();
-
-        if (isAutoAnimation) {
-            startAutoAnimation();
-        }
     }
 
     public interface OnProgressListener {
@@ -98,17 +94,16 @@ public class ProgressCustom extends BaseChart {
         return this;
     }
 
-    private void startAutoAnimation() {
+    public void startAutoAnimation() {
         if (progressAnimator != null && progressAnimator.isRunning()) {
             progressAnimator.cancel();
         }
-
         progressAnimator = ValueAnimator.ofFloat(minVal, maxVal);
-        progressAnimator.setDuration(timeAnim * 1000);
+        progressAnimator.setDuration(timeAnim * 1000L);
         progressAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();
-            if (!isRestart) {
-                if (animatedValue == 100) {
+            if (isRestart==false) {
+                if (calculateProgressPercentage()>100f) {
                     progressAnimator.cancel();
                     progressListener.onEnd();
                 }
@@ -125,9 +120,10 @@ public class ProgressCustom extends BaseChart {
                 }
             }
         });
-
-        progressAnimator.setRepeatMode(ValueAnimator.RESTART);
-        progressAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        if(isRestart){
+            progressAnimator.setRepeatMode(ValueAnimator.RESTART);
+            progressAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        }
 
         progressAnimator.start();
     }

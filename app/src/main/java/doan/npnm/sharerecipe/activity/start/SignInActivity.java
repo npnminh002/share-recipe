@@ -10,6 +10,11 @@ import doan.npnm.sharerecipe.databinding.ActivitySignInBinding;
 public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
 
     @Override
+    public void OnClick() {
+
+    }
+
+    @Override
     protected ActivitySignInBinding getViewBinding() {
         return ActivitySignInBinding.inflate(getLayoutInflater());
     }

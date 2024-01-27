@@ -14,16 +14,7 @@ import doan.npnm.sharerecipe.utility.Constant;
 public class SignUpActivity extends BaseActivity<ActivitySignUpBinding> {
 
     @Override
-    protected ActivitySignUpBinding getViewBinding() {
-        return ActivitySignUpBinding.inflate(getLayoutInflater());
-    }
-
-    @Override
-    protected void createView() {
-        appViewModel.getUsers().observe(this,users -> {
-            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-            finish();
-        });
+    public void OnClick() {
         binding.signIn.setOnClickListener(v -> {
             startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
             finish();
@@ -39,6 +30,20 @@ public class SignUpActivity extends BaseActivity<ActivitySignUpBinding> {
                 signUpApp(email, name, pass);
             }
         });
+    }
+
+    @Override
+    protected ActivitySignUpBinding getViewBinding() {
+        return ActivitySignUpBinding.inflate(getLayoutInflater());
+    }
+
+    @Override
+    protected void createView() {
+        appViewModel.getUsers().observe(this,users -> {
+            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+            finish();
+        });
+
     }
     public void signUpApp(String email, String name, String pass) {
         firestore.collection(Constant.KEY_USER)
@@ -65,7 +70,7 @@ public class SignUpActivity extends BaseActivity<ActivitySignUpBinding> {
                             .addOnSuccessListener(getTokenResult -> {
                                 String idToken = getTokenResult.getToken();
                                 Users user = new Users(authResult.getUser().getUid(), name,
-                                        email, pass, idToken, "", new Date().toString(),0);
+                                        email, pass, idToken, "", new Date().toString(),"","","",0);
                                 firestore.collection(Constant.KEY_USER)
                                         .document(user.UserID)
                                         .set(user)

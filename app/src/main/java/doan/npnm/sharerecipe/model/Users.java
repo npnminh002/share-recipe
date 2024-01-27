@@ -3,23 +3,25 @@ package doan.npnm.sharerecipe.model;
 import java.io.Serializable;
 
 public class Users implements Serializable {
-    public String UserID,UserName,Email,Password,Token,UrlImg,TimeLog;
+    public String UserID,UserName,Email,Password,Token,UrlImg,TimeLog,Address,Gender,NickName;
     public int AccountType;
 
     public Users() {
     }
 
-    public Users(String userID, String userName, String email, String password, String token, String urlImg, String timeLog,int accountType) {
+    public Users(String userID, String userName, String email, String password, String token, String urlImg, String timeLog, String address, String gender, String nickName, int accountType) {
         UserID = userID;
         UserName = userName;
         Email = email;
         Password = password;
         Token = token;
         UrlImg = urlImg;
-        AccountType=accountType;
         TimeLog = timeLog;
+        Address = address;
+        Gender = gender;
+        NickName = nickName;
+        AccountType = accountType;
     }
-
 
     @Override
     public String toString() {
@@ -31,6 +33,10 @@ public class Users implements Serializable {
                 ", Token='" + Token + '\'' +
                 ", UrlImg='" + UrlImg + '\'' +
                 ", TimeLog='" + TimeLog + '\'' +
+                ", Address='" + Address + '\'' +
+                ", Gender='" + Gender + '\'' +
+                ", NickName='" + NickName + '\'' +
+                ", AccountType=" + AccountType +
                 '}';
     }
 }

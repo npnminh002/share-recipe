@@ -1,5 +1,37 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Share Recipe</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="username">UserName</string>
+    <string name="language">Language</string>
+    <string name="notifications">Notifications</string>
+    <string name="edit_profile_information">Edit profile information</string>
+    <string name="help_support"><![CDATA[Help & Support]]></string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="save">Save</string>
+    <string name="update_info">Update Info</string>
+    <string name="language_english" translatable="false" tools:ignore="DuplicateDefinition">English</string>
+    <string name="language_spain" translatable="false">Espalier</string>
+    <string name="language_portugal" translatable="false">Portuguese</string>
+    <string name="language_hindi" translatable="false">भारतीय भाषा</string>
+    <string name="language_germany" translatable="false">Deutsch</string>
+    <string name="language_brazil" translatable="false">Lingua Brasilia</string>
+    <string name="language_japan" translatable="false">日本</string>
+    <string name="language_korean" translatable="false">한국어</string>
+    <string name="language_france" translatable="false">Francais</string>
+    <string name="profile">Profile</string>
+    <string name="contact_us">Contact us</string>
+    <string name="full_name">Full name</string>
+    <string name="nickname">Nickname</string>
+    <string name="country">Country</string>
+    <string name="gender">Gender</string>
+    <string name="vi_t_nam">Việt Nam</string>
+    <string name="address">Address</string>
+    <string name="email">Email</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="gender_femail">Female</string>
+    <string name="undisclosed">Undisclosed</string>
+    <string name="cofirm_update">Are you sure to update the information?</string>
+    <string name="gender_male">Male</string>
+    <string name="profile_update_success">Update profile successfull</string>
 </resources>

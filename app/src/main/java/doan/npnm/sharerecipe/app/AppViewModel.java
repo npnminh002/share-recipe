@@ -1,5 +1,8 @@
 package doan.npnm.sharerecipe.app;
 
+import android.content.ContentResolver;
+import android.net.Uri;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
@@ -9,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Date;
 
@@ -25,21 +29,51 @@ public class AppViewModel extends ViewModel {
     public MutableLiveData<Users> users = new MutableLiveData<>();
 
     public AppViewModel() {
-        if (auth.getCurrentUser()!=null) {
+        if (auth.getCurrentUser() != null) {
             getDataFromUser(auth.getCurrentUser().getUid());
         }
     }
 
+
+    public void putImgToStorage(StorageReference storageReference, Uri uri, OnPutImageListener onPutImage) {
+        StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + file_extension(uri));
+
+        UploadTask uploadTask = fileRef.putFile(uri);
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            fileRef.getDownloadUrl().addOnSuccessListener(uri1 -> onPutImage.onComplete(uri1.toString()))
+                    .addOnFailureListener(ex -> onPutImage.onFailure(ex.getMessage()));
+        }).addOnFailureListener(e -> onPutImage.onFailure(e.getMessage()));
+    }
+
+    private String file_extension(Uri uri) {
+        ContentResolver cr = AppContext.getContext().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+    public interface OnPutImageListener {
+        void onComplete(String url);
+
+        void onFailure(String mess);
+    }
+
+    public static String formatString(String input) {
+        String trimmedString = input.trim();
+        String formattedString = trimmedString.replaceAll("\\s+", "_").toLowerCase();
+        return "#"+formattedString;
+    }
     public void getDataFromUser(String uid) {
         firestore.collection(Constant.KEY_USER)
                 .document(uid)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    Users us = documentSnapshot.toObject(Users.class);
-                    users.postValue(us);
-                })
-                .addOnFailureListener(e -> {
-                    showToast("Error: " + e.getMessage());
+                .addSnapshotListener((value, error) -> {
+                    if(value!=null){
+                        Users us = value.toObject(Users.class);
+                        users.postValue(us);
+                    }
+                    else {
+                        showToast("Error: " + error.getMessage());
+                    }
+
                 });
     }
 
@@ -72,7 +106,7 @@ public class AppViewModel extends ViewModel {
                             .addOnSuccessListener(getTokenResult -> {
                                 String idToken = getTokenResult.getToken();
                                 Users user = new Users(authResult.getUser().getUid(), name,
-                                        email, pass, idToken, "", new Date().toString(),0);
+                                        email, pass, idToken, "", new Date().toString(), "", "", formatString(name), 0);
                                 firestore.collection(Constant.KEY_USER)
                                         .document(user.UserID)
                                         .set(user)
