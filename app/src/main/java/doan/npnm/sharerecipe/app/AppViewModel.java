@@ -28,6 +28,8 @@ public class AppViewModel extends ViewModel {
 
     public MutableLiveData<Users> users = new MutableLiveData<>();
 
+    public MutableLiveData<Boolean> isAddRecipe= new MutableLiveData<>(false);
+
     public AppViewModel() {
         if (auth.getCurrentUser() != null) {
             getDataFromUser(auth.getCurrentUser().getUid());

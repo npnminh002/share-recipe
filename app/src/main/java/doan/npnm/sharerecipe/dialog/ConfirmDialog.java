@@ -1,20 +1,15 @@
 package doan.npnm.sharerecipe.dialog;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
 
-import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.base.BaseDialog;
-import doan.npnm.sharerecipe.databinding.DialogUpdateProfileBinding;
+import doan.npnm.sharerecipe.databinding.DialogConfirmBinding;
 
-public class UpdateProfieDialog extends BaseDialog {
-    public UpdateProfieDialog(Context context,String message,OnUpdateSelect select) {
+public class ConfirmDialog extends BaseDialog {
+    public ConfirmDialog(Context context, String message, OnUpdateSelect select) {
         super(context);
 
-        DialogUpdateProfileBinding binding = DialogUpdateProfileBinding.inflate(getLayoutInflater());
+        DialogConfirmBinding binding = DialogConfirmBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setCancelable(false);
 

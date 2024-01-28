@@ -46,6 +46,8 @@ public class BaseDialog extends Dialog {
         }
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

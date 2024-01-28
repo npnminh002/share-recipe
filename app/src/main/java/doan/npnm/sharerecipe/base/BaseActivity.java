@@ -17,6 +17,7 @@ import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -33,6 +34,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewbinding.ViewBinding;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -118,7 +120,21 @@ public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActiv
     public void showToast(Object mess) {
         Toast.makeText(this, mess.toString(), Toast.LENGTH_LONG).show();
     }
+    public void loadImage(String imageLink, final ImageView imageView) {
+        Glide.with(this)
+                .load(imageLink)
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
+    }
 
+    public void loadImage(Object imageLink, final ImageView imageView) {
+        Glide.with(this)
+                .load(imageLink)
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
+    }
     protected abstract V getViewBinding();
 
     protected abstract void createView();

@@ -13,6 +13,7 @@ import doan.npnm.sharerecipe.base.BaseActivity;
 import doan.npnm.sharerecipe.databinding.ActivityMainBinding;
 import doan.npnm.sharerecipe.fragment.user.HomeUserFragment;
 import doan.npnm.sharerecipe.fragment.user.ProfileUserFragment;
+import doan.npnm.sharerecipe.fragment.user.addrecipe.FirstRecipeFragment;
 
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
@@ -31,7 +32,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                     openFragment(new HomeUserFragment(appViewModel), true, true);
                     break;
                 case 1:
-                    openFragment(new ProfileUserFragment(appViewModel), true, true);
+                    addFragment(new FirstRecipeFragment(appViewModel), android.R.id.content, true);
                     break;
                 case 2:
                     openFragment(new ProfileUserFragment(appViewModel), true, true);

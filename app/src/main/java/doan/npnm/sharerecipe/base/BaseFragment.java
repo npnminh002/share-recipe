@@ -60,6 +60,14 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
                 .into(imageView);
     }
 
+    public void loadImage(Object imageLink, final ImageView imageView) {
+        Glide.with(this)
+                .load(imageLink)
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
+    }
+
     public void showToast(String mess) {
         Toast.makeText(this.requireContext(), mess, Toast.LENGTH_LONG).show();
     }

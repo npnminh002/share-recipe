@@ -14,7 +14,7 @@ import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.AppViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentUpdateInfoBinding;
-import doan.npnm.sharerecipe.dialog.UpdateProfieDialog;
+import doan.npnm.sharerecipe.dialog.ConfirmDialog;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.utility.Constant;
 
@@ -60,7 +60,7 @@ public class UpdateInfoFragment extends BaseFragment<FragmentUpdateInfoBinding> 
     public void OnClick() {
         binding.backIcon.setOnClickListener(v -> closeFragment(UpdateInfoFragment.this));
         binding.btnSave.setOnClickListener(v -> {
-            new UpdateProfieDialog(UpdateInfoFragment.this.requireContext(), getString(R.string.cofirm_update), () -> {
+            new ConfirmDialog(UpdateInfoFragment.this.requireContext(), getString(R.string.cofirm_update), () -> {
                 upDateInfo();
             }).show();
         });
