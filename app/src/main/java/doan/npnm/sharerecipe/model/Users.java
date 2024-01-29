@@ -4,12 +4,13 @@ import java.io.Serializable;
 
 public class Users implements Serializable {
     public String UserID,UserName,Email,Password,Token,UrlImg,TimeLog,Address,Gender,NickName;
+    public int Follower,Follow,Recipe;
     public int AccountType;
 
     public Users() {
     }
 
-    public Users(String userID, String userName, String email, String password, String token, String urlImg, String timeLog, String address, String gender, String nickName, int accountType) {
+    public Users(String userID, String userName, String email, String password, String token, String urlImg, String timeLog, String address, String gender, String nickName, int follower, int follow, int recipe, int accountType) {
         UserID = userID;
         UserName = userName;
         Email = email;
@@ -20,6 +21,9 @@ public class Users implements Serializable {
         Address = address;
         Gender = gender;
         NickName = nickName;
+        Follower = follower;
+        Follow = follow;
+        Recipe = recipe;
         AccountType = accountType;
     }
 
@@ -36,6 +40,9 @@ public class Users implements Serializable {
                 ", Address='" + Address + '\'' +
                 ", Gender='" + Gender + '\'' +
                 ", NickName='" + NickName + '\'' +
+                ", Follower=" + Follower +
+                ", Follow=" + Follow +
+                ", Recipe=" + Recipe +
                 ", AccountType=" + AccountType +
                 '}';
     }

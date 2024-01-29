@@ -70,7 +70,7 @@ public class SignUpActivity extends BaseActivity<ActivitySignUpBinding> {
                             .addOnSuccessListener(getTokenResult -> {
                                 String idToken = getTokenResult.getToken();
                                 Users user = new Users(authResult.getUser().getUid(), name,
-                                        email, pass, idToken, "", new Date().toString(),"","","",0);
+                                        email, pass, idToken, "", new Date().toString(),"","","",0,0,0,0);
                                 firestore.collection(Constant.KEY_USER)
                                         .document(user.UserID)
                                         .set(user)

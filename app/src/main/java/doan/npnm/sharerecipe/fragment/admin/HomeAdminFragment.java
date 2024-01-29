@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import doan.npnm.sharerecipe.adapter.UsersAdapter;
 import doan.npnm.sharerecipe.app.AppViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
+import doan.npnm.sharerecipe.databinding.FragmentHomeAdminBinding;
 import doan.npnm.sharerecipe.databinding.FragmentHomeUserBinding;
 import doan.npnm.sharerecipe.model.Users;
 
-public class HomeAdminFragment extends BaseFragment<FragmentHomeUserBinding> {
+public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> {
 
     public AppViewModel homeviewModel;
     public HomeAdminFragment(AppViewModel appViewModel) {
@@ -24,18 +25,12 @@ public class HomeAdminFragment extends BaseFragment<FragmentHomeUserBinding> {
     }
 
     @Override
-    protected FragmentHomeUserBinding getBinding(LayoutInflater inflater, ViewGroup container) {
-        return FragmentHomeUserBinding.inflate(getLayoutInflater());
+    protected FragmentHomeAdminBinding getBinding(LayoutInflater inflater, ViewGroup container) {
+        return FragmentHomeAdminBinding.inflate(getLayoutInflater());
     }
 
     @Override
     protected void initView() {
-        UsersAdapter us= new UsersAdapter();
-        ArrayList<Users> listUser= new ArrayList<>();
-        listUser.add(homeviewModel.users.getValue());
 
-        binding.rcvData.setAdapter(us);
-
-    //    us.setItems(listUser);
     }
 }

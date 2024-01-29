@@ -14,37 +14,38 @@ public class ImageRecipeAdapter extends BaseAdapter<Uri, ItemImageRecipeBinding>
 
     final ImageItemEvent event;
 
+
     public ImageRecipeAdapter(ImageItemEvent event) {
         this.event = event;
     }
 
     @Override
     protected ItemImageRecipeBinding createBinding(LayoutInflater inflater, ViewGroup parent, int viewType) {
-        return ItemImageRecipeBinding.inflate(inflater,parent,false);
+        return ItemImageRecipeBinding.inflate(inflater, parent, false);
     }
 
     @Override
     protected void bind(ItemImageRecipeBinding binding, @Nullable Uri item, int position) {
-        if(item==null){
+        if (item == null) {
             binding.llAddImage.setVisibility(View.VISIBLE);
             binding.imgProduct.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             binding.llAddImage.setVisibility(View.GONE);
             binding.imgProduct.setVisibility(View.VISIBLE);
-            loadImage(item,binding.imgProduct);
+            loadImage(item, binding.imgProduct);
         }
-
-
-        binding.llAddImage.setOnClickListener(v->event.onAdd());
-        binding.imgProduct.setOnLongClickListener(v->{
-            event.onRemove(position);
-            return true;
-        });
+        binding.llAddImage.setOnClickListener(v -> event.onAdd());
+        if (event != null) {
+            binding.imgProduct.setOnLongClickListener(v -> {
+                event.onRemove(position);
+                return true;
+            });
+        }
     }
 
-    public interface ImageItemEvent{
+    public interface ImageItemEvent {
         void onAdd();
+
         void onRemove(int pos);
     }
 }

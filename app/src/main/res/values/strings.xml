@@ -51,4 +51,23 @@
     <string name="directions">Directions</string>
     <string name="optional">Optional</string>
     <string name="gallery">Gallery</string>
+    <string name="preview_recipe">Preview Recipe</string>
+    <string name="recipe">Recipe</string>
+    <string name="follow">Follow</string>
+    <string name="followers">Followers</string>
+    <string name="recently_view">Recently view</string>
+    <string name="my_recipe">My recipe</string>
+    <string name="bakery">Bakery</string>
+    <string name="beverages">Beverages</string>
+    <string name="dairy">Dairy</string>
+    <string name="frozen">Frozen food</string>
+    <string name="fruit">Fruit</string>
+    <string name="meat">Meat</string>
+    <string name="poultry">Poultry</string>
+    <string name="seafood">Seafood</string>
+    <string name="vegetable">Vegetable</string>
+    <string name="hello">Hello</string>
+    <string name="what_are_you_cooking_today">What are you cooking today?</string>
+    <string name="search">Search...</string>
+    <string name="category">Category</string>
 </resources>

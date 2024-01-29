@@ -10,6 +10,11 @@
         <item name="strokeWidth">10dp</item>
     </style>
 
+    <style name="RivCorner_16.2">
+        <item name="cornerSize">@dimen/_16sdp</item>
+        <item name="strokeWidth">10dp</item>
+    </style>
+
     <style name="RivCorner_8">
         <item name="cornerSize">@dimen/_8sdp</item>
         <item name="strokeWidth">10dp</item>

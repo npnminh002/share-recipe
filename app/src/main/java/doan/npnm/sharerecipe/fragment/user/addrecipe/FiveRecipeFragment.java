@@ -132,9 +132,7 @@ public class FiveRecipeFragment extends BaseFragment<FragmentFiveRecipeBinding> 
     }
 
     private void putDataToFireStore() {
-        viewModel.isAddRecipe.postValue(true);
-        closeFragment(FiveRecipeFragment.this);
-
+        replaceFragment(new PreviewRecipeFragment(viewModel,recipeViewModel),android.R.id.content,true);
     }
 
 

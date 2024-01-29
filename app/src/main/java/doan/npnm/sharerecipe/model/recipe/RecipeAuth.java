@@ -1,9 +1,15 @@
 package doan.npnm.sharerecipe.model.recipe;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 
+@Entity(tableName = "RecipeAuth")
 public class RecipeAuth implements Serializable {
-    public String AuthId="",AuthName="",Gender="",Address="",NickName="",Image="";
+    @PrimaryKey
+    public String AuthId="";
+    public String AuthName="",Gender="",Address="",NickName="",Image="";
 
     public RecipeAuth(String authId, String authName, String gender, String address,String nickName,String image) {
         AuthId = authId;

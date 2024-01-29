@@ -9,15 +9,22 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.Date;
 
+import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.context.AppContext;
+import doan.npnm.sharerecipe.database.AppDatabase;
+import doan.npnm.sharerecipe.database.AppDatabaseProvider;
+import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.Users;
+import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
 
 public class AppViewModel extends ViewModel {
@@ -28,14 +35,58 @@ public class AppViewModel extends ViewModel {
 
     public MutableLiveData<Users> users = new MutableLiveData<>();
 
-    public MutableLiveData<Boolean> isAddRecipe= new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> isAddRecipe = new MutableLiveData<>(false);
+
+    public MutableLiveData<ArrayList<Recipe>> recipeLiveData = new MutableLiveData<>(new ArrayList<>());
+
+    public AppDatabase database = AppDatabaseProvider.getDatabase();
 
     public AppViewModel() {
         if (auth.getCurrentUser() != null) {
             getDataFromUser(auth.getCurrentUser().getUid());
         }
+        new Thread(this::onGetRecipeData).start();
     }
 
+    public void onGetRecipeData() {
+        ArrayList<Recipe> rcpList = new ArrayList<>();
+        firestore.collection(Constant.RECIPE)
+                .limit(50)
+                .addSnapshotListener((value, error) -> {
+                    for (DocumentSnapshot documentSnapshot : value) {
+                        if (documentSnapshot.exists()) {
+
+                            Recipe rcp = documentSnapshot.toObject(Recipe.class);
+                            if (rcp != null) {
+                                rcpList.add(rcp);
+                            } else {
+                                showToast("Recipe is null");
+                            }
+                        } else {
+
+                            showToast("Document does not exist");
+                        }
+                    }
+                    recipeLiveData.postValue(rcpList);
+
+                });
+
+    }
+
+    public ArrayList<Category> getListCategory(){
+        ArrayList<Category> categories= new ArrayList<>();
+        categories.add(new Category("1",AppContext.getContext().getString(R.string.bakery), R.drawable.category_bakery));
+        categories.add(new Category("2",AppContext.getContext().getString(R.string.beverages), R.drawable.category_beverages));
+        categories.add(new Category("3",AppContext.getContext().getString(R.string.dairy), R.drawable.category_dairy));
+        categories.add(new Category("4",AppContext.getContext().getString(R.string.frozen), R.drawable.category_frozen));
+        categories.add(new Category("5",AppContext.getContext().getString(R.string.fruit), R.drawable.category_fruit));
+        categories.add(new Category("6",AppContext.getContext().getString(R.string.meat), R.drawable.category_meat));
+        categories.add(new Category("7",AppContext.getContext().getString(R.string.poultry), R.drawable.category_poultry));
+        categories.add(new Category("8",AppContext.getContext().getString(R.string.seafood), R.drawable.category_seafood));
+        categories.add(new Category("9",AppContext.getContext().getString(R.string.vegetable), R.drawable.category_vegettable));
+        return categories;
+
+    }
 
     public void putImgToStorage(StorageReference storageReference, Uri uri, OnPutImageListener onPutImage) {
         StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + file_extension(uri));
@@ -62,17 +113,17 @@ public class AppViewModel extends ViewModel {
     public static String formatString(String input) {
         String trimmedString = input.trim();
         String formattedString = trimmedString.replaceAll("\\s+", "_").toLowerCase();
-        return "#"+formattedString;
+        return "#" + formattedString;
     }
+
     public void getDataFromUser(String uid) {
         firestore.collection(Constant.KEY_USER)
                 .document(uid)
                 .addSnapshotListener((value, error) -> {
-                    if(value!=null){
+                    if (value != null) {
                         Users us = value.toObject(Users.class);
                         users.postValue(us);
-                    }
-                    else {
+                    } else {
                         showToast("Error: " + error.getMessage());
                     }
 
@@ -108,7 +159,7 @@ public class AppViewModel extends ViewModel {
                             .addOnSuccessListener(getTokenResult -> {
                                 String idToken = getTokenResult.getToken();
                                 Users user = new Users(authResult.getUser().getUid(), name,
-                                        email, pass, idToken, "", new Date().toString(), "", "", formatString(name), 0);
+                                        email, pass, idToken, "", new Date().toString(), "", "", formatString(name), 0,0,0,0);
                                 firestore.collection(Constant.KEY_USER)
                                         .document(user.UserID)
                                         .set(user)

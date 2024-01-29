@@ -1,14 +1,21 @@
 package doan.npnm.sharerecipe.model.recipe;
 
+import androidx.annotation.Keep;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.app.context.AppContext;
+import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.Material;
 
+
 public class Recipe implements Serializable {
-    public String Id = "", Name, Description, TimeInit = "" + System.currentTimeMillis();
+    public String Id = "";
+    public String Name, Description, TimeInit = "" + System.currentTimeMillis();
     public String ImgUrl = "";
     public RecipeAuth RecipeAuth = new RecipeAuth();
     public PrepareTime PrepareTime = new PrepareTime();
@@ -20,14 +27,16 @@ public class Recipe implements Serializable {
 
     public int View = 0, Love = 0;
     public boolean IsConfirm = false;
-    public Material Material = new Material();
+    public Category Category = new Category();
+    public ArrayList<String> ImagePreview = new ArrayList<>();
 
     public Recipe(String id, String name, String description, String timeInit, String imgUrl,
                   doan.npnm.sharerecipe.model.recipe.RecipeAuth recipeAuth,
                   doan.npnm.sharerecipe.model.recipe.PrepareTime prepareTime,
                   doan.npnm.sharerecipe.model.recipe.CookTime cookTime, String level,
                   ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients> ingredients,
-                  ArrayList<doan.npnm.sharerecipe.model.recipe.Directions> directions, int view, int love, boolean isConfirm, Material material) {
+                  ArrayList<doan.npnm.sharerecipe.model.recipe.Directions> directions, int view,
+                  int love, boolean isConfirm, Category category, ArrayList<String> imagePreview) {
         Id = id;
         Name = name;
         Description = description;
@@ -42,11 +51,14 @@ public class Recipe implements Serializable {
         View = view;
         Love = love;
         IsConfirm = isConfirm;
-        Material = material;
+        Category = category;
+        ImagePreview = imagePreview;
     }
 
+    @Keep
     public Recipe() {
     }
+
 
     @Override
     public String toString() {
@@ -64,7 +76,17 @@ public class Recipe implements Serializable {
                 ", Directions=" + Directions.toString() +
                 ", View=" + View +
                 ", Love=" + Love +
+                ",ImagePreview" + ImagePreview +
                 ", IsConfirm=" + IsConfirm +
                 '}';
+    }
+
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+    public  Recipe fromJson(String jsonString) {
+        Gson gson = new Gson();
+        return gson.fromJson(jsonString, Recipe.class);
     }
 }

@@ -2,8 +2,6 @@ package doan.npnm.sharerecipe.model.recipe;
 
 import java.io.Serializable;
 
-
-
 public class CookTime implements Serializable{
     public String Time="0",TimeType="s";
 

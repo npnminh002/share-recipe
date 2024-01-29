@@ -8,6 +8,7 @@
     tools:context=".fragment.user.ProfileUserFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout4"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -15,24 +16,24 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:textColor="@color/black"
-            android:text="Profile"
-            android:textSize="@dimen/_14sdp"
-            android:fontFamily="@font/poppins_semibold"
             android:id="@+id/Profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/profile"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/icSetting"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:padding="@dimen/_4sdp"
             android:id="@+id/icSetting"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_32sdp"
             android:layout_marginEnd="@dimen/_12sdp"
+            android:padding="@dimen/_4sdp"
             android:src="@drawable/ic_settings"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,4 +42,241 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginHorizontal="@dimen/_12sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_32sdp"
+                android:layout_height="@dimen/_100sdp">
+
+
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/ImgUser"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_100sdp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/RivCorner_150"
+                    app:strokeColor="@color/lightgray"
+                    app:strokeWidth="2sp" />
+
+                <TextView
+                    android:id="@+id/userName"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:gravity="center"
+                    android:text="@string/profile"
+                    android:textColor="@color/textcolor"
+                    android:textSize="@dimen/_13sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ImgUser"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/poppins_light"
+                    android:gravity="center"
+                    android:text="@string/recipe"
+                    android:textColor="@color/textcolor"
+                    android:textSize="@dimen/_13sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ImgUser"
+                    app:layout_constraintTop_toBottomOf="@id/userName" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/_12sdp"
+                android:background="@drawable/bg_input_start"
+                android:layout_width="match_parent"
+                android:weightSum="3"
+                android:orientation="horizontal"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ImgUser"
+                app:layout_constraintTop_toTopOf="parent">
+                <LinearLayout
+                    android:paddingBottom="@dimen/_6sdp"
+                    android:layout_marginHorizontal="@dimen/_4sdp"
+                    android:layout_gravity="center"
+                    android:paddingTop="@dimen/_16sdp"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_light"
+                        android:text="@string/recipe"
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_13sdp" />
+                    <TextView
+                        android:id="@+id/txtRecipe"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="0"
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_13sdp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginHorizontal="@dimen/_4sdp"
+                    android:layout_gravity="center"
+                    android:paddingTop="@dimen/_16sdp"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_light"
+                        android:text="@string/followers"
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_12sdp" />
+                    <TextView
+                        android:id="@+id/txtFollower"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="0"
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_13sdp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginHorizontal="@dimen/_4sdp"
+                    android:layout_gravity="center"
+                    android:paddingTop="@dimen/_16sdp"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_light"
+                        android:text="@string/follow"
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_13sdp" />
+                    <TextView
+                        android:id="@+id/txtFollow"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="0"
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_13sdp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="@string/recently_view"
+                android:textColor="@color/textcolor"
+                android:textSize="@dimen/_13sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ImgUser"
+                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvDirection"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_130sdp"
+                android:layout_marginVertical="@dimen/_12sdp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3"
+               />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="@string/my_recipe"
+                android:textColor="@color/textcolor"
+                android:textSize="@dimen/_13sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ImgUser"
+                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvMyRecipe"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_130sdp"
+                android:layout_marginVertical="@dimen/_12sdp"
+                android:layout_marginBottom="157dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                />
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

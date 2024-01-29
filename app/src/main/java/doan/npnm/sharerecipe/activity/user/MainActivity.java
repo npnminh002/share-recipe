@@ -25,6 +25,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Override
     protected void createView() {
+        openFragment(new HomeUserFragment(appViewModel), true, true);
 
         binding.bottomNavigationViewLinear.setNavigationChangeListener((view, position) -> {
             switch (position) {

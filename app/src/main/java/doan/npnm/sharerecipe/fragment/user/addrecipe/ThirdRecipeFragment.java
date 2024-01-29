@@ -43,7 +43,7 @@ public class ThirdRecipeFragment extends BaseFragment<FragmentThirdRecipeBinding
         viewModel.isAddRecipe.observe(this, val -> {
             if (val) closeFragment(ThirdRecipeFragment.this);
         });
-        ingridentsAdapter = new IngridentsAdapter(new IngridentsAdapter.OnIngridetEvent() {
+        ingridentsAdapter = new IngridentsAdapter(IngridentsAdapter.IGR_TYPE.EDIT,new IngridentsAdapter.OnIngridentEvent() {
             @Override
             public void onNameChange(Ingredients ingredients, String value, int po) {
                 listDefautIngrident.get(po).Name = value;

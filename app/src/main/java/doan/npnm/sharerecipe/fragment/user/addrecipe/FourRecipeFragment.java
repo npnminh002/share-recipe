@@ -40,7 +40,7 @@ public class FourRecipeFragment extends BaseFragment<FragmentFourRecipeBinding> 
         viewModel.isAddRecipe.observe(this, val -> {
             if (val) closeFragment(FourRecipeFragment.this);
         });
-        directionsAdapter = new DirectionsAdapter(new DirectionsAdapter.OnDirectionEvent() {
+        directionsAdapter = new DirectionsAdapter(DirectionsAdapter.DIR_TYPE.EDIT,new DirectionsAdapter.OnDirectionEvent() {
             @Override
             public void onNameChange(Directions directions, String value, int postion) {
                 listDefDirection.get(postion).Name = value;
@@ -50,7 +50,7 @@ public class FourRecipeFragment extends BaseFragment<FragmentFourRecipeBinding> 
             public void onRemove(Directions id, int pos) {
                 removeDirection(id, pos);
             }
-        });
+        } );
 
         binding.rcvDirection.setAdapter(directionsAdapter);
         recipeViewModel.recipeLiveData.observe(this, data -> {
