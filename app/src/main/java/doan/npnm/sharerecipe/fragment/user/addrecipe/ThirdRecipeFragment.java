@@ -43,10 +43,13 @@ public class ThirdRecipeFragment extends BaseFragment<FragmentThirdRecipeBinding
         viewModel.isAddRecipe.observe(this, val -> {
             if (val) closeFragment(ThirdRecipeFragment.this);
         });
-        ingridentsAdapter = new IngridentsAdapter(IngridentsAdapter.IGR_TYPE.EDIT,new IngridentsAdapter.OnIngridentEvent() {
+        ingridentsAdapter = new IngridentsAdapter(IngridentsAdapter.IGR_TYPE.EDIT, new IngridentsAdapter.OnIngridentEvent() {
             @Override
             public void onNameChange(Ingredients ingredients, String value, int po) {
-                listDefautIngrident.get(po).Name = value;
+                int indexOf = listDefautIngrident.indexOf(ingredients);
+                if (indexOf != -1) {
+                    listDefautIngrident.get(indexOf).Name = value;
+                }
             }
 
             @Override

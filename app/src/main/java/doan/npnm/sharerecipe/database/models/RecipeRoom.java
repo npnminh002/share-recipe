@@ -11,6 +11,11 @@ public class RecipeRoom {
     @PrimaryKey(autoGenerate = true)
     public int Id;
 
+    @ColumnInfo(name = "AuthId")
+    public String AuthId= "";
+    @ColumnInfo(name = "RecipeID")
+    public String RecipeID= "";
+
     @ColumnInfo(name = "Recipe")
     public String Recipe= new Recipe().toJson();
 }

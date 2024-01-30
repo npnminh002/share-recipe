@@ -27,6 +27,9 @@
             android:name=".activity.user.LanguageActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.AddDataActivity"
+            android:exported="true" />
+        <activity
             android:name=".activity.start.SplashActivity"
             android:exported="true">
             <intent-filter>

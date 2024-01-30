@@ -40,17 +40,20 @@ public class FourRecipeFragment extends BaseFragment<FragmentFourRecipeBinding> 
         viewModel.isAddRecipe.observe(this, val -> {
             if (val) closeFragment(FourRecipeFragment.this);
         });
-        directionsAdapter = new DirectionsAdapter(DirectionsAdapter.DIR_TYPE.EDIT,new DirectionsAdapter.OnDirectionEvent() {
+        directionsAdapter = new DirectionsAdapter(DirectionsAdapter.DIR_TYPE.EDIT, new DirectionsAdapter.OnDirectionEvent() {
             @Override
             public void onNameChange(Directions directions, String value, int postion) {
-                listDefDirection.get(postion).Name = value;
+                int indexOf = listDefDirection.indexOf(directions);
+                if (indexOf != -1) {
+                    listDefDirection.get(indexOf).Name = value;
+                }
             }
 
             @Override
             public void onRemove(Directions id, int pos) {
                 removeDirection(id, pos);
             }
-        } );
+        });
 
         binding.rcvDirection.setAdapter(directionsAdapter);
         recipeViewModel.recipeLiveData.observe(this, data -> {
@@ -78,7 +81,10 @@ public class FourRecipeFragment extends BaseFragment<FragmentFourRecipeBinding> 
 
     @Override
     public void OnClick() {
-        binding.backIcon.setOnClickListener(v -> {closeFragment(FourRecipeFragment.this); postValue(false);});
+        binding.backIcon.setOnClickListener(v -> {
+            closeFragment(FourRecipeFragment.this);
+            postValue(false);
+        });
         binding.btnNext.setOnClickListener(v -> {
             replaceFragment(new FiveRecipeFragment(viewModel, recipeViewModel), android.R.id.content, true);
             postValue(true);

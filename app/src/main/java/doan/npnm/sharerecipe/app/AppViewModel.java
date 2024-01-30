@@ -73,6 +73,33 @@ public class AppViewModel extends ViewModel {
 
     }
 
+    public interface OnGetSucces{
+        void onData(ArrayList<Recipe> arr);
+    }
+    public void getData(OnGetSucces succes){
+        ArrayList<Recipe> rcpList = new ArrayList<>();
+        firestore.collection(Constant.RECIPE)
+                .limit(50)
+                .addSnapshotListener((value, error) -> {
+                    for (DocumentSnapshot documentSnapshot : value) {
+                        if (documentSnapshot.exists()) {
+
+                            Recipe rcp = documentSnapshot.toObject(Recipe.class);
+                            if (rcp != null) {
+                                rcpList.add(rcp);
+                            } else {
+                                showToast("Recipe is null");
+                            }
+                        } else {
+
+                            showToast("Document does not exist");
+                        }
+                    }
+                    succes.onData(rcpList);
+
+                });
+    }
+
     public ArrayList<Category> getListCategory(){
         ArrayList<Category> categories= new ArrayList<>();
         categories.add(new Category("1",AppContext.getContext().getString(R.string.bakery), R.drawable.category_bakery));
