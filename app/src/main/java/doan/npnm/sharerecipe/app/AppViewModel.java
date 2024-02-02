@@ -25,6 +25,7 @@ import doan.npnm.sharerecipe.database.AppDatabaseProvider;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
+import doan.npnm.sharerecipe.model.recipe.RecipeAuth;
 import doan.npnm.sharerecipe.utility.Constant;
 
 public class AppViewModel extends ViewModel {
@@ -48,7 +49,11 @@ public class AppViewModel extends ViewModel {
         new Thread(this::onGetRecipeData).start();
     }
 
+    public MutableLiveData<ArrayList<RecipeAuth>> recipeAuth = new MutableLiveData<ArrayList<RecipeAuth>>();
+
     public void onGetRecipeData() {
+
+        ArrayList<RecipeAuth> recipeAuths = new ArrayList<>();
         ArrayList<Recipe> rcpList = new ArrayList<>();
         firestore.collection(Constant.RECIPE)
                 .limit(50)
@@ -59,6 +64,7 @@ public class AppViewModel extends ViewModel {
                             Recipe rcp = documentSnapshot.toObject(Recipe.class);
                             if (rcp != null) {
                                 rcpList.add(rcp);
+                                recipeAuths.add(rcp.RecipeAuth);
                             } else {
                                 showToast("Recipe is null");
                             }
@@ -67,16 +73,18 @@ public class AppViewModel extends ViewModel {
                             showToast("Document does not exist");
                         }
                     }
+                    this.recipeAuth.postValue(recipeAuths);
                     recipeLiveData.postValue(rcpList);
 
                 });
 
     }
 
-    public interface OnGetSucces{
+    public interface OnGetSucces {
         void onData(ArrayList<Recipe> arr);
     }
-    public void getData(OnGetSucces succes){
+
+    public void getData(OnGetSucces succes) {
         ArrayList<Recipe> rcpList = new ArrayList<>();
         firestore.collection(Constant.RECIPE)
                 .limit(50)
@@ -100,17 +108,17 @@ public class AppViewModel extends ViewModel {
                 });
     }
 
-    public ArrayList<Category> getListCategory(){
-        ArrayList<Category> categories= new ArrayList<>();
-        categories.add(new Category("1",AppContext.getContext().getString(R.string.bakery), R.drawable.category_bakery));
-        categories.add(new Category("2",AppContext.getContext().getString(R.string.beverages), R.drawable.category_beverages));
-        categories.add(new Category("3",AppContext.getContext().getString(R.string.dairy), R.drawable.category_dairy));
-        categories.add(new Category("4",AppContext.getContext().getString(R.string.frozen), R.drawable.category_frozen));
-        categories.add(new Category("5",AppContext.getContext().getString(R.string.fruit), R.drawable.category_fruit));
-        categories.add(new Category("6",AppContext.getContext().getString(R.string.meat), R.drawable.category_meat));
-        categories.add(new Category("7",AppContext.getContext().getString(R.string.poultry), R.drawable.category_poultry));
-        categories.add(new Category("8",AppContext.getContext().getString(R.string.seafood), R.drawable.category_seafood));
-        categories.add(new Category("9",AppContext.getContext().getString(R.string.vegetable), R.drawable.category_vegettable));
+    public ArrayList<Category> getListCategory() {
+        ArrayList<Category> categories = new ArrayList<>();
+        categories.add(new Category("1", AppContext.getContext().getString(R.string.bakery), R.drawable.category_bakery));
+        categories.add(new Category("2", AppContext.getContext().getString(R.string.beverages), R.drawable.category_beverages));
+        categories.add(new Category("3", AppContext.getContext().getString(R.string.dairy), R.drawable.category_dairy));
+        categories.add(new Category("4", AppContext.getContext().getString(R.string.frozen), R.drawable.category_frozen));
+        categories.add(new Category("5", AppContext.getContext().getString(R.string.fruit), R.drawable.category_fruit));
+        categories.add(new Category("6", AppContext.getContext().getString(R.string.meat), R.drawable.category_meat));
+        categories.add(new Category("7", AppContext.getContext().getString(R.string.poultry), R.drawable.category_poultry));
+        categories.add(new Category("8", AppContext.getContext().getString(R.string.seafood), R.drawable.category_seafood));
+        categories.add(new Category("9", AppContext.getContext().getString(R.string.vegetable), R.drawable.category_vegettable));
         return categories;
 
     }
@@ -186,7 +194,7 @@ public class AppViewModel extends ViewModel {
                             .addOnSuccessListener(getTokenResult -> {
                                 String idToken = getTokenResult.getToken();
                                 Users user = new Users(authResult.getUser().getUid(), name,
-                                        email, pass, idToken, "", new Date().toString(), "", "", formatString(name), 0,0,0,0);
+                                        email, pass, idToken, "", new Date().toString(), "", "", formatString(name), 0, 0, 0, 0);
                                 firestore.collection(Constant.KEY_USER)
                                         .document(user.UserID)
                                         .set(user)

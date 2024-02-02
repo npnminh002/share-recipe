@@ -5,13 +5,16 @@ import androidx.room.RoomDatabase;
 
 import doan.npnm.sharerecipe.database.dao.RecentViewDao;
 import doan.npnm.sharerecipe.database.dao.RecipeDao;
+import doan.npnm.sharerecipe.database.dao.SaveRecipeDao;
 import doan.npnm.sharerecipe.database.models.RecentView;
 import doan.npnm.sharerecipe.database.models.RecipeRoom;
+import doan.npnm.sharerecipe.database.models.SaveRecipe;
 
-@Database(entities = {RecentView.class,RecipeRoom.class}, version = 1, exportSchema = false)
+@Database(entities = {RecentView.class,RecipeRoom.class, SaveRecipe.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract RecipeDao recipeDao();
     public abstract RecentViewDao recentViewDao();
+    public abstract SaveRecipeDao saveRecipeDao();
 }
 
 

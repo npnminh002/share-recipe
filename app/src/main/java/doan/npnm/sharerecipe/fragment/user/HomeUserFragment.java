@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import doan.npnm.sharerecipe.activity.AddDataActivity;
 import doan.npnm.sharerecipe.adapter.CategoryAdapter;
 import doan.npnm.sharerecipe.adapter.RecipeAdapter;
+import doan.npnm.sharerecipe.adapter.TopChefAdapter;
 import doan.npnm.sharerecipe.app.AppViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
+import doan.npnm.sharerecipe.database.models.RecentView;
+import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.databinding.FragmentHomeUserBinding;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
@@ -34,6 +37,7 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
     }
 
     private CategoryAdapter categoryAdapter;
+    private TopChefAdapter topChefAdapter;
 
     private RecipeAdapter recipeAdapter;
 
@@ -41,21 +45,15 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
     @Override
     protected void initView() {
 
-//        homeviewModel.recipeLiveData.observe(this,arr->{
-//            recipeAdapter.setItems(arr);
-//
-//            loadImage(arr.get(0).ImgUrl,binding.imgUsers);
-//
-//        });
-
-        homeviewModel.getData(new AppViewModel.OnGetSucces() {
-            @Override
-            public void onData(ArrayList<Recipe> arr) {
-                recipeAdapter.setItems(arr);
-
-                loadImage(arr.get(0).ImgUrl, binding.imgUsers);
-            }
+        homeviewModel.recipeLiveData.observe(this,arr->{
+            recipeAdapter.setItems(arr);
         });
+        topChefAdapter= new TopChefAdapter();
+        homeviewModel.recipeAuth.observe(this,arr->{
+            topChefAdapter.setItems(arr);
+        });
+        binding.rcvTopChef.setAdapter(topChefAdapter);
+
         categoryAdapter = new CategoryAdapter(category -> {
 
         });
@@ -63,12 +61,30 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
         recipeAdapter = new RecipeAdapter(new RecipeAdapter.OnRecipeEvent() {
             @Override
             public void onView(Recipe rcp) {
+                if( homeviewModel.database.recentViewDao().checkExistence(rcp.Id)){
+                    homeviewModel.database.recentViewDao().removeRecent(rcp.Id);
+                }
+                homeviewModel.database.recentViewDao().addRecentView(new RecentView(){{
+                    AuthID=rcp.RecipeAuth.AuthId;
+                    RecipeID=rcp.Id;
+                    ViewTime=getTimeNow();
+                    Recipe= rcp.toJson();
+                }});
 
+                addFragment(new DetailRecipeFragment(rcp),android.R.id.content,true);
             }
 
             @Override
-            public void onSave(Recipe recipe) {
-
+            public void onSave(Recipe rcp) {
+                if( homeviewModel.database.saveRecipeDao().checkExistence(rcp.Id)){
+                    homeviewModel.database.saveRecipeDao().removeRecent(rcp.Id);
+                }
+                homeviewModel.database.saveRecipeDao().addRecentView(new SaveRecipe(){{
+                    AuthID=rcp.RecipeAuth.AuthId;
+                    RecipeID=rcp.Id;
+                    SaveTime=getTimeNow();
+                    Recipe= rcp.toJson();
+                }});
             }
         });
         binding.imgUsers.setOnClickListener(v -> {

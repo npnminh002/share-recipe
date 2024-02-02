@@ -23,6 +23,7 @@
         android:theme="@style/Theme.ShareRecipe"
         tools:ignore="HardcodedDebugMode"
         tools:targetApi="31">
+
         <activity
             android:name=".activity.user.LanguageActivity"
             android:exported="false" />
@@ -41,7 +42,7 @@
         <activity
             android:name=".activity.start.SignUpActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.start.SignInActivity"
             android:exported="false"
@@ -50,6 +51,11 @@
             android:name=".activity.user.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".test.TestActivity"
+            android:exported="true" >
+
+        </activity>
     </application>
 
 </manifest>

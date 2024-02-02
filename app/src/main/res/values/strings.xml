@@ -71,4 +71,8 @@
     <string name="search">Search...</string>
     <string name="category">Category</string>
     <string name="top_chef">Top Chef</string>
+    <string name="popular">Popular</string>
+    <string name="save_recipes">Save recipes</string>
+    <string name="discussion">Discussion</string>
+    <string name="write_some_thing">Write some thing</string>
 </resources>
