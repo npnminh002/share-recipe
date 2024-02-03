@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -32,6 +33,7 @@ import doan.npnm.sharerecipe.utility.Constant;
 public class AppViewModel extends ViewModel {
     public FirebaseAuth auth = FirebaseAuth.getInstance();
     public FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    public FirebaseDatabase fbDatabase = FirebaseDatabase.getInstance();
     public FirebaseStorage storage = FirebaseStorage.getInstance();
     public StorageReference storageReference = storage.getReference();
 

@@ -95,6 +95,8 @@
 
                 <doan.npnm.sharerecipe.lib.widget.CircleImageView
                     android:id="@+id/circleImageView"
+                    app:civ_border_color="@color/lightgray"
+                    app:civ_border_width="@dimen/_1ssp"
                     android:layout_width="@dimen/_50sdp"
                     android:layout_height="@dimen/_50sdp"
                     android:src="@drawable/img_us_demo"
@@ -289,6 +291,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcvDiscussion"
+                tools:listitem="@layout/item_discussion_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_12sdp"
@@ -298,14 +301,14 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_38sdp"
+                android:minHeight="@dimen/_38sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_12sdp"
                 android:background="@drawable/bg_input_start"
-                android:backgroundTint="@color/aliceblue"
-                android:padding="@dimen/_2sdp">
+                android:backgroundTint="@color/aliceblue">
 
                 <ImageView
-                    android:id="@+id/icSearch"
+                    android:id="@+id/icSendDiscuss"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:padding="@dimen/_5sdp"
@@ -315,20 +318,46 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="#333" />
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:id="@+id/llReply"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="@string/reply"
+                        android:fontFamily="@font/poppins_medium"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="@string/reply"
+                        android:textColor="@color/textcolor"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
 
                 <EditText
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:id="@+id/txt_discuss"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/_12sdp"
+                    android:layout_marginBottom="@dimen/_2sdp"
                     android:background="@color/aliceblue"
                     android:fontFamily="@font/poppins_light"
                     android:hint="@string/write_some_thing"
                     android:textColor="@color/textcolor"
                     android:textSize="@dimen/_13sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/icSearch"
+                    app:layout_constraintEnd_toStartOf="@+id/icSendDiscuss"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/llReply" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
