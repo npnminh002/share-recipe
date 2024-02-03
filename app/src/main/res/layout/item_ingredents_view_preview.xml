@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_marginTop="@dimen/_8sdp"
     android:layout_height="wrap_content">
 
 
-    <EditText
+    <TextView
         android:id="@+id/ingridenName"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_36sdp"
-        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_6sdp"
         android:background="@drawable/bg_input_start"
         android:backgroundTint="@color/aliceblue"
-
-        android:paddingStart="@dimen/_6sdp"
+        android:gravity="left|top"
+        android:fontFamily="@font/poppins_light"
+        android:minHeight="@dimen/_36sdp"
+        android:padding="@dimen/_6sdp"
         android:textColor="@color/textcolor"
+        android:textSize="@dimen/_13sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintEnd_toStartOf="@+id/quantitive"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/txtNumId"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +37,7 @@
         android:gravity="center"
         android:text="1"
         android:lineHeight="@dimen/_36sdp"
-        android:textSize="@dimen/_16sdp"
+        android:textSize="@dimen/_12sdp"
         android:fontFamily="@font/poppins_semibold"
         android:textColor="@color/black"
         android:textAlignment="center"
@@ -42,50 +46,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/appcolor" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="@dimen/_60sdp"
-        android:layout_height="@dimen/_36sdp"
-        android:background="@drawable/bg_input_start"
-        android:orientation="horizontal"
-        android:padding="@dimen/_3sdp"
-        android:backgroundTint="@color/aliceblue"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <EditText
-            android:fontFamily="@font/poppins_medium"
-            android:paddingEnd="@dimen/_3sdp"
-            android:id="@+id/quantitive"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_40sdp"
-            android:background="#00FFFFFF"
-            android:inputType="number"
-            android:text="0"
-            android:paddingTop="@dimen/_4sdp"
-            android:textSize="@dimen/_15sdp"
-            android:textAlignment="textEnd"
-            android:textColor="@color/textcolor"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/textView2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView2"
-            android:layout_width="@dimen/_12sdp"
-            android:layout_height="wrap_content"
-            android:background="#00ffffff"
-            android:text="g"
+            android:id="@+id/quantitive"
+            android:layout_width="@dimen/_46sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@drawable/bg_input_start"
             android:fontFamily="@font/poppins_medium"
-            android:textAlignment="center"
+            android:gravity="center"
+            android:backgroundTint="@color/aliceblue"
+            android:paddingEnd="@dimen/_3sdp"
+            android:textAlignment="textEnd"
             android:textColor="@color/textcolor"
-            android:textSize="@dimen/_13sdp"
+            android:textSize="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RtlCompat,RtlSymmetry" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

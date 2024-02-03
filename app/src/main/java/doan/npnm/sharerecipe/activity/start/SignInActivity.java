@@ -21,13 +21,15 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
 
     @Override
     protected void createView() {
-        appViewModel.getUsers().observe(this,users -> {
-            startActivity(new Intent(SignInActivity.this, MainActivity.class));
-            finish();
+        appViewModel.getUsers().observe(this, users -> {
+            if (users != null) {
+                startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                finish();
+            }
         });
 
         binding.signIn.setOnClickListener(v -> {
-            startActivity(new Intent(SignInActivity.this,SignUpActivity.class));
+            startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
             finish();
         });
         binding.signInApp.setOnClickListener(v -> {
@@ -45,16 +47,14 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
 
 
     private void signIn(String email, String pass) {
-        auth.signInWithEmailAndPassword(email, pass)
-                .addOnSuccessListener(authResult -> {
-                    appViewModel.getDataFromUser(authResult.getUser().getUid());
+        auth.signInWithEmailAndPassword(email, pass).addOnSuccessListener(authResult -> {
+            appViewModel.getDataFromUser(authResult.getUser().getUid());
 
-                    showToast("Sign-in successful");
-                })
-                .addOnFailureListener(e -> {
-                    // If sign in fails, display a message to the user.
-                    showToast("Authentication failed: " + e.getMessage());
-                });
+            showToast("Sign-in successful");
+        }).addOnFailureListener(e -> {
+            // If sign in fails, display a message to the user.
+            showToast("Authentication failed: " + e.getMessage());
+        });
 
 
     }

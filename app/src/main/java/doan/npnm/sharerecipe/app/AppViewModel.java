@@ -22,6 +22,7 @@ import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.database.AppDatabase;
 import doan.npnm.sharerecipe.database.AppDatabaseProvider;
+import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
@@ -157,14 +158,30 @@ public class AppViewModel extends ViewModel {
                 .addSnapshotListener((value, error) -> {
                     if (value != null) {
                         Users us = value.toObject(Users.class);
-                        users.postValue(us);
+
+                        users.postValue(us!=null ? us: null);
                     } else {
                         showToast("Error: " + error.getMessage());
+                        users.postValue(null);
                     }
 
                 });
     }
 
+    public void getDataFromUser(String uid, FetchByID<Users> fetch) {
+        firestore.collection(Constant.KEY_USER)
+                .document(uid)
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        Users us = value.toObject(Users.class);
+                        fetch.onSuccess(us);
+                    } else {
+                        showToast("Error: " + error.getMessage());
+                        fetch.onErr(error);
+                    }
+
+                });
+    }
     public void signUpApp(String email, String name, String pass, MutableLiveData<Boolean> isEmailExists) {
         firestore.collection(Constant.KEY_USER)
                 .whereEqualTo("Email", email)

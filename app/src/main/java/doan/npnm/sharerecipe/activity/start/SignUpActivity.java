@@ -16,7 +16,7 @@ public class SignUpActivity extends BaseActivity<ActivitySignUpBinding> {
     @Override
     public void OnClick() {
         binding.signIn.setOnClickListener(v -> {
-            startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
+            startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
             finish();
         });
         binding.signUpApp.setOnClickListener(v -> {
@@ -39,12 +39,15 @@ public class SignUpActivity extends BaseActivity<ActivitySignUpBinding> {
 
     @Override
     protected void createView() {
-        appViewModel.getUsers().observe(this,users -> {
-            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-            finish();
+        appViewModel.getUsers().observe(this, users -> {
+            if (users != null) {
+                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                finish();
+            }
         });
 
     }
+
     public void signUpApp(String email, String name, String pass) {
         firestore.collection(Constant.KEY_USER)
                 .whereEqualTo("Email", email)
@@ -70,7 +73,7 @@ public class SignUpActivity extends BaseActivity<ActivitySignUpBinding> {
                             .addOnSuccessListener(getTokenResult -> {
                                 String idToken = getTokenResult.getToken();
                                 Users user = new Users(authResult.getUser().getUid(), name,
-                                        email, pass, idToken, "", new Date().toString(),"","","",0,0,0,0);
+                                        email, pass, idToken, "", new Date().toString(), "", "", "", 0, 0, 0, 0);
                                 firestore.collection(Constant.KEY_USER)
                                         .document(user.UserID)
                                         .set(user)
@@ -90,8 +93,6 @@ public class SignUpActivity extends BaseActivity<ActivitySignUpBinding> {
                     showToast(error.getMessage());
                 });
     }
-
-
 
 
 }

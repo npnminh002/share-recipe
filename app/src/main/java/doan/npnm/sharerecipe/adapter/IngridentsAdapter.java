@@ -122,6 +122,7 @@ public class IngridentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         void onBind(Ingredients item) {
             binding.ingridenName.setText(item.Name);
             binding.txtNumId.setText(""+item.Id);
+            binding.quantitive.setText(item.Quantitative+" g");
         }
     }
 

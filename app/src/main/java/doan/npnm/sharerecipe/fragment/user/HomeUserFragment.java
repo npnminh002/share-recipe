@@ -71,7 +71,7 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
                     Recipe= rcp.toJson();
                 }});
 
-                addFragment(new DetailRecipeFragment(rcp),android.R.id.content,true);
+                addFragment(new DetailRecipeFragment(rcp,homeviewModel),android.R.id.content,true);
             }
 
             @Override

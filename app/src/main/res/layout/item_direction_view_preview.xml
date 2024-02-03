@@ -6,15 +6,18 @@
     android:layout_marginTop="@dimen/_8sdp">
 
 
-    <EditText
+    <TextView
+        android:gravity="top|left"
         android:id="@+id/ingridenName"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_36sdp"
-        android:layout_marginStart="@dimen/_12sdp"
+        android:padding="@dimen/_6sdp"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/_36sdp"
+        android:textSize="@dimen/_13sdp"
+        android:layout_marginStart="@dimen/_6sdp"
+        android:fontFamily="@font/poppins_light"
         android:background="@drawable/bg_input_start"
         android:backgroundTint="@color/aliceblue"
-
-        android:paddingStart="@dimen/_6sdp"
         android:textColor="@color/textcolor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,9 +33,7 @@
         android:backgroundTint="@color/aliceblue"
         android:padding="@dimen/_3sdp"
         android:gravity="center"
-        android:text="1"
-        android:lineHeight="@dimen/_36sdp"
-        android:textSize="@dimen/_16sdp"
+        android:textSize="@dimen/_12sdp"
         android:fontFamily="@font/poppins_semibold"
         android:textColor="@color/black"
         android:textAlignment="center"
