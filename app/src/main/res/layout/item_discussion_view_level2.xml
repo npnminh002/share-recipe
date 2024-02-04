@@ -5,8 +5,8 @@
     android:layout_height="wrap_content">
 
 
-
     <View
+        android:id="@+id/view2"
         android:layout_width="@dimen/_2ssp"
         android:layout_height="0dp"
         android:background="@color/red"
@@ -14,21 +14,24 @@
         app:layout_constraintEnd_toEndOf="@+id/img_user"
         app:layout_constraintStart_toStartOf="@+id/img_user"
         app:layout_constraintTop_toTopOf="parent" />
+
     <doan.npnm.sharerecipe.lib.widget.CircleImageView
         android:id="@+id/img_user"
         android:layout_width="@dimen/_36sdp"
         android:layout_height="@dimen/_36sdp"
         android:src="@drawable/img_demo_user"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/linearLayout2" />
 
 
     <LinearLayout
-        android:paddingVertical="@dimen/_3sdp"
-        android:layout_marginBottom="@dimen/_6sdp"
+        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_6sdp"
         android:orientation="vertical"
+        android:paddingVertical="@dimen/_3sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_user"
@@ -41,13 +44,12 @@
             android:layout_marginStart="@dimen/_12sdp"
             android:layout_marginTop="@dimen/_3sdp"
             android:fontFamily="@font/poppins_semibold"
-            android:paddingHorizontal="@dimen/_8sdp"
-            android:paddingVertical="@dimen/_2sdp"
             android:text="@string/username"
             android:textColor="@color/textcolor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/txtContent"
             android:layout_width="wrap_content"
@@ -56,10 +58,9 @@
             android:layout_marginTop="@dimen/_3sdp"
             android:background="@drawable/bg_discusion"
             android:fontFamily="@font/poppins_medium"
-            android:minHeight="@dimen/_36sdp"
             android:paddingHorizontal="@dimen/_8sdp"
-            android:paddingVertical="@dimen/_2sdp"
-            android:text="@string/appbar_scrolling_view_behavior"
+            android:paddingVertical="@dimen/_6sdp"
+            android:text="Ddd"
             android:textColor="@color/textcolor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

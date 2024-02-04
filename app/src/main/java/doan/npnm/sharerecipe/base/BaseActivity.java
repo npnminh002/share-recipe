@@ -35,6 +35,8 @@ import androidx.viewbinding.ViewBinding;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -70,14 +72,13 @@ public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActiv
         super.onCreate(savedInstanceState);
         setStatusBarColor();
         binding = getViewBinding();
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(binding.getRoot());
         appViewModel= new ViewModelProvider(this).get(AppViewModel.class);
         decorView = getWindow().getDecorView();
         createView();
         OnClick();
         LanguageUtil.setupLanguage(this);
-
     }
 
     private void setStatusBarColor() {

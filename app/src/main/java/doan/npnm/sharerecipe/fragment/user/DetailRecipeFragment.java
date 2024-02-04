@@ -1,11 +1,26 @@
 package doan.npnm.sharerecipe.fragment.user;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareMediaContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.widget.ShareDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -14,15 +29,20 @@ import java.util.ArrayList;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.DirectionsAdapter;
+import doan.npnm.sharerecipe.adapter.DiscussionAdapter;
 import doan.npnm.sharerecipe.adapter.ImageStringAdapter;
 import doan.npnm.sharerecipe.adapter.IngridentsAdapter;
 import doan.npnm.sharerecipe.app.AppViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentDetailRecipeBinding;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
+import doan.npnm.sharerecipe.lib.ImageDownloader;
 import doan.npnm.sharerecipe.model.Users;
+import doan.npnm.sharerecipe.model.disscus.DiscussType;
 import doan.npnm.sharerecipe.model.disscus.Discussion;
 import doan.npnm.sharerecipe.model.disscus.DisscusAuth;
+import doan.npnm.sharerecipe.model.recipe.Directions;
+import doan.npnm.sharerecipe.model.recipe.Ingredients;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
 
@@ -36,6 +56,10 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
         this.data = rcp;
     }
 
+    CallbackManager callbackManager;
+    ShareDialog shareDialog;
+
+
     @Override
     protected FragmentDetailRecipeBinding getBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentDetailRecipeBinding.inflate(inflater);
@@ -47,8 +71,32 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
 
     private ImageStringAdapter adapter;
 
+    private DiscussionAdapter discussionAdapter;
+
     @Override
     protected void initView() {
+
+        AppEventsLogger.activateApp(this.requireActivity().getApplication());
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                Log.d("Share", "onSuccess: " + result.getPostId());
+            }
+
+            @Override
+            public void onError(@NonNull FacebookException e) {
+                showToast(e.getMessage());
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+
+
         new Thread(this::listenerDiscussion).start();
 
         directionsAdapter = new DirectionsAdapter(DirectionsAdapter.DIR_TYPE.PREVIEW, null);
@@ -84,38 +132,53 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
         directionsAdapter.setItems(data.Directions);
         ingridentsAdapter.setItems(data.Ingredients);
         adapter.setItems(data.ImagePreview);
+        discussionAdapter = new DiscussionAdapter(DiscussType.DISSCUS, new DiscussionAdapter.OnDiscussionEvent() {
+            @Override
+            public void onReply(Discussion dcs) {
+                DetailRecipeFragment.this.discussionReply = dcs;
+                DetailRecipeFragment.this.isReply = true;
+                binding.llReply.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onChangeIcon(Discussion dcs) {
+
+            }
+        });
+        binding.rcvDiscussion.setAdapter(discussionAdapter);
     }
 
-    private ArrayList<Discussion> discussions= new ArrayList<>();
+
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    Discussion discussionReply = null;
+    private boolean isReply = false;
+
+    private ArrayList<Discussion> discussions = new ArrayList<>();
+
     private void listenerDiscussion() {
         viewModel.fbDatabase.getReference(Constant.KEY_DICUSSION)
                 .child(data.Id)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        // Check if the snapshot exists and has data
                         if (snapshot.exists()) {
                             ArrayList<Discussion> discussions = new ArrayList<>();
-                            // Iterate through each child snapshot and convert it to Discussion object
                             for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                                 Discussion dcs = childSnapshot.getValue(Discussion.class);
                                 discussions.add(dcs);
                             }
-                            // Now you have the updated array of discussions
-                            // You can use 'discussions' list as needed
-
-                            StringBuilder discussionsText = new StringBuilder();
-                            for (Discussion dcs : discussions) {
-                                discussionsText.append(dcs.toJson()).append("\n");
-                            }
-                            binding.txtDiscuss.setText(discussionsText.toString());
-
+                            discussionAdapter.setItem(discussions);
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        // Handle database error
+
                     }
                 });
 
@@ -126,7 +189,139 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
     public void OnClick() {
         binding.backIcon.setOnClickListener(v -> closeFragment(DetailRecipeFragment.this));
         binding.icSendDiscuss.setOnClickListener(v -> sendDisscuss());
+        binding.llShareRecipe.setOnClickListener(v -> {
+//         new BottomSheetShare( () -> {
+//
+//            shareWithFacebook();
+//         }).show(requireFragmentManager(),"");
+            shareWithFacebook();
+        });
     }
+    private void shareWithFacebook() {
+        loaddingDialog.show();
+        ArrayList<Bitmap> bitmaps = new ArrayList<>();
+        ArrayList<SharePhoto> sharePhotos = new ArrayList<>();
+
+        ImageDownloader imageDownloaderMain = new ImageDownloader(new ImageDownloader.OnImageDownloadedListener() {
+            @Override
+            public void onImageDownloaded(Bitmap bitmap) {
+                if (bitmap != null) {
+                    bitmaps.add(bitmap);
+                }
+            }
+        });
+
+        imageDownloaderMain.execute(data.ImgUrl);
+
+        // Download additional preview images
+        for (String url : data.ImagePreview) {
+            ImageDownloader imageDownloaderPreview = new ImageDownloader(new ImageDownloader.OnImageDownloadedListener() {
+                @Override
+                public void onImageDownloaded(Bitmap bitmap) {
+                    if (bitmap != null) {
+                        bitmaps.add(bitmap);
+
+                        // Check if all images have been downloaded
+                        if (bitmaps.size() == data.ImagePreview.size() + 1) {
+                            loaddingDialog.dismiss();
+                            for (Bitmap bm : bitmaps) {
+                                SharePhoto sharePhoto = new SharePhoto.Builder()
+                                        .setBitmap(bm)
+                                        .build();
+                                sharePhotos.add(sharePhoto);
+                            }
+                            ShareMediaContent.Builder contentBuilder = new ShareMediaContent.Builder();
+                            contentBuilder.addMedia(sharePhotos);
+                            String content=getContentMedia(data);
+
+
+
+
+
+
+                            contentBuilder.setShareHashtag(new ShareHashtag.Builder()
+                                    .setHashtag(content)
+                                    .build());
+
+                            contentBuilder.setPageId(data.Name);
+
+                            ShareContent shareContent = contentBuilder.build();
+
+                            // Show share dialog
+                            shareDialog.show(shareContent);
+                        }
+                    }
+                }
+            });
+
+            imageDownloaderPreview.execute(url);
+        }
+    }
+
+    private String getContentMedia(Recipe data) {
+        String content="";
+
+        content+=data.Name;
+
+        content+="\n@ "+getString(R.string.ingredients)+"\n";
+        for (Ingredients gd:data.Ingredients){
+            content+="   -"+gd.Name+" --"+ gd.Quantitative+" g\n";
+        }
+        content+="\n@ "+getString(R.string.directions)+"\n";
+        int i=0;
+        for (Directions gd:data.Directions){
+            i++;
+            content+="   -"+getString(R.string.step)+""+i+": "+gd.Name+"\n";
+        }
+        content+="\n#test_do_an";
+        content+="\n#recipe_app";
+        return content;
+    }
+//    private String getContentMedia(Recipe data) {
+//        String content = "";
+//
+//        // Bold the recipe name using HTML formatting
+//        content += "<b>" + data.Name + "</b>\n";
+//
+//        content += "\n@ " + getString(R.string.ingredients) + "\n";
+//        for (Ingredients gd : data.Ingredients) {
+//            content += "   -" + gd.Name + " --" + gd.Quantitative + " g\n";
+//        }
+//        content += "\n@ " + getString(R.string.directions) + "\n";
+//        int i = 0;
+//        for (Directions gd : data.Directions) {
+//            i++;
+//            content += "   -" + getString(R.string.step) + "" + i + ": " + gd.Name + "\n";
+//        }
+//        content += "\n#test_do_an";
+//        content += "\n#recipe_app";
+//
+//        // Return HTML formatted string
+//        return Html.fromHtml(content).toString();
+//    }
+
+
+//    private void shareWithFacebook() {
+//
+//        Bitmap bmValue=null;
+//        ImageDownloader imageDownloader = new ImageDownloader(new ImageDownloader.OnImageDownloadedListener() {
+//            @Override
+//            public void onImageDownloaded(Bitmap bitmap) {
+//                SharePhoto sharePhoto1 = new SharePhoto.Builder()
+//                        .setBitmap(bitmap).build();
+//
+//
+//                ShareContent shareContent = new ShareMediaContent.Builder()
+//                        .addMedium(sharePhoto1)
+//                        .build();
+//                shareDialog.show(shareContent, ShareDialog.Mode.AUTOMATIC);
+//            }
+//        });
+//
+//        imageDownloader.execute(data.ImgUrl);
+//
+//
+//    }
 
 
     private void sendDisscuss() {
@@ -147,18 +342,37 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
             Content = message;
             DiscussIcon = doan.npnm.sharerecipe.model.disscus.DiscussIcon.NONE;
             DiscussType = doan.npnm.sharerecipe.model.disscus.DiscussType.DISSCUS;
-            DiscussionArray=null;
+            DiscussionArray = null;
         }};
-        viewModel.fbDatabase.getReference(Constant.KEY_DICUSSION)
-                .child(data.Id).child(id)
-                .setValue(discussion)
-                .addOnSuccessListener(unused -> {
-                    showToast("Success");
-                    binding.txtDiscuss.setText("");
-                })
-                .addOnFailureListener(e -> {
-                    showToast(e.getMessage());
-                });
+
+        if (!isReply) {
+
+            viewModel.fbDatabase.getReference(Constant.KEY_DICUSSION)
+                    .child(data.Id).child(id)
+                    .setValue(discussion)
+                    .addOnSuccessListener(unused -> {
+                        showToast("Success");
+                        binding.txtDiscuss.setText("");
+                    })
+                    .addOnFailureListener(e -> {
+                        showToast(e.getMessage());
+                    });
+        } else {
+            discussionReply.DiscussionArray.add(discussion);
+            viewModel.fbDatabase.getReference(Constant.KEY_DICUSSION)
+                    .child(data.Id).child(discussionReply.Id)
+                    .child("DiscussionArray")
+                    .setValue(discussionReply.DiscussionArray)
+                    .addOnSuccessListener(unused -> {
+                        showToast("Success");
+                        binding.txtDiscuss.setText("");
+                        binding.llReply.setVisibility(View.GONE);
+                    })
+                    .addOnFailureListener(e -> {
+                        showToast(e.getMessage());
+                    });
+        }
+
 
     }
 }

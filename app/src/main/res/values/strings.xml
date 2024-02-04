@@ -76,4 +76,7 @@
     <string name="discussion">Discussion</string>
     <string name="write_some_thing">Write some thing</string>
     <string name="reply">Reply</string>
+    <string name="facebook_client_token">3bff09d823583c0ff009624938cbed5d</string>
+    <string name="facebook_app_id">1321037335188570</string>
+    <string name="step">Step</string>
 </resources>
