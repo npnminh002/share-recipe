@@ -2,7 +2,7 @@ package doan.npnm.sharerecipe.model;
 
 import java.io.Serializable;
 
-public class Users implements Serializable {
+public class Users extends BaseModel<Users> {
     public String UserID,UserName,Email,Password,Token,UrlImg,TimeLog,Address,Gender,NickName;
     public int Follower,Follow,Recipe;
     public int AccountType;

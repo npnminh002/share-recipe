@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 import doan.npnm.sharerecipe.activity.AddDataActivity;
 import doan.npnm.sharerecipe.adapter.CategoryAdapter;
 import doan.npnm.sharerecipe.adapter.RecipeAdapter;
@@ -15,6 +13,7 @@ import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.RecentView;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.databinding.FragmentHomeUserBinding;
+import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
 public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
@@ -48,7 +47,9 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
         homeviewModel.recipeLiveData.observe(this,arr->{
             recipeAdapter.setItems(arr);
         });
-        topChefAdapter= new TopChefAdapter();
+        topChefAdapter= new TopChefAdapter(us -> {
+            addFragment(new DetailAuthFragment(homeviewModel,us),android.R.id.content,true);
+        });
         homeviewModel.recipeAuth.observe(this,arr->{
             topChefAdapter.setItems(arr);
         });

@@ -33,7 +33,6 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
             finish();
         });
         binding.signInApp.setOnClickListener(v -> {
-
             String email = binding.email.getText().toString();
             String pass = binding.passs.getText().toString();
 
@@ -48,11 +47,11 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
 
     private void signIn(String email, String pass) {
         auth.signInWithEmailAndPassword(email, pass).addOnSuccessListener(authResult -> {
-            appViewModel.getDataFromUser(authResult.getUser().getUid());
-
+            appViewModel.getDataFromUserId(authResult.getUser().getUid());
+           appViewModel.firstStartApp(authResult.getUser().getUid());
             showToast("Sign-in successful");
         }).addOnFailureListener(e -> {
-            // If sign in fails, display a message to the user.
+
             showToast("Authentication failed: " + e.getMessage());
         });
 

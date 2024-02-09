@@ -3,7 +3,6 @@ package doan.npnm.sharerecipe.fragment.user;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +34,8 @@ import doan.npnm.sharerecipe.adapter.IngridentsAdapter;
 import doan.npnm.sharerecipe.app.AppViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentDetailRecipeBinding;
+import doan.npnm.sharerecipe.dialog.BottomSheetShare;
+import doan.npnm.sharerecipe.dialog.BottomSheetShare.OnBottomSheetEvent;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.lib.ImageDownloader;
 import doan.npnm.sharerecipe.model.Users;
@@ -46,7 +47,7 @@ import doan.npnm.sharerecipe.model.recipe.Ingredients;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
 
-public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBinding> {
+public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBinding> implements OnBottomSheetEvent {
     private Recipe data;
     private AppViewModel viewModel;
 
@@ -111,7 +112,7 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
 
         loadImage(data.ImgUrl, binding.imgProduct);
         new Thread(() -> {
-            viewModel.getDataFromUser(data.RecipeAuth.AuthId, new FetchByID<Users>() {
+            viewModel.getDataFromUserId(data.RecipeAuth.AuthId, new FetchByID<Users>() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onSuccess(Users data) {
@@ -190,66 +191,48 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
         binding.backIcon.setOnClickListener(v -> closeFragment(DetailRecipeFragment.this));
         binding.icSendDiscuss.setOnClickListener(v -> sendDisscuss());
         binding.llShareRecipe.setOnClickListener(v -> {
-//         new BottomSheetShare( () -> {
-//
-//            shareWithFacebook();
-//         }).show(requireFragmentManager(),"");
-            shareWithFacebook();
+            
+            BottomSheetShare bottomSheetShare = new BottomSheetShare(this);
+            bottomSheetShare.show(requireFragmentManager(), bottomSheetShare.getTag());
+
         });
     }
+
     private void shareWithFacebook() {
         loaddingDialog.show();
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
         ArrayList<SharePhoto> sharePhotos = new ArrayList<>();
 
-        ImageDownloader imageDownloaderMain = new ImageDownloader(new ImageDownloader.OnImageDownloadedListener() {
-            @Override
-            public void onImageDownloaded(Bitmap bitmap) {
-                if (bitmap != null) {
-                    bitmaps.add(bitmap);
-                }
+        ImageDownloader imageDownloaderMain = new ImageDownloader(bitmap -> {
+            if (bitmap != null) {
+                bitmaps.add(bitmap);
             }
         });
 
         imageDownloaderMain.execute(data.ImgUrl);
 
-        // Download additional preview images
         for (String url : data.ImagePreview) {
-            ImageDownloader imageDownloaderPreview = new ImageDownloader(new ImageDownloader.OnImageDownloadedListener() {
-                @Override
-                public void onImageDownloaded(Bitmap bitmap) {
-                    if (bitmap != null) {
-                        bitmaps.add(bitmap);
-
-                        // Check if all images have been downloaded
-                        if (bitmaps.size() == data.ImagePreview.size() + 1) {
-                            loaddingDialog.dismiss();
-                            for (Bitmap bm : bitmaps) {
-                                SharePhoto sharePhoto = new SharePhoto.Builder()
-                                        .setBitmap(bm)
-                                        .build();
-                                sharePhotos.add(sharePhoto);
-                            }
-                            ShareMediaContent.Builder contentBuilder = new ShareMediaContent.Builder();
-                            contentBuilder.addMedia(sharePhotos);
-                            String content=getContentMedia(data);
-
-
-
-
-
-
-                            contentBuilder.setShareHashtag(new ShareHashtag.Builder()
-                                    .setHashtag(content)
-                                    .build());
-
-                            contentBuilder.setPageId(data.Name);
-
-                            ShareContent shareContent = contentBuilder.build();
-
-                            // Show share dialog
-                            shareDialog.show(shareContent);
+            ImageDownloader imageDownloaderPreview = new ImageDownloader(bitmap -> {
+                if (bitmap != null) {
+                    bitmaps.add(bitmap);
+                    if (bitmaps.size() == data.ImagePreview.size() + 1) {
+                        loaddingDialog.dismiss();
+                        for (Bitmap bm : bitmaps) {
+                            SharePhoto sharePhoto = new SharePhoto.Builder()
+                                    .setBitmap(bm)
+                                    .build();
+                            sharePhotos.add(sharePhoto);
                         }
+                        ShareMediaContent.Builder contentBuilder = new ShareMediaContent.Builder();
+
+                        contentBuilder.addMedia(sharePhotos);
+                        String content = getContentMedia(data);
+                        contentBuilder.setShareHashtag(new ShareHashtag.Builder()
+                                .setHashtag(content)
+                                .build());
+                        ShareContent<ShareMediaContent, ShareMediaContent.Builder> shareContent = contentBuilder.build();
+
+                        shareDialog.show(shareContent);
                     }
                 }
             });
@@ -259,69 +242,24 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
     }
 
     private String getContentMedia(Recipe data) {
-        String content="";
+        String content = "";
 
-        content+=data.Name;
+        content += data.Name;
 
-        content+="\n@ "+getString(R.string.ingredients)+"\n";
-        for (Ingredients gd:data.Ingredients){
-            content+="   -"+gd.Name+" --"+ gd.Quantitative+" g\n";
+        content += "\n@ " + getString(R.string.ingredients) + "\n";
+        for (Ingredients gd : data.Ingredients) {
+            content += "   -" + gd.Name + " --" + gd.Quantitative + " g\n";
         }
-        content+="\n@ "+getString(R.string.directions)+"\n";
-        int i=0;
-        for (Directions gd:data.Directions){
+        content += "\n@ " + getString(R.string.directions) + "\n";
+        int i = 0;
+        for (Directions gd : data.Directions) {
             i++;
-            content+="   -"+getString(R.string.step)+""+i+": "+gd.Name+"\n";
+            content += "   -" + getString(R.string.step) + "" + i + ": " + gd.Name + "\n";
         }
-        content+="\n#test_do_an";
-        content+="\n#recipe_app";
+        content += "\n#test_do_an";
+        content += "\n#recipe_app";
         return content;
     }
-//    private String getContentMedia(Recipe data) {
-//        String content = "";
-//
-//        // Bold the recipe name using HTML formatting
-//        content += "<b>" + data.Name + "</b>\n";
-//
-//        content += "\n@ " + getString(R.string.ingredients) + "\n";
-//        for (Ingredients gd : data.Ingredients) {
-//            content += "   -" + gd.Name + " --" + gd.Quantitative + " g\n";
-//        }
-//        content += "\n@ " + getString(R.string.directions) + "\n";
-//        int i = 0;
-//        for (Directions gd : data.Directions) {
-//            i++;
-//            content += "   -" + getString(R.string.step) + "" + i + ": " + gd.Name + "\n";
-//        }
-//        content += "\n#test_do_an";
-//        content += "\n#recipe_app";
-//
-//        // Return HTML formatted string
-//        return Html.fromHtml(content).toString();
-//    }
-
-
-//    private void shareWithFacebook() {
-//
-//        Bitmap bmValue=null;
-//        ImageDownloader imageDownloader = new ImageDownloader(new ImageDownloader.OnImageDownloadedListener() {
-//            @Override
-//            public void onImageDownloaded(Bitmap bitmap) {
-//                SharePhoto sharePhoto1 = new SharePhoto.Builder()
-//                        .setBitmap(bitmap).build();
-//
-//
-//                ShareContent shareContent = new ShareMediaContent.Builder()
-//                        .addMedium(sharePhoto1)
-//                        .build();
-//                shareDialog.show(shareContent, ShareDialog.Mode.AUTOMATIC);
-//            }
-//        });
-//
-//        imageDownloader.execute(data.ImgUrl);
-//
-//
-//    }
 
 
     private void sendDisscuss() {
@@ -346,7 +284,6 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
         }};
 
         if (!isReply) {
-
             viewModel.fbDatabase.getReference(Constant.KEY_DICUSSION)
                     .child(data.Id).child(id)
                     .setValue(discussion)
@@ -374,5 +311,10 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
         }
 
 
+    }
+
+    @Override
+    public void onFaceBook() {
+        showToast("Ge;;;");
     }
 }

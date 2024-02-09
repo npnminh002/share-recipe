@@ -2,6 +2,7 @@ package doan.npnm.sharerecipe.fragment.user;
 
 import android.os.Build;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.RequiresApi;
@@ -48,6 +49,8 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
     @Override
     protected void initView() {
 
+
+
         viewModel.users.observe(this, users -> {
             if (!Objects.equals(users.UrlImg, "")) {
                 loadImage(users.UrlImg, binding.ImgUser);
@@ -82,6 +85,14 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
                 
                 saveViewAdapter.removeItem(pos);
             }
+        });
+
+        binding.llFollow.setOnClickListener(v -> {
+            addFragment(new FollowerFragment(viewModel, FollowerFragment.FOLLOW.FOLLOW),android.R.id.content,true);
+        });
+
+        binding.llFollower.setOnClickListener(v -> {
+            addFragment(new FollowerFragment(viewModel, FollowerFragment.FOLLOW.FOLLOWER),android.R.id.content,true);
         });
 
         binding.rcvRecentView.setAdapter(recentViewAdapter);

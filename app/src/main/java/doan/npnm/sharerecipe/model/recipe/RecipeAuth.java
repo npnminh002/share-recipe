@@ -5,8 +5,10 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
+import doan.npnm.sharerecipe.model.BaseModel;
+
 @Entity(tableName = "RecipeAuth")
-public class RecipeAuth implements Serializable {
+public class RecipeAuth extends BaseModel<RecipeAuth> {
     @PrimaryKey
     public String AuthId="";
     public String AuthName="",Gender="",Address="",NickName="",Image="";

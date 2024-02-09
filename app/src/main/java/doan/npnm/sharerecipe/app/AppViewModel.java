@@ -2,32 +2,42 @@ package doan.npnm.sharerecipe.app;
 
 import android.content.ContentResolver;
 import android.net.Uri;
+import android.os.Build;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.database.AppDatabase;
 import doan.npnm.sharerecipe.database.AppDatabaseProvider;
+import doan.npnm.sharerecipe.database.models.Follower;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
-import doan.npnm.sharerecipe.model.recipe.RecipeAuth;
 import doan.npnm.sharerecipe.utility.Constant;
 
 public class AppViewModel extends ViewModel {
@@ -47,16 +57,49 @@ public class AppViewModel extends ViewModel {
 
     public AppViewModel() {
         if (auth.getCurrentUser() != null) {
-            getDataFromUser(auth.getCurrentUser().getUid());
+            getDataFromUserId(auth.getCurrentUser().getUid());
+
         }
         new Thread(this::onGetRecipeData).start();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            new Thread(this::onGetAuth).start();
+        }
+
+    }
+    public MutableLiveData<Boolean> isFollow= new MutableLiveData<>(false);
+
+
+    public void checkFollowByUid(String uid) {
+        boolean isFollow= database.followerDao().checkExisId(uid);
+        this.isFollow.postValue(isFollow);
     }
 
-    public MutableLiveData<ArrayList<RecipeAuth>> recipeAuth = new MutableLiveData<ArrayList<RecipeAuth>>();
+
+    public void firstStartApp(String uId){
+        onLoadFollower(uId);
+    }
+
+    private void onLoadFollower(String usID) {
+        fbDatabase.getReference(Constant.FOLLOW_USER)
+                .child(usID)
+                .child("YouFollow")
+                .get()
+                .addOnCompleteListener(task -> {
+                    for (DataSnapshot doc :task.getResult().getChildren()){
+                       database.followerDao().addRecentView(new Follower(){{
+                           AuthID= doc.getKey();
+                       }});
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    showToast(e.getMessage());
+                });
+    }
+
+
+    public MutableLiveData<ArrayList<Users>> recipeAuth = new MutableLiveData<ArrayList<Users>>();
 
     public void onGetRecipeData() {
-
-        ArrayList<RecipeAuth> recipeAuths = new ArrayList<>();
         ArrayList<Recipe> rcpList = new ArrayList<>();
         firestore.collection(Constant.RECIPE)
                 .limit(50)
@@ -67,7 +110,6 @@ public class AppViewModel extends ViewModel {
                             Recipe rcp = documentSnapshot.toObject(Recipe.class);
                             if (rcp != null) {
                                 rcpList.add(rcp);
-                                recipeAuths.add(rcp.RecipeAuth);
                             } else {
                                 showToast("Recipe is null");
                             }
@@ -76,40 +118,35 @@ public class AppViewModel extends ViewModel {
                             showToast("Document does not exist");
                         }
                     }
-                    this.recipeAuth.postValue(recipeAuths);
                     recipeLiveData.postValue(rcpList);
-
                 });
-
     }
 
-    public interface OnGetSucces {
-        void onData(ArrayList<Recipe> arr);
-    }
-
-    public void getData(OnGetSucces succes) {
-        ArrayList<Recipe> rcpList = new ArrayList<>();
-        firestore.collection(Constant.RECIPE)
-                .limit(50)
-                .addSnapshotListener((value, error) -> {
-                    for (DocumentSnapshot documentSnapshot : value) {
-                        if (documentSnapshot.exists()) {
-
-                            Recipe rcp = documentSnapshot.toObject(Recipe.class);
-                            if (rcp != null) {
-                                rcpList.add(rcp);
-                            } else {
-                                showToast("Recipe is null");
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void onGetAuth() {
+        ArrayList<Users> users = new ArrayList<>();
+        firestore.collection(Constant.KEY_USER)
+                .get()
+                .addOnCompleteListener(query -> {
+                    if (query.isSuccessful()) {
+                        QuerySnapshot querySnapshot = query.getResult();
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                                Users user = doc.toObject(Users.class);
+                                users.add(user);
                             }
-                        } else {
+                            users.sort(Comparator.comparingInt(o -> -o.Recipe));
+                            users.subList(0,15);
 
-                            showToast("Document does not exist");
+                            this.recipeAuth.postValue(users);
                         }
                     }
-                    succes.onData(rcpList);
-
+                })
+                .addOnFailureListener(e -> {
+                    showToast(e.getMessage());
                 });
     }
+
 
     public ArrayList<Category> getListCategory() {
         ArrayList<Category> categories = new ArrayList<>();
@@ -154,14 +191,14 @@ public class AppViewModel extends ViewModel {
         return "#" + formattedString;
     }
 
-    public void getDataFromUser(String uid) {
+    public void getDataFromUserId(String uid) {
         firestore.collection(Constant.KEY_USER)
                 .document(uid)
                 .addSnapshotListener((value, error) -> {
                     if (value != null) {
                         Users us = value.toObject(Users.class);
 
-                        users.postValue(us!=null ? us: null);
+                        users.postValue(us != null ? us : null);
                     } else {
                         showToast("Error: " + error.getMessage());
                         users.postValue(null);
@@ -170,7 +207,7 @@ public class AppViewModel extends ViewModel {
                 });
     }
 
-    public void getDataFromUser(String uid, FetchByID<Users> fetch) {
+    public void getDataFromUserId(String uid, FetchByID<Users> fetch) {
         firestore.collection(Constant.KEY_USER)
                 .document(uid)
                 .addSnapshotListener((value, error) -> {
@@ -184,6 +221,7 @@ public class AppViewModel extends ViewModel {
 
                 });
     }
+
     public void signUpApp(String email, String name, String pass, MutableLiveData<Boolean> isEmailExists) {
         firestore.collection(Constant.KEY_USER)
                 .whereEqualTo("Email", email)
