@@ -6,18 +6,14 @@ import android.os.Build;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -28,6 +24,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Objects;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.context.AppContext;
@@ -58,24 +55,87 @@ public class AppViewModel extends ViewModel {
     public AppViewModel() {
         if (auth.getCurrentUser() != null) {
             getDataFromUserId(auth.getCurrentUser().getUid());
-
-        }
+             }
         new Thread(this::onGetRecipeData).start();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             new Thread(this::onGetAuth).start();
         }
 
     }
-    public MutableLiveData<Boolean> isFollow= new MutableLiveData<>(false);
 
+    public MutableLiveData<Boolean> isFollow = new MutableLiveData<>(false);
+
+
+    public void onFollow(Users usfollower) {
+        Users authLogin = getUsers().getValue();
+        database.followerDao().addRecentView(new Follower() {{
+            AuthID = usfollower.UserID;
+        }});
+        new Thread(() -> {
+            fbDatabase.getReference(Constant.FOLLOW_USER)
+                    .child(authLogin.UserID)
+                    .child("YouFollow")
+                    .child(usfollower.UserID)
+                    .setValue(usfollower.toJson());
+            fbDatabase.getReference(Constant.FOLLOW_USER)
+                    .child(usfollower.UserID)
+                    .child("OtherFollow")
+                    .child(authLogin.UserID)
+                    .setValue(authLogin.toJson());
+
+            DocumentReference docRef = firestore.collection(Constant.KEY_USER)
+                    .document(authLogin.UserID);
+            docRef.update("Follow", authLogin.Follow + 1);
+
+            DocumentReference docRef2 = firestore.collection(Constant.KEY_USER)
+                    .document(usfollower.UserID);
+            docRef2.get().addOnCompleteListener(task -> {
+                Users usGet = task.getResult().toObject(Users.class);
+                docRef2.update("Follower", usGet.Follower + 1);
+
+            });
+
+        }).start();
+    }
+
+    public void onUnFollow(Users usfollower) {
+        Users authLogin = getUsers().getValue();
+        database.followerDao().removeRecent(usfollower.UserID);
+        new Thread(() -> {
+            fbDatabase.getReference(Constant.FOLLOW_USER)
+                    .child(authLogin.UserID)
+                    .child("YouFollow")
+                    .child(usfollower.UserID)
+                    .removeValue();
+            fbDatabase.getReference(Constant.FOLLOW_USER)
+                    .child(usfollower.UserID)
+                    .child("OtherFollow")
+                    .child(usfollower.UserID)
+                    .removeValue();
+
+            DocumentReference docRef = firestore.collection(Constant.KEY_USER)
+                    .document(authLogin.UserID);
+            docRef.update("Follow", authLogin.Follow <= 1 ? 0 : authLogin.Follow - 1);
+
+            DocumentReference docRef2 = firestore.collection(Constant.KEY_USER)
+                    .document(usfollower.UserID);
+            docRef2.get().addOnCompleteListener(task -> {
+                Users usGet = task.getResult().toObject(Users.class);
+                docRef2.update("Follower", usGet.Follower <= 1 ? 0 : usGet.Follower + 1);
+
+            });
+
+        }).start();
+
+    }
 
     public void checkFollowByUid(String uid) {
-        boolean isFollow= database.followerDao().checkExisId(uid);
+        boolean isFollow = database.followerDao().checkExisId(uid);
         this.isFollow.postValue(isFollow);
     }
 
 
-    public void firstStartApp(String uId){
+    public void firstStartApp(String uId) {
         onLoadFollower(uId);
     }
 
@@ -85,10 +145,10 @@ public class AppViewModel extends ViewModel {
                 .child("YouFollow")
                 .get()
                 .addOnCompleteListener(task -> {
-                    for (DataSnapshot doc :task.getResult().getChildren()){
-                       database.followerDao().addRecentView(new Follower(){{
-                           AuthID= doc.getKey();
-                       }});
+                    for (DataSnapshot doc : task.getResult().getChildren()) {
+                        database.followerDao().addRecentView(new Follower() {{
+                            AuthID = doc.getKey();
+                        }});
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -97,19 +157,22 @@ public class AppViewModel extends ViewModel {
     }
 
 
-    public MutableLiveData<ArrayList<Users>> recipeAuth = new MutableLiveData<ArrayList<Users>>();
+    public MutableLiveData<ArrayList<Users>> recipeAuth = new MutableLiveData<>();
+    public ArrayList<String> myRecipeArr= new ArrayList<>();
+
 
     public void onGetRecipeData() {
         ArrayList<Recipe> rcpList = new ArrayList<>();
         firestore.collection(Constant.RECIPE)
-                .limit(50)
                 .addSnapshotListener((value, error) -> {
                     for (DocumentSnapshot documentSnapshot : value) {
                         if (documentSnapshot.exists()) {
-
                             Recipe rcp = documentSnapshot.toObject(Recipe.class);
                             if (rcp != null) {
                                 rcpList.add(rcp);
+                                if(rcp.RecipeAuth.AuthId.equals(Objects.requireNonNull(users.getValue()).UserID)){
+                                    myRecipeArr.add(rcp.toJson());
+                                }
                             } else {
                                 showToast("Recipe is null");
                             }
@@ -136,7 +199,7 @@ public class AppViewModel extends ViewModel {
                                 users.add(user);
                             }
                             users.sort(Comparator.comparingInt(o -> -o.Recipe));
-                            users.subList(0,15);
+                            users.subList(0, 15);
 
                             this.recipeAuth.postValue(users);
                         }

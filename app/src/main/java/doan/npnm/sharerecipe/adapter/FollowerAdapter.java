@@ -4,6 +4,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Objects;
+
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.base.BaseAdapter;
 import doan.npnm.sharerecipe.database.AppDatabase;
@@ -34,7 +36,7 @@ public class FollowerAdapter extends BaseAdapter<String, ItemFollowViewBinding> 
         binding.btnFollow.setVisibility(isFollow ? View.GONE : View.VISIBLE);
         binding.btnFollow.setOnClickListener(v -> event.onFollower(value));
         binding.btnUnFollow.setOnClickListener(v -> event.onUnFollow(value));
-        loadImage(item.UrlImg == "" ? R.drawable.img_demo_user : item.UrlImg, binding.imgChef);
+        loadImage(Objects.equals(item.UrlImg, "") ?"https://img.freepik.com/premium-vector/chef-icon-illustraton-vector_57048-38.jpg?w=740": item.UrlImg, binding.imgChef);
         binding.recipeView.setText("" + item.Recipe);
         binding.chefName.setText(item.UserName);
         binding.getRoot().setOnClickListener(v -> event.onView(value));

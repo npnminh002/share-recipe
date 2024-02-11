@@ -9,14 +9,13 @@ import java.util.Objects;
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.base.BaseAdapter;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
-import doan.npnm.sharerecipe.interfaces.OnRecipeEvent;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
-public class RecipeSaveViewAdapter extends BaseAdapter<SaveRecipe, doan.npnm.sharerecipe.databinding.ItemRecipeRecentBinding> {
+public class MyRecipeViewAdapter extends BaseAdapter<String, doan.npnm.sharerecipe.databinding.ItemRecipeRecentBinding> {
 
     final OnRecipeEvent event;
 
-    public RecipeSaveViewAdapter(OnRecipeEvent event) {
+    public MyRecipeViewAdapter(OnRecipeEvent event) {
         this.event = event;
     }
 
@@ -26,15 +25,15 @@ public class RecipeSaveViewAdapter extends BaseAdapter<SaveRecipe, doan.npnm.sha
     }
 
     @Override
-    protected void bind(doan.npnm.sharerecipe.databinding.ItemRecipeRecentBinding binding, SaveRecipe recent, int position) {
-        Recipe item = new Recipe().fromJson(recent.Recipe);
-
+    protected void bind(doan.npnm.sharerecipe.databinding.ItemRecipeRecentBinding binding, String recent, int position) {
+        Recipe item = new Recipe().fromJson(recent);
         binding.txtTimeCook.setText((item.CookTime.Time + item.CookTime.TimeType).equals("s") ? "second" : Objects.equals(item.CookTime.TimeType, "m") ? "minute" : "hour");
         binding.chefName.setText(item.Name);
         binding.llSaveRecipe.setOnClickListener(v -> {
             event.onRemove(item,position);
         });
-
+        binding.icEditRecipe.setVisibility(View.VISIBLE);
+        binding.icEditRecipe.setOnClickListener(v->event.onEdit(item));
         binding.llSaveRecipe.setImageResource(R.drawable.ic_delete_outline);
         binding.getRoot().setOnClickListener(v -> event.onView(item));
         loadImage(item.ImgUrl, binding.imgChef);
@@ -45,5 +44,6 @@ public class RecipeSaveViewAdapter extends BaseAdapter<SaveRecipe, doan.npnm.sha
         void onView(Recipe rcp);
 
         void onRemove(Recipe recipe,int pos);
+        void  onEdit(Recipe recipe);
     }
 }

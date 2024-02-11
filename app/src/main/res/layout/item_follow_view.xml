@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="@dimen/_12sdp"
-    android:layout_marginEnd="@dimen/_12sdp"
+    android:layout_marginTop="@dimen/_12sdp"
+    android:layout_marginHorizontal="@dimen/_6sdp"
     android:layout_height="@dimen/_200sdp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/_10sdp"
-                android:layout_margin="@dimen/_12sdp"
+                android:layout_margin="@dimen/_6sdp"
                 android:background="@drawable/bg_input_start"
                 android:backgroundTint="@color/appcolor"
                 android:fontFamily="@font/poppins_medium"
@@ -50,12 +51,12 @@
 
 
             <TextView
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/btnUnFollow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp"
+                android:layout_margin="@dimen/_6sdp"
+                android:textSize="@dimen/_10sdp"
                 android:background="@drawable/bg_input_start"
                 android:backgroundTint="@color/appcolor"
                 android:fontFamily="@font/poppins_medium"

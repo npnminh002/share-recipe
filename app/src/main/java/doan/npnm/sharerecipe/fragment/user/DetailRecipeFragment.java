@@ -33,6 +33,7 @@ import doan.npnm.sharerecipe.adapter.ImageStringAdapter;
 import doan.npnm.sharerecipe.adapter.IngridentsAdapter;
 import doan.npnm.sharerecipe.app.AppViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
+import doan.npnm.sharerecipe.database.models.Follower;
 import doan.npnm.sharerecipe.databinding.FragmentDetailRecipeBinding;
 import doan.npnm.sharerecipe.dialog.BottomSheetShare;
 import doan.npnm.sharerecipe.dialog.BottomSheetShare.OnBottomSheetEvent;
@@ -191,10 +192,15 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
         binding.backIcon.setOnClickListener(v -> closeFragment(DetailRecipeFragment.this));
         binding.icSendDiscuss.setOnClickListener(v -> sendDisscuss());
         binding.llShareRecipe.setOnClickListener(v -> {
-            
             BottomSheetShare bottomSheetShare = new BottomSheetShare(this);
             bottomSheetShare.show(requireFragmentManager(), bottomSheetShare.getTag());
 
+        });
+
+        binding.llSaveRecipe.setOnClickListener(v->{
+            viewModel.database.followerDao().addRecentView(new Follower(){{
+                AuthID=data.Id;
+            }});
         });
     }
 

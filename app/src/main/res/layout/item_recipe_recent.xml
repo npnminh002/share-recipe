@@ -36,6 +36,20 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0">
 
+            <ImageView
+                android:id="@+id/icEditRecipe"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_margin="@dimen/_6sdp"
+                android:background="@drawable/bg_input_start"
+                android:backgroundTint="#8ABABABA"
+                app:tint="@color/white"
+                android:visibility="gone"
+                android:padding="@dimen/_3sdp"
+                android:src="@drawable/ic_round_edit"
+                app:layout_constraintEnd_toStartOf="@+id/llSaveRecipe"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/txt_timeView"
                 android:layout_width="wrap_content"

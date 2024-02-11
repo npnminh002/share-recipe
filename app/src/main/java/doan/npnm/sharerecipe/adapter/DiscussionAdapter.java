@@ -69,6 +69,8 @@ public class DiscussionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public void onBind(Discussion discussion, int position) {
+            binding.view3.setVisibility(position==0? View.VISIBLE : View.GONE);
+            binding.view2.setVisibility(position!=0? View.VISIBLE : View.GONE);
             DiscussionAdapter discussionAdapter = new DiscussionAdapter(DiscussType.REPLY, new OnDiscussionEvent() {
                 @Override
                 public void onReply(Discussion dcs) {
@@ -107,6 +109,11 @@ public class DiscussionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public void onBind(Discussion discussion, int position) {
+
+
+            binding.view3.setVisibility(position==0? View.VISIBLE : View.GONE);
+            binding.view2.setVisibility(position!=0? View.VISIBLE : View.GONE);
+
           //  binding.imgUser.loadImage(discussion.DisscusAuth.Image == "" ? R.drawable.img_1 : discussion.DisscusAuth.Image);
             binding.txtContent.setText(discussion.Content);
             binding.txtUserName.setText(discussion.DisscusAuth.AuthName);

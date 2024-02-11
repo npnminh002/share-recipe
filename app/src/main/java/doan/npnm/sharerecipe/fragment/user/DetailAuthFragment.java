@@ -14,7 +14,6 @@ import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.RecipeAdapter;
 import doan.npnm.sharerecipe.app.AppViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.database.models.Follower;
 import doan.npnm.sharerecipe.databinding.FragmentDetailAuthBinding;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.model.Users;
@@ -66,7 +65,7 @@ public class DetailAuthFragment extends BaseFragment<FragmentDetailAuthBinding> 
         binding.txtFollower.setText("" + users.Follower);
 
         viewModel.checkFollowByUid(users.UserID);
-        viewModel.isFollow.observe(this,isFollow->{
+        viewModel.isFollow.observe(this, isFollow -> {
             binding.btnFollow.setText(getString(isFollow ? R.string.un_follow : R.string.follow));
         });
 
@@ -117,37 +116,12 @@ public class DetailAuthFragment extends BaseFragment<FragmentDetailAuthBinding> 
         });
         binding.btnFollow.setOnClickListener(v -> {
             if (viewModel.isFollow.getValue()) {
-                viewModel.database.followerDao().removeRecent(users.UserID);
-                new Thread(() -> {
-                    viewModel.fbDatabase.getReference(Constant.FOLLOW_USER)
-                            .child(authLogin.UserID)
-                            .child("YouFollow")
-                            .child(users.UserID)
-                            .removeValue();
-                    viewModel.fbDatabase.getReference(Constant.FOLLOW_USER)
-                            .child(users.UserID)
-                            .child("OtherFollow")
-                            .child(authLogin.UserID)
-                            .removeValue();
-                }).start();
-
+                binding.txtFollower.setText("" + (users.Follower - 1));
+                viewModel.onUnFollow(users);
 
             } else {
-                viewModel.database.followerDao().addRecentView(new Follower() {{
-                    AuthID = users.UserID;
-                }});
-                new Thread(() -> {
-                    viewModel.fbDatabase.getReference(Constant.FOLLOW_USER)
-                            .child(authLogin.UserID)
-                            .child("YouFollow")
-                            .child(users.UserID)
-                            .setValue(users.toJson());
-                    viewModel.fbDatabase.getReference(Constant.FOLLOW_USER)
-                            .child(users.UserID)
-                            .child("OtherFollow")
-                            .child(authLogin.UserID)
-                            .setValue(authLogin.toJson());
-                }).start();
+                viewModel.onFollow(users);
+                binding.txtFollower.setText("" + (users.Follower + 1));
             }
             viewModel.checkFollowByUid(users.UserID);
 
