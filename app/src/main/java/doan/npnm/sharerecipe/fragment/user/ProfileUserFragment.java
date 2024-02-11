@@ -49,7 +49,6 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
 
     private MyRecipeViewAdapter myViewAdapter;
 
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initView() {
@@ -67,66 +66,66 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
         recentViewAdapter = new RecipeRecentViewAdapter(new OnRecipeEvent() {
             @Override
             public void onView(Recipe rcp) {
-                if( viewModel.database.recentViewDao().checkExistence(rcp.Id)){
+                if (viewModel.database.recentViewDao().checkExistence(rcp.Id)) {
                     viewModel.database.recentViewDao().removeRecent(rcp.Id);
                 }
-                viewModel.database.recentViewDao().addRecentView(new RecentView(){{
-                    AuthID=rcp.RecipeAuth.AuthId;
-                    RecipeID=rcp.Id;
-                    ViewTime=getTimeNow();
-                    Recipe= rcp.toJson();
+                viewModel.database.recentViewDao().addRecentView(new RecentView() {{
+                    AuthID = rcp.RecipeAuth.AuthId;
+                    RecipeID = rcp.Id;
+                    ViewTime = getTimeNow();
+                    Recipe = rcp.toJson();
                 }});
 
-                addFragment(new DetailRecipeFragment(rcp,viewModel),android.R.id.content,true);
+                addFragment(new DetailRecipeFragment(rcp, viewModel), android.R.id.content, true);
             }
 
             @Override
             public void onSave(Recipe rcp) {
-                if( viewModel.database.saveRecipeDao().checkExistence(rcp.Id)){
+                if (viewModel.database.saveRecipeDao().checkExistence(rcp.Id)) {
                     viewModel.database.saveRecipeDao().removeRecent(rcp.Id);
                 }
-                viewModel.database.saveRecipeDao().addRecentView(new SaveRecipe(){{
-                    AuthID=rcp.RecipeAuth.AuthId;
-                    RecipeID=rcp.Id;
-                    SaveTime=getTimeNow();
-                    Recipe= rcp.toJson();
+                viewModel.database.saveRecipeDao().addRecentView(new SaveRecipe() {{
+                    AuthID = rcp.RecipeAuth.AuthId;
+                    RecipeID = rcp.Id;
+                    SaveTime = getTimeNow();
+                    Recipe = rcp.toJson();
                 }});
             }
         });
         saveViewAdapter = new RecipeSaveViewAdapter(new RecipeSaveViewAdapter.OnRecipeEvent() {
             @Override
             public void onView(Recipe rcp) {
-                if( viewModel.database.recentViewDao().checkExistence(rcp.Id)){
+                if (viewModel.database.recentViewDao().checkExistence(rcp.Id)) {
                     viewModel.database.recentViewDao().removeRecent(rcp.Id);
                 }
-                viewModel.database.recentViewDao().addRecentView(new RecentView(){{
-                    AuthID=rcp.RecipeAuth.AuthId;
-                    RecipeID=rcp.Id;
-                    ViewTime=getTimeNow();
-                    Recipe= rcp.toJson();
+                viewModel.database.recentViewDao().addRecentView(new RecentView() {{
+                    AuthID = rcp.RecipeAuth.AuthId;
+                    RecipeID = rcp.Id;
+                    ViewTime = getTimeNow();
+                    Recipe = rcp.toJson();
                 }});
 
-                addFragment(new DetailRecipeFragment(rcp,viewModel),android.R.id.content,true);
+                addFragment(new DetailRecipeFragment(rcp, viewModel), android.R.id.content, true);
             }
 
             @Override
-            public void onRemove(Recipe recipe,int pos) {
+            public void onRemove(Recipe recipe, int pos) {
                 viewModel.database.saveRecipeDao().removeRecent(recipe.Id);
-                
+
                 saveViewAdapter.removeItem(pos);
             }
         });
 
 
-        myViewAdapter= new MyRecipeViewAdapter(new MyRecipeViewAdapter.OnRecipeEvent() {
+        myViewAdapter = new MyRecipeViewAdapter(new MyRecipeViewAdapter.OnRecipeEvent() {
             @Override
             public void onView(Recipe rcp) {
-                addFragment(new DetailRecipeFragment(rcp,viewModel),android.R.id.content,true);
+                addFragment(new DetailRecipeFragment(rcp, viewModel), android.R.id.content, true);
             }
 
             @Override
             public void onRemove(Recipe recipe, int pos) {
-                new ConfirmDialog(ProfileUserFragment.this.requireContext(),getString( R.string.cf_delete), new ConfirmDialog.OnUpdateSelect() {
+                new ConfirmDialog(ProfileUserFragment.this.requireContext(), getString(R.string.cf_delete), new ConfirmDialog.OnUpdateSelect() {
                     @Override
                     public void onSelect() {
 
@@ -141,15 +140,12 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
         });
 
 
-
-
-
         binding.llFollow.setOnClickListener(v -> {
-            addFragment(new FollowerFragment(viewModel, FollowerFragment.FOLLOW.FOLLOW),android.R.id.content,true);
+            addFragment(new FollowerFragment(viewModel, FollowerFragment.FOLLOW.FOLLOW), android.R.id.content, true);
         });
 
         binding.llFollower.setOnClickListener(v -> {
-            addFragment(new FollowerFragment(viewModel, FollowerFragment.FOLLOW.FOLLOWER),android.R.id.content,true);
+            addFragment(new FollowerFragment(viewModel, FollowerFragment.FOLLOW.FOLLOWER), android.R.id.content, true);
         });
 
         binding.rcvRecentView.setAdapter(recentViewAdapter);
