@@ -144,6 +144,9 @@ public class PreviewRecipeFragment extends BaseFragment<FragmentPreviewRecipeBin
     }
 
     private void putDataRecipe(Recipe value) {
+        recipe.History= new ArrayList<String>(){{
+            add("Time Add"+getTimeNow());
+        }};
         firestore.collection(Constant.RECIPE)
                 .document(value.Id)
                 .set(recipe).addOnSuccessListener(task -> {

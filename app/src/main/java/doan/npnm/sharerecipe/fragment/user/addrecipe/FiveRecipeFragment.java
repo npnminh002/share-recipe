@@ -18,7 +18,6 @@ import doan.npnm.sharerecipe.databinding.FragmentFiveRecipeBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
-import doan.npnm.sharerecipe.model.recipe.RecipeAuth;
 
 public class FiveRecipeFragment extends BaseFragment<FragmentFiveRecipeBinding> {
     public AppViewModel viewModel;
@@ -40,7 +39,6 @@ public class FiveRecipeFragment extends BaseFragment<FragmentFiveRecipeBinding> 
     }
 
     public Recipe recipe;
-    RecipeAuth auth;
     private ImageRecipeAdapter adapter;
 
     @Override
@@ -64,16 +62,7 @@ public class FiveRecipeFragment extends BaseFragment<FragmentFiveRecipeBinding> 
 
         recipeViewModel.recipeLiveData.observe(this, data -> {
             this.recipe = data;
-            auth = new RecipeAuth() {{
-                AuthId = users.UserID;
-                AuthName = users.UserName;
-                Address = users.Address;
-                Gender = users.Gender;
-                NickName = users.NickName;
-                Image = users.UrlImg;
-            }};
-
-            recipe.RecipeAuth = auth;
+            recipe.RecipeAuth = users.Id;
         });
         recipeViewModel.listSelect.observe(this, data -> {
             if (data == null) {

@@ -80,4 +80,8 @@
     <string name="facebook_app_id">1321037335188570</string>
     <string name="step">Step</string>
     <string name="un_follow">Unfollow</string>
+    <string name="edit_recipe">Edit recipe</string>
+    <string name="have_an_err">Error occurs when viewing this recipe for copyright reasons</string>
+    <string name="report">Report</string>
+    <string name="share">Share</string>
 </resources>

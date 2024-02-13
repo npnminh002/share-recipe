@@ -31,6 +31,18 @@
 
 
         <TextView
+            android:id="@+id/cancelIcon"
+            android:paddingHorizontal="@dimen/_6sdp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins_semibold"
+            android:lineHeight="@dimen/_28sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/button_app_background"
+            android:text="@string/cancel"
+            android:gravity="center_vertical" />
+        <TextView
             android:id="@+id/Profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -431,27 +443,8 @@
                     app:layout_constraintStart_toStartOf="parent">
 
                     <TextView
-                        android:id="@+id/btn_cancel"
+                        android:id="@+id/btn_save_data"
                         android:layout_width="0dp"
-                        app:layout_constraintWidth_percent="0.48"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/active_background"
-                        android:backgroundTint="@color/lightgray"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:paddingVertical="@dimen/_8sdp"
-                        android:text="@string/cancel"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_14sdp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:src="@drawable/ic_arrow_back"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/btn_next"
-                        android:layout_width="0dp"
-                        app:layout_constraintWidth_percent="0.48"
                         android:layout_height="wrap_content"
                         android:background="@drawable/active_background"
                         android:backgroundTint="@color/appcolor"
@@ -463,6 +456,7 @@
                         android:textSize="@dimen/_14sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

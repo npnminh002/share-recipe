@@ -1,5 +1,6 @@
 package doan.npnm.sharerecipe.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -24,9 +25,11 @@ public class RecipeAdapter extends BaseAdapter<Recipe, ItemRecipeHomeBinding> {
         return ItemRecipeHomeBinding.inflate(inflater, parent, false);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void bind(ItemRecipeHomeBinding binding, Recipe item, int position) {
-        binding.txtTimeCook.setText((item.CookTime.Time + item.CookTime.TimeType).equals("s") ? "second" : Objects.equals(item.CookTime.TimeType, "m") ? "minute" : "hour");
+        binding.txtTimeCook.setText(item.CookTime.Time+" " + (item.CookTime.TimeType.equals("s") ? "second" :
+                Objects.equals(item.CookTime.TimeType, "m") ? "minute" : "hour"));
         binding.chefName.setText(item.Name);
         binding.llSaveRecipe.setOnClickListener(v -> {
             event.onSave(item);

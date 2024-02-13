@@ -70,7 +70,7 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
                     viewModel.database.recentViewDao().removeRecent(rcp.Id);
                 }
                 viewModel.database.recentViewDao().addRecentView(new RecentView() {{
-                    AuthID = rcp.RecipeAuth.AuthId;
+                    AuthID = rcp.RecipeAuth;
                     RecipeID = rcp.Id;
                     ViewTime = getTimeNow();
                     Recipe = rcp.toJson();
@@ -85,7 +85,7 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
                     viewModel.database.saveRecipeDao().removeRecent(rcp.Id);
                 }
                 viewModel.database.saveRecipeDao().addRecentView(new SaveRecipe() {{
-                    AuthID = rcp.RecipeAuth.AuthId;
+                    AuthID = rcp.RecipeAuth;
                     RecipeID = rcp.Id;
                     SaveTime = getTimeNow();
                     Recipe = rcp.toJson();
@@ -99,7 +99,7 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
                     viewModel.database.recentViewDao().removeRecent(rcp.Id);
                 }
                 viewModel.database.recentViewDao().addRecentView(new RecentView() {{
-                    AuthID = rcp.RecipeAuth.AuthId;
+                    AuthID = rcp.RecipeAuth;
                     RecipeID = rcp.Id;
                     ViewTime = getTimeNow();
                     Recipe = rcp.toJson();
@@ -135,7 +135,7 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
 
             @Override
             public void onEdit(Recipe recipe) {
-
+                replaceFullViewFragment(new EditRecipeFragment(viewModel,recipe),android.R.id.content,true);
             }
         });
 

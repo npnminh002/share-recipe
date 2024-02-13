@@ -162,6 +162,7 @@ public class AppViewModel extends ViewModel {
 
 
     public void onGetRecipeData() {
+        String loginID= Objects.requireNonNull(auth.getCurrentUser()).getUid();
         ArrayList<Recipe> rcpList = new ArrayList<>();
         firestore.collection(Constant.RECIPE)
                 .addSnapshotListener((value, error) -> {
@@ -170,7 +171,7 @@ public class AppViewModel extends ViewModel {
                             Recipe rcp = documentSnapshot.toObject(Recipe.class);
                             if (rcp != null) {
                                 rcpList.add(rcp);
-                                if(rcp.RecipeAuth.AuthId.equals(Objects.requireNonNull(users.getValue()).UserID)){
+                                if (rcp.RecipeAuth.equals(loginID)) {
                                     myRecipeArr.add(rcp.toJson());
                                 }
                             } else {

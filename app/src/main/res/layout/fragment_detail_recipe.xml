@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:background="@color/white"
     android:paddingVertical="@dimen/_6sdp"
     tools:context=".fragment.user.DetailRecipeFragment">
@@ -20,49 +19,53 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/backIcon"
+            android:id="@+id/backIcon2"
             android:layout_width="@dimen/_28sdp"
             android:layout_height="@dimen/_28sdp"
             android:layout_alignParentStart="true"
             android:layout_gravity="start"
+            android:background="@drawable/button_app_background"
             android:padding="@dimen/_3sdp"
             android:src="@drawable/ic_arrow_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
 
         <ImageView
             android:id="@+id/llSaveRecipe"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/_8sdp"
             android:background="@drawable/bg_input_start"
             android:backgroundTint="#8ABABABA"
+            android:layout_marginEnd="@dimen/_8sdp"
             android:padding="@dimen/_3sdp"
             android:src="@drawable/ic_bookmark_add"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/llShareRecipe"
+            app:layout_constraintEnd_toStartOf="@+id/llReport"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/black" />
 
+
         <ImageView
-            android:id="@+id/llShareRecipe"
+            android:id="@+id/llReport"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
             android:layout_alignParentEnd="true"
             android:background="@drawable/bg_input_start"
             android:backgroundTint="#8ABABABA"
             android:padding="@dimen/_3sdp"
-            android:src="@drawable/ic_share"
+            android:src="@drawable/ic_more_vert"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/black" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -95,22 +98,22 @@
 
                 <doan.npnm.sharerecipe.lib.widget.CircleImageView
                     android:id="@+id/circleImageView"
-                    app:civ_border_color="@color/lightgray"
-                    app:civ_border_width="@dimen/_1ssp"
                     android:layout_width="@dimen/_50sdp"
                     android:layout_height="@dimen/_50sdp"
                     android:src="@drawable/img_us_demo"
+                    app:civ_border_color="@color/lightgray"
+                    app:civ_border_width="@dimen/_1ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/recipeCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_6sdp"
                     android:fontFamily="@font/poppins_light"
                     android:text="Recipe View"
-                    android:id="@+id/recipeCount"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp"
                     app:layout_constraintStart_toEndOf="@+id/circleImageView"
@@ -169,10 +172,10 @@
 
                         <ImageView
                             android:layout_width="@dimen/_14sdp"
-                            app:tint="@color/white"
                             android:layout_height="@dimen/_14sdp"
                             android:layout_marginHorizontal="@dimen/_6sdp"
-                            android:src="@drawable/ic_apple_round" />
+                            android:src="@drawable/ic_apple_round"
+                            app:tint="@color/white" />
 
                         <TextView
                             android:id="@+id/txtIngrident"
@@ -291,21 +294,21 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcvDiscussion"
-                tools:listitem="@layout/item_discussion_view_level1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_12sdp"
                 android:maxHeight="@dimen/_450sdp"
                 android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_discussion_view_level1" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:minHeight="@dimen/_38sdp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_12sdp"
                 android:background="@drawable/bg_input_start"
-                android:backgroundTint="@color/aliceblue">
+                android:backgroundTint="@color/aliceblue"
+                android:minHeight="@dimen/_38sdp">
 
                 <ImageView
                     android:id="@+id/icSendDiscuss"
@@ -318,36 +321,39 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="#333" />
+
                 <LinearLayout
-                    android:visibility="gone"
-                    android:layout_marginStart="@dimen/_12sdp"
                     android:id="@+id/llReply"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="@string/reply"
+                        android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
-                        android:layout_height="wrap_content"/>
+                        android:text="@string/reply" />
+
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="@string/reply"
-                        android:textColor="@color/textcolor"
-                        android:fontFamily="@font/poppins_semibold"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_6sdp"
-                        android:layout_height="wrap_content"/>
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/reply"
+                        android:textColor="@color/textcolor" />
 
                 </LinearLayout>
 
                 <EditText
-                    android:layout_marginTop="@dimen/_2sdp"
                     android:id="@+id/txt_discuss"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
                     android:layout_marginBottom="@dimen/_2sdp"
                     android:background="@color/aliceblue"
                     android:fontFamily="@font/poppins_light"
@@ -361,6 +367,47 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/llAnErr"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:padding="@dimen/_12sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
+
+        <doan.npnm.sharerecipe.lib.widget.CircleImageView
+            android:id="@+id/circleImageView2"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginTop="120dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_1"
+            app:civ_border_color="@color/lightgray"
+            app:civ_border_width="2sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/RivCorner_50" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_24sdp"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="@string/have_an_err"
+            android:textColor="@color/grey_active"
+            android:textSize="@dimen/_13ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/circleImageView2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

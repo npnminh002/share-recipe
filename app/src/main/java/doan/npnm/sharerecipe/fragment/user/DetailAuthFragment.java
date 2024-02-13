@@ -14,6 +14,8 @@ import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.RecipeAdapter;
 import doan.npnm.sharerecipe.app.AppViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
+import doan.npnm.sharerecipe.database.models.RecentView;
+import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.databinding.FragmentDetailAuthBinding;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.model.Users;
@@ -24,7 +26,7 @@ public class DetailAuthFragment extends BaseFragment<FragmentDetailAuthBinding> 
 
     private AppViewModel viewModel;
     private Users users;
-    private Users authLogin;
+
 
     public DetailAuthFragment(AppViewModel viewModel, Users idAuth) {
         this.viewModel = viewModel;
@@ -41,16 +43,33 @@ public class DetailAuthFragment extends BaseFragment<FragmentDetailAuthBinding> 
 
     @Override
     protected void initView() {
-        authLogin = viewModel.users.getValue();
         recipeAdapter = new RecipeAdapter(new RecipeAdapter.OnRecipeEvent() {
             @Override
             public void onView(Recipe rcp) {
+                if( viewModel.database.recentViewDao().checkExistence(rcp.Id)){
+                    viewModel.database.recentViewDao().removeRecent(rcp.Id);
+                }
+                viewModel.database.recentViewDao().addRecentView(new RecentView(){{
+                    AuthID=rcp.RecipeAuth;
+                    RecipeID=rcp.Id;
+                    ViewTime=getTimeNow();
+                    Recipe= rcp.toJson();
+                }});
 
+                addFragment(new DetailRecipeFragment(rcp,viewModel),android.R.id.content,true);
             }
 
             @Override
-            public void onSave(Recipe recipe) {
-
+            public void onSave(Recipe rcp) {
+                if( viewModel.database.saveRecipeDao().checkExistence(rcp.Id)){
+                    viewModel.database.saveRecipeDao().removeRecent(rcp.Id);
+                }
+                viewModel.database.saveRecipeDao().addRecentView(new SaveRecipe(){{
+                    AuthID=rcp.RecipeAuth;
+                    RecipeID=rcp.Id;
+                    SaveTime=getTimeNow();
+                    Recipe= rcp.toJson();
+                }});
             }
         });
         binding.rcvRecipe.setAdapter(recipeAdapter);
@@ -91,11 +110,11 @@ public class DetailAuthFragment extends BaseFragment<FragmentDetailAuthBinding> 
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         Recipe recipe = doc.toObject(Recipe.class);
-                        if (Objects.equals(recipe.RecipeAuth.AuthId, users.UserID)) {
+                        if (Objects.equals(recipe.RecipeAuth, users.UserID)) {
                             recipes.add(recipe);
                         }
 
-                        Log.d("TESTRCP", "onFetchRecipeyUs: " + "USID:" + users.UserID + "  RECIPE: " + recipe.RecipeAuth.toJson());
+                        Log.d("TESTRCP", "onFetchRecipeyUs: " + "USID:" + users.UserID + "  RECIPE: " + recipe.RecipeAuth);
                     }
                     if (!recipes.isEmpty()) {
                         arrayListFetchByID.onSuccess(recipes);
@@ -126,5 +145,7 @@ public class DetailAuthFragment extends BaseFragment<FragmentDetailAuthBinding> 
             viewModel.checkFollowByUid(users.UserID);
 
         });
+
+
     }
 }

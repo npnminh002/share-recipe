@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 
@@ -25,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.DirectionsAdapter;
@@ -35,10 +37,12 @@ import doan.npnm.sharerecipe.app.AppViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.Follower;
 import doan.npnm.sharerecipe.databinding.FragmentDetailRecipeBinding;
+import doan.npnm.sharerecipe.databinding.PopupReportRecipeBinding;
 import doan.npnm.sharerecipe.dialog.BottomSheetShare;
 import doan.npnm.sharerecipe.dialog.BottomSheetShare.OnBottomSheetEvent;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.lib.ImageDownloader;
+import doan.npnm.sharerecipe.lib.PopUpDialog;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.disscus.DiscussType;
 import doan.npnm.sharerecipe.model.disscus.Discussion;
@@ -47,6 +51,7 @@ import doan.npnm.sharerecipe.model.recipe.Directions;
 import doan.npnm.sharerecipe.model.recipe.Ingredients;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
+import doan.npnm.sharerecipe.utility.Utils;
 
 public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBinding> implements OnBottomSheetEvent {
     private Recipe data;
@@ -101,53 +106,59 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
 
         new Thread(this::listenerDiscussion).start();
 
-        directionsAdapter = new DirectionsAdapter(DirectionsAdapter.DIR_TYPE.PREVIEW, null);
-        binding.rcvDirection.setAdapter(directionsAdapter);
-        adapter = new ImageStringAdapter(url -> {
 
-        });
-
-        ingridentsAdapter = new IngridentsAdapter(IngridentsAdapter.IGR_TYPE.PREVIEW, null);
-        binding.rcvIngrident.setAdapter(ingridentsAdapter);
-        binding.rcvGallery.setAdapter(adapter);
-
-        loadImage(data.ImgUrl, binding.imgProduct);
-        new Thread(() -> {
-            viewModel.getDataFromUserId(data.RecipeAuth.AuthId, new FetchByID<Users>() {
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void onSuccess(Users data) {
-                    binding.chefName.setText(data.UserName);
-                    binding.recipeCount.setText(data.Recipe + " " + getString(R.string.recipe));
-                    binding.circleImageView.loadImage(data.UrlImg);
-                }
-
-                @Override
-                public void onErr(Object err) {
-
-                }
-            });
-        }).start();
-
-
-        binding.foodName.setText(data.Name == null ? "" : data.Name);
-        directionsAdapter.setItems(data.Directions);
-        ingridentsAdapter.setItems(data.Ingredients);
-        adapter.setItems(data.ImagePreview);
-        discussionAdapter = new DiscussionAdapter(DiscussType.DISSCUS, new DiscussionAdapter.OnDiscussionEvent() {
+        viewModel.getDataFromUserId(data.RecipeAuth, new FetchByID<Users>() {
+            @SuppressLint("SetTextI18n")
             @Override
-            public void onReply(Discussion dcs) {
-                DetailRecipeFragment.this.discussionReply = dcs;
-                DetailRecipeFragment.this.isReply = true;
-                binding.llReply.setVisibility(View.VISIBLE);
+            public void onSuccess(Users users) {
+                if (data != null) {
+                    binding.llAnErr.setVisibility(View.GONE);
+                    binding.chefName.setText(users.UserName);
+                    binding.recipeCount.setText(users.Recipe + " " + getString(R.string.recipe));
+                    binding.circleImageView.loadImage(users.UrlImg);
+
+                    directionsAdapter = new DirectionsAdapter(DirectionsAdapter.DIR_TYPE.PREVIEW, null);
+                    binding.rcvDirection.setAdapter(directionsAdapter);
+                    adapter = new ImageStringAdapter(url -> {
+
+                    });
+
+                    ingridentsAdapter = new IngridentsAdapter(IngridentsAdapter.IGR_TYPE.PREVIEW, null);
+                    binding.rcvIngrident.setAdapter(ingridentsAdapter);
+                    binding.rcvGallery.setAdapter(adapter);
+
+                    loadImage(data.ImgUrl, binding.imgProduct);
+
+
+                    binding.foodName.setText(data.Name == null ? "" : data.Name);
+                    directionsAdapter.setItems(data.Directions);
+                    ingridentsAdapter.setItems(data.Ingredients);
+                    adapter.setItems(data.ImagePreview);
+                    discussionAdapter = new DiscussionAdapter(DiscussType.DISSCUS, new DiscussionAdapter.OnDiscussionEvent() {
+                        @Override
+                        public void onReply(Discussion dcs) {
+                            DetailRecipeFragment.this.discussionReply = dcs;
+                            DetailRecipeFragment.this.isReply = true;
+                            binding.llReply.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onChangeIcon(Discussion dcs) {
+
+                        }
+                    });
+                    binding.rcvDiscussion.setAdapter(discussionAdapter);
+                }
+
             }
 
             @Override
-            public void onChangeIcon(Discussion dcs) {
-
+            public void onErr(Object err) {
+                binding.llAnErr.setVisibility(View.VISIBLE);
             }
         });
-        binding.rcvDiscussion.setAdapter(discussionAdapter);
+
+
     }
 
 
@@ -189,20 +200,31 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
 
     @Override
     public void OnClick() {
-        binding.backIcon.setOnClickListener(v -> closeFragment(DetailRecipeFragment.this));
+        binding.backIcon2.setOnClickListener(v -> closeFragment(DetailRecipeFragment.this));
         binding.icSendDiscuss.setOnClickListener(v -> sendDisscuss());
-        binding.llShareRecipe.setOnClickListener(v -> {
-            BottomSheetShare bottomSheetShare = new BottomSheetShare(this);
-            bottomSheetShare.show(requireFragmentManager(), bottomSheetShare.getTag());
 
-        });
 
-        binding.llSaveRecipe.setOnClickListener(v->{
-            viewModel.database.followerDao().addRecentView(new Follower(){{
-                AuthID=data.Id;
+        binding.llSaveRecipe.setOnClickListener(v -> {
+            viewModel.database.followerDao().addRecentView(new Follower() {{
+                AuthID = data.Id;
             }});
         });
+
+        binding.llReport.setOnClickListener(v -> {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                int locationY=Utils.getHeightPercent(5);
+                int locationX=v.getRight() -  Utils.getWidthPercent(30);
+                PopUpDialog.showPopupMenu(v, PopupReportRecipeBinding::inflate, Utils.getWidthPercent(35), ViewGroup.LayoutParams.WRAP_CONTENT, locationX, locationY, (binding, popup) -> {
+                   binding.llShare.setOnClickListener(v2->{
+                       shareWithFacebook();
+                       popup.dismiss();
+                   });
+                });
+            }
+        });
     }
+
+
 
     private void shareWithFacebook() {
         loaddingDialog.show();

@@ -66,7 +66,7 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
                     homeviewModel.database.recentViewDao().removeRecent(rcp.Id);
                 }
                 homeviewModel.database.recentViewDao().addRecentView(new RecentView(){{
-                    AuthID=rcp.RecipeAuth.AuthId;
+                    AuthID=rcp.RecipeAuth;
                     RecipeID=rcp.Id;
                     ViewTime=getTimeNow();
                     Recipe= rcp.toJson();
@@ -81,7 +81,7 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
                     homeviewModel.database.saveRecipeDao().removeRecent(rcp.Id);
                 }
                 homeviewModel.database.saveRecipeDao().addRecentView(new SaveRecipe(){{
-                    AuthID=rcp.RecipeAuth.AuthId;
+                    AuthID=rcp.RecipeAuth;
                     RecipeID=rcp.Id;
                     SaveTime=getTimeNow();
                     Recipe= rcp.toJson();
