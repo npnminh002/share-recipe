@@ -1,32 +1,39 @@
 package doan.npnm.sharerecipe.fragment.user;
 
+
+import static android.app.Activity.RESULT_OK;
+
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.Sharer;
-import com.facebook.share.model.ShareContent;
-import com.facebook.share.model.ShareHashtag;
-import com.facebook.share.model.ShareMediaContent;
-import com.facebook.share.model.SharePhoto;
 import com.facebook.share.widget.ShareDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.function.Function;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.DirectionsAdapter;
@@ -38,9 +45,9 @@ import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.Follower;
 import doan.npnm.sharerecipe.databinding.FragmentDetailRecipeBinding;
 import doan.npnm.sharerecipe.databinding.PopupReportRecipeBinding;
-import doan.npnm.sharerecipe.dialog.BottomSheetShare;
 import doan.npnm.sharerecipe.dialog.BottomSheetShare.OnBottomSheetEvent;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
+import doan.npnm.sharerecipe.lib.BitmapUtils;
 import doan.npnm.sharerecipe.lib.ImageDownloader;
 import doan.npnm.sharerecipe.lib.PopUpDialog;
 import doan.npnm.sharerecipe.model.Users;
@@ -80,6 +87,7 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
 
     private DiscussionAdapter discussionAdapter;
 
+
     @Override
     protected void initView() {
 
@@ -112,6 +120,8 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
             @Override
             public void onSuccess(Users users) {
                 if (data != null) {
+                    viewModel.firestore.collection(Constant.RECIPE).document(data.Id)
+                            .update("View",data.View+1);
                     binding.llAnErr.setVisibility(View.GONE);
                     binding.chefName.setText(users.UserName);
                     binding.recipeCount.setText(users.Recipe + " " + getString(R.string.recipe));
@@ -162,12 +172,6 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
     }
 
 
-    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-
     Discussion discussionReply = null;
     private boolean isReply = false;
 
@@ -188,13 +192,10 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
                             discussionAdapter.setItem(discussions);
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
                     }
                 });
-
     }
 
 
@@ -203,37 +204,47 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
         binding.backIcon2.setOnClickListener(v -> closeFragment(DetailRecipeFragment.this));
         binding.icSendDiscuss.setOnClickListener(v -> sendDisscuss());
 
-
-        binding.llSaveRecipe.setOnClickListener(v -> {
-            viewModel.database.followerDao().addRecentView(new Follower() {{
-                AuthID = data.Id;
-            }});
-        });
+        binding.llSaveRecipe.setOnClickListener(v -> viewModel.database.followerDao().addRecentView(new Follower() {{
+            AuthID = data.Id;
+        }}));
 
         binding.llReport.setOnClickListener(v -> {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                int locationY=Utils.getHeightPercent(5);
-                int locationX=v.getRight() -  Utils.getWidthPercent(30);
+                int locationY = Utils.getHeightPercent(5);
+                int locationX = v.getRight() - Utils.getWidthPercent(30);
                 PopUpDialog.showPopupMenu(v, PopupReportRecipeBinding::inflate, Utils.getWidthPercent(35), ViewGroup.LayoutParams.WRAP_CONTENT, locationX, locationY, (binding, popup) -> {
-                   binding.llShare.setOnClickListener(v2->{
-                       shareWithFacebook();
-                       popup.dismiss();
-                   });
+                    binding.llShare.setOnClickListener(v2 -> {
+                        shareWithFacebook();
+                    });
                 });
             }
         });
     }
 
+    public void isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Log.v("LOG", "Permission granted");
+
+            } else {
+                Log.v("LOG", "Permission not granted, requesting permission...");
+                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+            }
+        } else {
+            Log.v("LOG", "Permission is granted");
+
+        }
+    }
 
 
     private void shareWithFacebook() {
         loaddingDialog.show();
-        ArrayList<Bitmap> bitmaps = new ArrayList<>();
-        ArrayList<SharePhoto> sharePhotos = new ArrayList<>();
+        ArrayList<Uri> sharePhotos = new ArrayList<>();
 
         ImageDownloader imageDownloaderMain = new ImageDownloader(bitmap -> {
             if (bitmap != null) {
-                bitmaps.add(bitmap);
+                BitmapUtils.getUriFromBitmap(bitmap, sharePhotos::add);
             }
         });
 
@@ -242,25 +253,9 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
         for (String url : data.ImagePreview) {
             ImageDownloader imageDownloaderPreview = new ImageDownloader(bitmap -> {
                 if (bitmap != null) {
-                    bitmaps.add(bitmap);
-                    if (bitmaps.size() == data.ImagePreview.size() + 1) {
-                        loaddingDialog.dismiss();
-                        for (Bitmap bm : bitmaps) {
-                            SharePhoto sharePhoto = new SharePhoto.Builder()
-                                    .setBitmap(bm)
-                                    .build();
-                            sharePhotos.add(sharePhoto);
-                        }
-                        ShareMediaContent.Builder contentBuilder = new ShareMediaContent.Builder();
-
-                        contentBuilder.addMedia(sharePhotos);
-                        String content = getContentMedia(data);
-                        contentBuilder.setShareHashtag(new ShareHashtag.Builder()
-                                .setHashtag(content)
-                                .build());
-                        ShareContent<ShareMediaContent, ShareMediaContent.Builder> shareContent = contentBuilder.build();
-
-                        shareDialog.show(shareContent);
+                    BitmapUtils.getUriFromBitmap(bitmap, sharePhotos::add);
+                    if (sharePhotos.size() == data.ImagePreview.size() + 1) {
+                        shareImages(sharePhotos);
                     }
                 }
             });
@@ -269,26 +264,78 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
         }
     }
 
+    private static final int SHARE_REQUEST_CODE = 101;
+    private void shareImages(ArrayList<Uri> imageUris) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        shareIntent.setType("image/*");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, getContentMedia(data));
+        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+
+        try {
+            startActivityForResult(Intent.createChooser(shareIntent, "Share Images"), SHARE_REQUEST_CODE);
+            loaddingDialog.dismiss();
+            viewModel.listDeleted.addAll(imageUris);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(requireContext(), "No apps can perform this action", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SHARE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(requireContext(), "Sharing attempted", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(() -> {
+                    for (Uri uri : viewModel.listDeleted) {
+                        deleteImage(uri, requireContext());
+                    }
+                }, 600000);
+                viewModel.firestore.collection(Constant.RECIPE).document(this.data.Id)
+                        .update("Share",this.data.Share+1);
+            } else {
+                Toast.makeText(requireContext(), "Sharing cancelled or failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public void deleteImage(Uri imageUri, Context context) {
+        ContentResolver contentResolver = context.getContentResolver();
+        contentResolver.delete(imageUri, null, null);
+    }
+
+    private boolean checkAppInstall(String uri) {
+        PackageManager pm = requireActivity().getPackageManager();
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+
+        } catch (PackageManager.NameNotFoundException e) {
+
+        }
+        return false;
+    }
+
     private String getContentMedia(Recipe data) {
         String content = "";
-
         content += data.Name;
 
-        content += "\n@ " + getString(R.string.ingredients) + "\n";
+        content += "\n@" + getString(R.string.ingredients) + "\n";
         for (Ingredients gd : data.Ingredients) {
-            content += "   -" + gd.Name + " --" + gd.Quantitative + " g\n";
+            content += "   -" + gd.Name + ": " + gd.Quantitative + " g\n";
         }
-        content += "\n@ " + getString(R.string.directions) + "\n";
+        content += "\n@" + getString(R.string.directions) + "\n";
         int i = 0;
         for (Directions gd : data.Directions) {
             i++;
-            content += "   -" + getString(R.string.step) + "" + i + ": " + gd.Name + "\n";
+            content += "   -" + getString(R.string.step) + " " + i + ": " + gd.Name + "\n";
         }
         content += "\n#test_do_an";
         content += "\n#recipe_app";
         return content;
     }
-
 
     private void sendDisscuss() {
         Users us = viewModel.getUsers().getValue();

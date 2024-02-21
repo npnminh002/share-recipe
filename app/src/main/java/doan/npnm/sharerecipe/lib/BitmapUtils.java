@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -29,6 +28,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Objects;
 
 import doan.npnm.sharerecipe.app.context.AppContext;
 
@@ -126,6 +126,7 @@ public class BitmapUtils {
             }
         }
     }
+
     public static void saveImagePhoto(Bitmap bitmap) {
         // Generating a file name
         String filename = System.currentTimeMillis() + ".jpg";
@@ -257,5 +258,92 @@ public class BitmapUtils {
     private static void showToast(String message) {
         Toast.makeText(AppContext.getContext(), message, Toast.LENGTH_SHORT).show();
     }
+
+    public void saveImagePhoto(Bitmap bitmap,Context context) {
+        String filename = System.currentTimeMillis() + ".jpg";
+        OutputStream fos = null;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ContentResolver resolver = AppContext.getContext().getContentResolver();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, filename);
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg");
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+            Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+            try {
+                fos = resolver.openOutputStream(Objects.requireNonNull(imageUri));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            File imagesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File image = new File(imagesDir, filename);
+            try {
+                fos = new FileOutputStream(image);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (fos != null) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            showToast("Saved to Photos");
+        }
+    }
+
+
+    public static void getUriFromBitmap(Bitmap bitmap, OnGetSuccess<Uri> event) {
+        String filename = System.currentTimeMillis() + ".jpg";
+        OutputStream fos = null;
+        Uri imageUri = null;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ContentResolver resolver = AppContext.getContext().getContentResolver();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, filename);
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg");
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+            imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+
+            try {
+                fos = resolver.openOutputStream(Objects.requireNonNull(imageUri));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            File imagesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File image = new File(imagesDir, filename);
+
+            try {
+                fos = new FileOutputStream(image);
+                imageUri = Uri.fromFile(image);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (fos != null) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        event.onFetched(imageUri);
+    }
+
+
+    public interface OnGetSuccess<T> {
+        void onFetched(T result);
+    }
+
 }
+
 

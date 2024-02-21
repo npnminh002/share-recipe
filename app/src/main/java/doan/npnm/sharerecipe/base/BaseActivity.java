@@ -5,11 +5,15 @@ import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
@@ -43,6 +47,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -79,6 +85,23 @@ public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActiv
         createView();
         OnClick();
         LanguageUtil.setupLanguage(this);
+
+//        try {
+//            PackageInfo info = getPackageManager().getPackageInfo(
+//                    "doan.npnm.sharerecipe",PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        }
+//        catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        catch (NoSuchAlgorithmException e) {
+//            e.getMessage();
+//            e.printStackTrace();
+//        }
     }
 
     private void setStatusBarColor() {

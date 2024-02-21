@@ -24,13 +24,13 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Objects;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.database.AppDatabase;
 import doan.npnm.sharerecipe.database.AppDatabaseProvider;
 import doan.npnm.sharerecipe.database.models.Follower;
+import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.Users;
@@ -51,16 +51,16 @@ public class AppViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Recipe>> recipeLiveData = new MutableLiveData<>(new ArrayList<>());
 
     public AppDatabase database = AppDatabaseProvider.getDatabase();
+    public ArrayList<Uri> listDeleted= new ArrayList<>();
 
     public AppViewModel() {
         if (auth.getCurrentUser() != null) {
             getDataFromUserId(auth.getCurrentUser().getUid());
-             }
-        new Thread(this::onGetRecipeData).start();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            new Thread(this::onGetAuth).start();
+            new Thread(this::onGetRecipeData).start();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                new Thread(this::onGetAuth).start();
+            }
         }
-
     }
 
     public MutableLiveData<Boolean> isFollow = new MutableLiveData<>(false);
@@ -137,6 +137,26 @@ public class AppViewModel extends ViewModel {
 
     public void firstStartApp(String uId) {
         onLoadFollower(uId);
+        loadSaveRecipe(uId);
+    }
+
+    private void loadSaveRecipe(String uId) {
+        fbDatabase.getReference(Constant.RECIPE)
+                .child(uId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    for (DataSnapshot doc : task.getResult().getChildren()) {
+                        Recipe rcp = doc.getValue(Recipe.class);
+                        database.saveRecipeDao().addRecentView(new SaveRecipe() {{
+                            AuthID = rcp.RecipeAuth;
+                            RecipeID = rcp.Id;
+                            Recipe = rcp.toJson();
+                        }});
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    showToast(e.getMessage());
+                });
     }
 
     private void onLoadFollower(String usID) {
@@ -158,11 +178,11 @@ public class AppViewModel extends ViewModel {
 
 
     public MutableLiveData<ArrayList<Users>> recipeAuth = new MutableLiveData<>();
-    public ArrayList<String> myRecipeArr= new ArrayList<>();
+    public ArrayList<String> myRecipeArr = new ArrayList<>();
 
 
     public void onGetRecipeData() {
-        String loginID= Objects.requireNonNull(auth.getCurrentUser()).getUid();
+        String loginID = auth.getCurrentUser().getUid();
         ArrayList<Recipe> rcpList = new ArrayList<>();
         firestore.collection(Constant.RECIPE)
                 .addSnapshotListener((value, error) -> {
