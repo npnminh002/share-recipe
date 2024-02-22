@@ -8,10 +8,10 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-import doan.npnm.sharerecipe.adapter.DirectionsAdapter;
-import doan.npnm.sharerecipe.adapter.ImageRecipeAdapter;
-import doan.npnm.sharerecipe.adapter.IngridentsAdapter;
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.adapter.users.DirectionsAdapter;
+import doan.npnm.sharerecipe.adapter.users.ImageRecipeAdapter;
+import doan.npnm.sharerecipe.adapter.users.IngridentsAdapter;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentPreviewRecipeBinding;
@@ -20,10 +20,10 @@ import doan.npnm.sharerecipe.utility.Constant;
 
 public class PreviewRecipeFragment extends BaseFragment<FragmentPreviewRecipeBinding> {
 
-    private AppViewModel viewModel;
+    private UserViewModel viewModel;
     private RecipeViewModel recipeViewModel;
 
-    public PreviewRecipeFragment(AppViewModel viewModel, RecipeViewModel recipeViewModel) {
+    public PreviewRecipeFragment(UserViewModel viewModel, RecipeViewModel recipeViewModel) {
         this.viewModel = viewModel;
         this.recipeViewModel = recipeViewModel;
     }
@@ -108,14 +108,14 @@ public class PreviewRecipeFragment extends BaseFragment<FragmentPreviewRecipeBin
         StorageReference reference = storage.getReference(Constant.RECIPE).child(firestoreID);
         ArrayList<String> listUrl = new ArrayList<>();
 
-        viewModel.putImgToStorage(reference, recipeViewModel.imgUri, new AppViewModel.OnPutImageListener() {
+        viewModel.putImgToStorage(reference, recipeViewModel.imgUri, new UserViewModel.OnPutImageListener() {
             @Override
             public void onComplete(String urlApp) {
                 recipe.ImgUrl = urlApp;
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     recipeViewModel.listSelect.getValue().forEach(uri -> {
-                        viewModel.putImgToStorage(reference, uri, new AppViewModel.OnPutImageListener() {
+                        viewModel.putImgToStorage(reference, uri, new UserViewModel.OnPutImageListener() {
                             @Override
                             public void onComplete(String url) {
                                 listUrl.add(url);

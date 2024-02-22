@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.RequiresApi;
@@ -19,10 +18,10 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.adapter.DirectionsAdapter;
-import doan.npnm.sharerecipe.adapter.ImageRecipeAdapter;
-import doan.npnm.sharerecipe.adapter.IngridentsAdapter;
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.adapter.users.DirectionsAdapter;
+import doan.npnm.sharerecipe.adapter.users.ImageRecipeAdapter;
+import doan.npnm.sharerecipe.adapter.users.IngridentsAdapter;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentEditRecipeBinding;
@@ -34,10 +33,10 @@ import doan.npnm.sharerecipe.utility.Constant;
 
 public class EditRecipeFragment extends BaseFragment<FragmentEditRecipeBinding> {
 
-    private AppViewModel viewModel;
+    private UserViewModel viewModel;
     private RecipeViewModel recipeViewModel;
 
-    public EditRecipeFragment(AppViewModel viewModel, Recipe recipe) {
+    public EditRecipeFragment(UserViewModel viewModel, Recipe recipe) {
         this.viewModel = viewModel;
         this.recipe = recipe;
 
@@ -267,7 +266,7 @@ public class EditRecipeFragment extends BaseFragment<FragmentEditRecipeBinding> 
     }
 
     private void uploadMainImage(StorageReference reference, ArrayList<String> listUrl) {
-        viewModel.putImgToStorage(reference, recipeViewModel.imgUri, new AppViewModel.OnPutImageListener() {
+        viewModel.putImgToStorage(reference, recipeViewModel.imgUri, new UserViewModel.OnPutImageListener() {
             @Override
             public void onComplete(String urlApp) {
                 recipe.ImgUrl = urlApp;
@@ -290,7 +289,7 @@ public class EditRecipeFragment extends BaseFragment<FragmentEditRecipeBinding> 
         AtomicInteger count = new AtomicInteger(0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             recipeViewModel.listSelect.getValue().forEach(uri -> {
-                viewModel.putImgToStorage(reference, uri, new AppViewModel.OnPutImageListener() {
+                viewModel.putImgToStorage(reference, uri, new UserViewModel.OnPutImageListener() {
                     @Override
                     public void onComplete(String url) {
                         listUrl.add(url);

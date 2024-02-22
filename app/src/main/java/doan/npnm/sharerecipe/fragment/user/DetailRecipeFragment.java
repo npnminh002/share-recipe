@@ -9,7 +9,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -36,16 +35,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.adapter.DirectionsAdapter;
-import doan.npnm.sharerecipe.adapter.DiscussionAdapter;
-import doan.npnm.sharerecipe.adapter.ImageStringAdapter;
-import doan.npnm.sharerecipe.adapter.IngridentsAdapter;
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.adapter.users.DirectionsAdapter;
+import doan.npnm.sharerecipe.adapter.users.DiscussionAdapter;
+import doan.npnm.sharerecipe.adapter.users.ImageStringAdapter;
+import doan.npnm.sharerecipe.adapter.users.IngridentsAdapter;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.Follower;
 import doan.npnm.sharerecipe.databinding.FragmentDetailRecipeBinding;
 import doan.npnm.sharerecipe.databinding.PopupReportRecipeBinding;
-import doan.npnm.sharerecipe.dialog.BottomSheetShare.OnBottomSheetEvent;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.lib.BitmapUtils;
 import doan.npnm.sharerecipe.lib.ImageDownloader;
@@ -60,11 +58,11 @@ import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
 import doan.npnm.sharerecipe.utility.Utils;
 
-public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBinding> implements OnBottomSheetEvent {
+public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBinding> {
     private Recipe data;
-    private AppViewModel viewModel;
+    private UserViewModel viewModel;
 
-    public DetailRecipeFragment(Recipe rcp, AppViewModel vm) {
+    public DetailRecipeFragment(Recipe rcp, UserViewModel vm) {
         super();
         this.viewModel = vm;
         this.data = rcp;
@@ -386,10 +384,5 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
         }
 
 
-    }
-
-    @Override
-    public void onFaceBook() {
-        showToast("Ge;;;");
     }
 }

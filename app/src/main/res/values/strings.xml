@@ -84,4 +84,23 @@
     <string name="have_an_err">Error occurs when viewing this recipe for copyright reasons</string>
     <string name="report">Report</string>
     <string name="share">Share</string>
+    <string name="chart">Chart</string>
+    <string name="home">Home</string>
+    <string name="notification">Notification</string>
+    <string name="cf_sign_Out">Do you want to log out of this application?</string>
+    <string name="recipe_to_be_approved">Recipe to be approved</string>
+    <string name="account">Account</string>
+    <string name="approved">Approved</string>
+    <string name="recipe_id">Recipe ID</string>
+    <string name="name">Name</string>
+    <string name="auth_id">Auth Id</string>
+    <string name="level">Level</string>
+    <string name="view">View</string>
+    <string name="love">Love</string>
+    <string name="init_time">Init time</string>
+    <string name="locked">Locked</string>
+    <string name="wait_cf">Waitting Confirm</string>
+    <string name="status">Status</string>
+    <string name="manager">Manager</string>
+    <string name="detail">Detail</string>
 </resources>

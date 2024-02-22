@@ -2,7 +2,6 @@ package doan.npnm.sharerecipe.fragment.user;
 
 import android.os.Build;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.RequiresApi;
@@ -11,10 +10,10 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.adapter.MyRecipeViewAdapter;
-import doan.npnm.sharerecipe.adapter.RecipeRecentViewAdapter;
-import doan.npnm.sharerecipe.adapter.RecipeSaveViewAdapter;
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.adapter.users.MyRecipeViewAdapter;
+import doan.npnm.sharerecipe.adapter.users.RecipeRecentViewAdapter;
+import doan.npnm.sharerecipe.adapter.users.RecipeSaveViewAdapter;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.RecentView;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
@@ -24,9 +23,9 @@ import doan.npnm.sharerecipe.interfaces.OnRecipeEvent;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
 public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding> {
-    private AppViewModel viewModel;
+    private UserViewModel viewModel;
 
-    public ProfileUserFragment(AppViewModel viewModel) {
+    public ProfileUserFragment(UserViewModel viewModel) {
         this.viewModel = viewModel;
     }
 
@@ -125,11 +124,8 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
 
             @Override
             public void onRemove(Recipe recipe, int pos) {
-                new ConfirmDialog(ProfileUserFragment.this.requireContext(), getString(R.string.cf_delete), new ConfirmDialog.OnUpdateSelect() {
-                    @Override
-                    public void onSelect() {
+                new ConfirmDialog(ProfileUserFragment.this.requireContext(), getString(R.string.cf_delete), () -> {
 
-                    }
                 }).show();
             }
 
@@ -155,6 +151,9 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
 
         binding.rcvMyRecipe.setAdapter(myViewAdapter);
         myViewAdapter.setItems(viewModel.myRecipeArr);
+
+
+
     }
 }
 

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentFirstRecipeBinding;
@@ -20,12 +20,12 @@ import doan.npnm.sharerecipe.interfaces.OnAddedSuccess;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
 public class FirstRecipeFragment extends BaseFragment<FragmentFirstRecipeBinding> {
-    public AppViewModel viewModel;
+    public UserViewModel viewModel;
     private RecipeViewModel recipeViewModel;
     private Recipe recipe;
     private OnAddedSuccess onAddedSuccess;
 
-    public FirstRecipeFragment(AppViewModel viewModel) {
+    public FirstRecipeFragment(UserViewModel viewModel) {
         this.viewModel = viewModel;
     }
 

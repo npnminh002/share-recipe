@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.adapter.FollowerAdapter;
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.adapter.users.FollowerAdapter;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentFollowerBinding;
 import doan.npnm.sharerecipe.model.Users;
@@ -24,10 +24,10 @@ public class FollowerFragment extends BaseFragment<FragmentFollowerBinding> {
         FOLLOWER
     }
 
-    private AppViewModel viewModel;
+    private UserViewModel viewModel;
     public FOLLOW follow = FOLLOW.FOLLOWER;
 
-    public FollowerFragment(AppViewModel viewModel, FOLLOW follow) {
+    public FollowerFragment(UserViewModel viewModel, FOLLOW follow) {
         this.viewModel = viewModel;
         this.follow = follow;
     }

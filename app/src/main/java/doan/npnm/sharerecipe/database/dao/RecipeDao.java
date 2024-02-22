@@ -17,6 +17,10 @@ public interface RecipeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertRecipe(RecipeRoom recipe);
 
+
+    @Query("DELETE  From  RecipeRoom")
+    void SignOutApp();
+
 }
 
 

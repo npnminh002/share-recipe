@@ -1,10 +1,12 @@
 package doan.npnm.sharerecipe.activity.start;
 
 import android.content.Intent;
+import android.os.Build;
 import android.text.TextUtils;
 
 import java.util.Date;
 
+import doan.npnm.sharerecipe.activity.admin.AdminMainActivity;
 import doan.npnm.sharerecipe.activity.user.MainActivity;
 import doan.npnm.sharerecipe.base.BaseActivity;
 import doan.npnm.sharerecipe.databinding.ActivitySignUpBinding;
@@ -39,9 +41,12 @@ public class SignUpActivity extends BaseActivity<ActivitySignUpBinding> {
 
     @Override
     protected void createView() {
-        appViewModel.getUsers().observe(this, users -> {
+        userViewModel.getUsers().observe(this, users -> {
             if (users != null) {
-                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    startActivity(new Intent(SignUpActivity.this, users.AccountType == 1 ? AdminMainActivity.class : MainActivity.class));
+                }
                 finish();
             }
         });
@@ -79,7 +84,7 @@ public class SignUpActivity extends BaseActivity<ActivitySignUpBinding> {
                                         .set(user)
                                         .addOnSuccessListener(unused -> {
                                             showToast("Sign Up Success");
-                                            appViewModel.users.setValue(user);
+                                            userViewModel.users.setValue(user);
                                         })
                                         .addOnFailureListener(error -> {
                                             showToast(error.getMessage());

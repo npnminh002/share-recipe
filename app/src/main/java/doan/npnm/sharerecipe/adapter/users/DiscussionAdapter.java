@@ -1,4 +1,4 @@
-package doan.npnm.sharerecipe.adapter;
+package doan.npnm.sharerecipe.adapter.users;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.databinding.ItemDiscussionViewLevel1Binding;
 import doan.npnm.sharerecipe.databinding.ItemDiscussionViewLevel2Binding;
 import doan.npnm.sharerecipe.model.disscus.DiscussType;

@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.adapter.RecipeAdapter;
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.adapter.users.RecipeAdapter;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.RecentView;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
@@ -24,11 +24,11 @@ import doan.npnm.sharerecipe.utility.Constant;
 
 public class DetailAuthFragment extends BaseFragment<FragmentDetailAuthBinding> {
 
-    private AppViewModel viewModel;
+    private UserViewModel viewModel;
     private Users users;
 
 
-    public DetailAuthFragment(AppViewModel viewModel, Users idAuth) {
+    public DetailAuthFragment(UserViewModel viewModel, Users idAuth) {
         this.viewModel = viewModel;
         this.users = idAuth;
     }

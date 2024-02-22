@@ -25,21 +25,21 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Override
     protected void createView() {
-        openFragment(new HomeUserFragment(appViewModel), true, true);
+        openFragment(new HomeUserFragment(userViewModel), true, true);
 
         binding.bottomNavigationViewLinear.setNavigationChangeListener((view, position) -> {
             switch (position) {
                 case 0:
-                    openFragment(new HomeUserFragment(appViewModel), true, true);
+                    openFragment(new HomeUserFragment(userViewModel), true, true);
                     break;
                 case 1:
-                    addFragment(new FirstRecipeFragment(appViewModel), android.R.id.content, true);
+                    addFragment(new FirstRecipeFragment(userViewModel), android.R.id.content, true);
                     break;
                 case 2:
-                    openFragment(new ProfileUserFragment(appViewModel), true, true);
+                    openFragment(new ProfileUserFragment(userViewModel), true, true);
                     break;
                 case 3:
-                    openFragment(new ProfileUserFragment(appViewModel), true, true);
+                    openFragment(new ProfileUserFragment(userViewModel), true, true);
                     break;
             }
         });

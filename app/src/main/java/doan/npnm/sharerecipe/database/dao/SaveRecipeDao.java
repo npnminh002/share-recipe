@@ -24,5 +24,9 @@ public interface SaveRecipeDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM SaveRecipe WHERE RecipeID = :currentID)")
     boolean checkExistence(String currentID);
+
+
+    @Query("DELETE  From  SaveRecipe")
+    void SignOutApp();
 }
 

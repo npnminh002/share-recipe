@@ -3,8 +3,7 @@ package doan.npnm.sharerecipe.activity.start;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 
-import java.util.Objects;
-
+import doan.npnm.sharerecipe.activity.admin.AdminMainActivity;
 import doan.npnm.sharerecipe.activity.user.LanguageActivity;
 import doan.npnm.sharerecipe.activity.user.MainActivity;
 import doan.npnm.sharerecipe.app.lang.LanguageUtil;
@@ -32,16 +31,18 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
                 .progressEvent(new ProgressCustom.OnProgressListener() {
                     @Override
                     public void onEnd() {
-                        if (appViewModel.auth.getCurrentUser() == null) {
+                        if (userViewModel.auth.getCurrentUser() == null) {
                             startActivity(new Intent(SplashActivity.this, SignInActivity.class));
                             finish();
                         } else {
-                            if(LanguageUtil.isFirstOpenApp()){
+                            if (LanguageUtil.isFirstOpenApp()) {
                                 startActivity(new Intent(SplashActivity.this, LanguageActivity.class));
                                 finish();
-                            }
-                            else {
-                                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                            } else {
+
+                                boolean isAdmin=   userViewModel.getUsers().getValue().AccountType==0;
+                                startActivity(new Intent(SplashActivity.this,
+                                   isAdmin   ? MainActivity.class : AdminMainActivity.class));
                                 finish();
                             }
 

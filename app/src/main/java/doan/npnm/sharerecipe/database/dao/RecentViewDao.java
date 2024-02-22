@@ -23,5 +23,9 @@ public interface RecentViewDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM RecentView WHERE RecipeID = :currentID)")
     boolean checkExistence(String currentID);
+
+
+    @Query("DELETE  From  RecentView")
+    void SignOutApp();
 }
 

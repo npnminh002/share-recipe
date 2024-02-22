@@ -37,7 +37,7 @@ import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
 
-public class AppViewModel extends ViewModel {
+public class UserViewModel extends ViewModel {
     public FirebaseAuth auth = FirebaseAuth.getInstance();
     public FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     public FirebaseDatabase fbDatabase = FirebaseDatabase.getInstance();
@@ -53,7 +53,7 @@ public class AppViewModel extends ViewModel {
     public AppDatabase database = AppDatabaseProvider.getDatabase();
     public ArrayList<Uri> listDeleted= new ArrayList<>();
 
-    public AppViewModel() {
+    public UserViewModel() {
         if (auth.getCurrentUser() != null) {
             getDataFromUserId(auth.getCurrentUser().getUid());
             new Thread(this::onGetRecipeData).start();
@@ -359,6 +359,16 @@ public class AppViewModel extends ViewModel {
 
     public void showToast(String mess) {
         Toast.makeText(AppContext.getContext(), mess, Toast.LENGTH_LONG).show();
+    }
+
+
+
+    public void signOutDatabase(){
+        database.recentViewDao().SignOutApp();
+        database.followerDao().SignOutApp();
+        database.recipeDao().SignOutApp();
+        database.saveRecipeDao().SignOutApp();
+
     }
 
 }

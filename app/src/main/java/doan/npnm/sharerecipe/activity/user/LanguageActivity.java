@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.adapter.LanguageAdapter;
+import doan.npnm.sharerecipe.adapter.users.LanguageAdapter;
 import doan.npnm.sharerecipe.app.lang.Language;
 import doan.npnm.sharerecipe.app.lang.LanguageUtil;
 import doan.npnm.sharerecipe.base.BaseActivity;

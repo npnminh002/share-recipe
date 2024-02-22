@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.adapter.IngridentsAdapter;
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.adapter.users.IngridentsAdapter;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentThirdRecipeBinding;
@@ -18,11 +18,11 @@ import doan.npnm.sharerecipe.model.recipe.Ingredients;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
 public class ThirdRecipeFragment extends BaseFragment<FragmentThirdRecipeBinding> {
-    public AppViewModel viewModel;
+    public UserViewModel viewModel;
     public RecipeViewModel recipeViewModel;
     private OnAddedSuccess onAddedSuccess;
 
-    public ThirdRecipeFragment(AppViewModel viewModel, RecipeViewModel recipeViewModel, OnAddedSuccess onAddedSuccess) {
+    public ThirdRecipeFragment(UserViewModel viewModel, RecipeViewModel recipeViewModel, OnAddedSuccess onAddedSuccess) {
         this.viewModel = viewModel;
         this.recipeViewModel = recipeViewModel;
         this.onAddedSuccess = onAddedSuccess;

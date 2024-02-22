@@ -59,6 +59,10 @@
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".activity.admin.AdminMainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".activity.start.SignInActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
@@ -68,7 +72,13 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".test.TestActivity"
-            android:exported="true" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
     <queries>
         <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />

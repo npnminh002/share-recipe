@@ -1,0 +1,390 @@
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_1sdp"
+    android:layout_marginBottom="@dimen/_1sdp">
+
+    <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+        android:id="@+id/llOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_1sdp"
+        app:cornerRadius="0dp"
+        app:strokeColor="#ccc"
+        app:strokeWidth="1dp">
+
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_stt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="1000" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+
+            android:layout_width="@dimen/_136sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0xjqoiLdzBHM4e4pN8Xo" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="0xjqoiLdzBHM4e4pN8Xo" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+
+            android:layout_width="@dimen/_136sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_user_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0xjqoiLdzBHM4e4pN8Xo" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_ingrident"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="0xjqoiLdzBHM4e4pN8Xo" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_direction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="0xjqoiLdzBHM4e4pN8Xo" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_prepare_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="0xjqoiLdzBHM4e4pN8Xo" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_cook_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="0xjqoiLdzBHM4e4pN8Xo" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_lever"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="1000" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="1000" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="1000" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="1000" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_time_create"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="1000" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:id="@+id/txt_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="1000" />
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#ccc" />
+
+        <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_1sdp"
+            android:weightSum="3"
+            app:cornerRadius="0dp"
+            app:strokeColor="#ccc"
+            app:strokeWidth="0sp">
+
+            <TextView
+                android:gravity="center"
+                android:textAlignment="center"
+                android:id="@+id/btnView"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/_6sdp"
+
+                android:background="@drawable/bg_menu_item_select"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="@string/detail"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_9sdp" />
+
+            <TextView
+                android:textAlignment="center"
+                android:gravity="center"
+                android:id="@+id/btnManager"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:background="@drawable/bg_menu_item_select"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="@string/manager"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_9sdp" />
+
+
+        </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+    </doan.npnm.sharerecipe.lib.widget.CornerLinearLayout>
+</TableRow>
+

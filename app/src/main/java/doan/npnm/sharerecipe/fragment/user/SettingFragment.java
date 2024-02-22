@@ -4,21 +4,26 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.R;
+import doan.npnm.sharerecipe.activity.start.SignInActivity;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentSettingBinding;
+import doan.npnm.sharerecipe.dialog.ConfirmDialog;
 
 public class SettingFragment extends BaseFragment<FragmentSettingBinding> {
-    public AppViewModel viewModel;
+    public UserViewModel viewModel;
 
-    public SettingFragment(AppViewModel viewModel) {
+    public SettingFragment(UserViewModel viewModel) {
         this.viewModel = viewModel;
     }
 
@@ -36,11 +41,17 @@ public class SettingFragment extends BaseFragment<FragmentSettingBinding> {
 
     private void onLoadUserProfile() {
         viewModel.users.observe(this, users -> {
-            if (!users.UrlImg.isEmpty()) {
-                loadImage(users.UrlImg, binding.ImgUser);
+            if(users==null){
+                startActivity(new Intent(requireContext(), SignInActivity.class));
             }
-            binding.userName.setText(users.UserName);
-            binding.emailValue.setText(users.Email);
+            else {
+                if (!users.UrlImg.isEmpty()) {
+                    loadImage(users.UrlImg, binding.ImgUser);
+                }
+                binding.userName.setText(users.UserName);
+                binding.emailValue.setText(users.Email);
+            }
+
         });
     }
 
@@ -62,6 +73,20 @@ public class SettingFragment extends BaseFragment<FragmentSettingBinding> {
             addFragment(new LanguageFragment(), android.R.id.content, true);
         });
 
+        binding.btnSignOut.setOnClickListener(v -> {
+            new ConfirmDialog(requireContext(), getString(R.string.cf_sign_Out), () -> {
+                loaddingDialog.show();
+                viewModel.auth.signOut();
+                viewModel.signOutDatabase();
+
+                 new Handler().postDelayed(()->{
+                    loaddingDialog.dismiss();
+                    viewModel.users.postValue(null);
+                    startActivity(new Intent(requireContext(), SignInActivity.class));
+                     viewModel= new ViewModelProvider(SettingFragment.this).get(UserViewModel.class);
+                 },1500);
+            }).show();
+        });
     }
 
     private void openImagePicker() {

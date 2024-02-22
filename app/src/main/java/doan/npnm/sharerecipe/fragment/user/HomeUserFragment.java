@@ -5,23 +5,22 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import doan.npnm.sharerecipe.activity.AddDataActivity;
-import doan.npnm.sharerecipe.adapter.CategoryAdapter;
-import doan.npnm.sharerecipe.adapter.RecipeAdapter;
-import doan.npnm.sharerecipe.adapter.TopChefAdapter;
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.adapter.users.CategoryAdapter;
+import doan.npnm.sharerecipe.adapter.users.RecipeAdapter;
+import doan.npnm.sharerecipe.adapter.users.TopChefAdapter;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.RecentView;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.databinding.FragmentHomeUserBinding;
-import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
 public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
 
-    public AppViewModel homeviewModel;
+    public UserViewModel homeviewModel;
 
-    public HomeUserFragment(AppViewModel appViewModel) {
-        this.homeviewModel = appViewModel;
+    public HomeUserFragment(UserViewModel userViewModel) {
+        this.homeviewModel = userViewModel;
     }
 
     @Override

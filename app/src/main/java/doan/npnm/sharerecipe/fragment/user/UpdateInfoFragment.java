@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentUpdateInfoBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
@@ -21,9 +21,9 @@ import doan.npnm.sharerecipe.utility.Constant;
 @SuppressLint("ResourceType")
 public class UpdateInfoFragment extends BaseFragment<FragmentUpdateInfoBinding> {
 
-    private AppViewModel viewModel;
+    private UserViewModel viewModel;
 
-    public UpdateInfoFragment(AppViewModel viewModel) {
+    public UpdateInfoFragment(UserViewModel viewModel) {
         this.viewModel = viewModel;
     }
 

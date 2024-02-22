@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -36,7 +37,6 @@ import java.util.Locale;
 
 import doan.npnm.sharerecipe.dialog.LoaddingDialog;
 import doan.npnm.sharerecipe.lib.shared_preference.SharedPreference;
-
 public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
 
     public FirebaseAuth auth = FirebaseAuth.getInstance();

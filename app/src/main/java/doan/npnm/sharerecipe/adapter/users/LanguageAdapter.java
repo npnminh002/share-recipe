@@ -1,4 +1,4 @@
-package doan.npnm.sharerecipe.adapter;
+package doan.npnm.sharerecipe.adapter.users;
 
 import android.content.Context;
 import android.view.LayoutInflater;

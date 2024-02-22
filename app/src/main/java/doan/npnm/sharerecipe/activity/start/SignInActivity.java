@@ -21,7 +21,7 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
 
     @Override
     protected void createView() {
-        appViewModel.getUsers().observe(this, users -> {
+        userViewModel.getUsers().observe(this, users -> {
             if (users != null) {
                 startActivity(new Intent(SignInActivity.this, MainActivity.class));
                 finish();
@@ -47,8 +47,8 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
 
     private void signIn(String email, String pass) {
         auth.signInWithEmailAndPassword(email, pass).addOnSuccessListener(authResult -> {
-            appViewModel.getDataFromUserId(authResult.getUser().getUid());
-           appViewModel.firstStartApp(authResult.getUser().getUid());
+            userViewModel.getDataFromUserId(authResult.getUser().getUid());
+           userViewModel.firstStartApp(authResult.getUser().getUid());
             showToast("Sign-in successful");
         }).addOnFailureListener(e -> {
 

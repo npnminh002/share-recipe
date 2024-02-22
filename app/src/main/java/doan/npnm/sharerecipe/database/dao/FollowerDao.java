@@ -24,5 +24,10 @@ public interface FollowerDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM Follower WHERE AuthID = :currentID)")
     boolean checkExisId(String currentID);
+
+
+
+    @Query("DELETE  From  Follower")
+    void SignOutApp();
 }
 

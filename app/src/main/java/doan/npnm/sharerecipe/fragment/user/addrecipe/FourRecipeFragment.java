@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.adapter.DirectionsAdapter;
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.adapter.users.DirectionsAdapter;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentFourRecipeBinding;
@@ -17,12 +17,12 @@ import doan.npnm.sharerecipe.model.recipe.Directions;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
 public class FourRecipeFragment extends BaseFragment<FragmentFourRecipeBinding> {
-    public AppViewModel viewModel;
+    public UserViewModel viewModel;
     public RecipeViewModel recipeViewModel;
     private Recipe recipe;
     public ArrayList<Directions> listDefDirection = new ArrayList<>();
 
-    public FourRecipeFragment(AppViewModel viewModel, RecipeViewModel recipeViewModel) {
+    public FourRecipeFragment(UserViewModel viewModel, RecipeViewModel recipeViewModel) {
         this.viewModel = viewModel;
         this.recipeViewModel = recipeViewModel;
     }

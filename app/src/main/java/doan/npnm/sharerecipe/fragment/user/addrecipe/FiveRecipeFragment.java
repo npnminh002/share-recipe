@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.adapter.ImageRecipeAdapter;
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.adapter.users.ImageRecipeAdapter;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentFiveRecipeBinding;
@@ -20,10 +20,10 @@ import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
 public class FiveRecipeFragment extends BaseFragment<FragmentFiveRecipeBinding> {
-    public AppViewModel viewModel;
+    public UserViewModel viewModel;
     private RecipeViewModel recipeViewModel;
 
-    public FiveRecipeFragment(AppViewModel viewModel, RecipeViewModel recipeViewModel) {
+    public FiveRecipeFragment(UserViewModel viewModel, RecipeViewModel recipeViewModel) {
         this.viewModel = viewModel;
         this.recipeViewModel = recipeViewModel;
         this.users = viewModel.users.getValue();

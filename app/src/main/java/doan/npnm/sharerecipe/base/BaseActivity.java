@@ -1,33 +1,25 @@
 package doan.npnm.sharerecipe.base;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
@@ -39,22 +31,19 @@ import androidx.viewbinding.ViewBinding;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.app.AppViewModel;
+import doan.npnm.sharerecipe.app.AdminViewModel;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.lang.LanguageUtil;
 import doan.npnm.sharerecipe.lib.shared_preference.SharedPreference;
 
@@ -64,7 +53,7 @@ public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActiv
     public FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     public FirebaseStorage storage = FirebaseStorage.getInstance();
     public StorageReference storageReference = storage.getReference();
-    public AppViewModel appViewModel;
+    public UserViewModel userViewModel;
     public static final String TAG = BaseActivity.class.getName();
     protected V binding;
     public boolean onFullscreen = false;
@@ -80,7 +69,8 @@ public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActiv
         binding = getViewBinding();
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(binding.getRoot());
-        appViewModel= new ViewModelProvider(this).get(AppViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
         decorView = getWindow().getDecorView();
         createView();
         OnClick();

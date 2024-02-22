@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gradient_colors" >
+        <item> #07a3b2 </item>
+        <item> #d9ecc7 </item>
+    </string-array>
+</resources>
