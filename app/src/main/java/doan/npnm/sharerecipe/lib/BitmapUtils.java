@@ -259,7 +259,7 @@ public class BitmapUtils {
         Toast.makeText(AppContext.getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    public void saveImagePhoto(Bitmap bitmap,Context context) {
+    public static void downloadImagePhoto(Bitmap bitmap) {
         String filename = System.currentTimeMillis() + ".jpg";
         OutputStream fos = null;
 

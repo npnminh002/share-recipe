@@ -26,6 +26,7 @@ public class HomeAdminFragment extends BaseFragment<FragmentAdminHomeBinding> {
     private MenuItemAdapter menuItemAdapter;
     @Override
     protected void initView() {
+        replaceFragment(new FragmentAdminRecipeHome(viewModel),R.id.llFrameView,true);
         listMenuItem = new ArrayList<String>() {{
             add(getString(R.string.recipe));
             add(getString(R.string.approved));
@@ -35,7 +36,7 @@ public class HomeAdminFragment extends BaseFragment<FragmentAdminHomeBinding> {
         }};
         menuItemAdapter = new MenuItemAdapter(item -> {
             if(item.equals(getString(R.string.recipe))){
-                addFragment(new FragmentAdminRecipeHome(viewModel),R.id.llFrameView,true);
+                replaceFragment(new FragmentAdminRecipeHome(viewModel),R.id.llFrameView,true);
             }
             else if(item.equals(getString(R.string.approved))){
 

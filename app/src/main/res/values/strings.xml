@@ -103,4 +103,9 @@
     <string name="status">Status</string>
     <string name="manager">Manager</string>
     <string name="detail">Detail</string>
+    <string name="cf_download">Are you sure you want to download this photo?</string>
+    <string name="content">Content</string>
+    <string name="id">Id</string>
+    <string name="number">Number</string>
+    <string name="history">History</string>
 </resources>

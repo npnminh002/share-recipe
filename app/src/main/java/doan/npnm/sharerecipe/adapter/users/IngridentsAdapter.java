@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import doan.npnm.sharerecipe.databinding.ItemIngredentsViewAdminBinding;
 import doan.npnm.sharerecipe.databinding.ItemIngredentsViewBinding;
 import doan.npnm.sharerecipe.databinding.ItemIngredentsViewPreviewBinding;
 import doan.npnm.sharerecipe.model.recipe.Ingredients;
@@ -22,7 +23,8 @@ public class IngridentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public enum IGR_TYPE {
         EDIT,
-        PREVIEW
+        PREVIEW,
+        ADMIN
     }
 
     public IngridentsAdapter(IGR_TYPE dirType, OnIngridentEvent event) {
@@ -34,16 +36,19 @@ public class IngridentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return dirType == IGR_TYPE.EDIT ? new IngridentViewholder(ItemIngredentsViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false))
-                : new PreviewIngridentViewholder(ItemIngredentsViewPreviewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return dirType == IGR_TYPE.EDIT ? new IngridentViewholder(ItemIngredentsViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)) :
+                dirType == IGR_TYPE.ADMIN ? new AdminIngridentViewholder(ItemIngredentsViewAdminBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)) :
+                        new PreviewIngridentViewholder(ItemIngredentsViewPreviewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (dirType == IGR_TYPE.EDIT) {
             ((IngridentViewholder) holder).onBind(ingridents.get(position), position);
-        } else {
+        } else if (dirType == IGR_TYPE.PREVIEW) {
             ((PreviewIngridentViewholder) holder).onBind(ingridents.get(position));
+        } else {
+            ((AdminIngridentViewholder) holder).onBind(ingridents.get(position));
         }
     }
 
@@ -121,8 +126,24 @@ public class IngridentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @SuppressLint("SetTextI18n")
         void onBind(Ingredients item) {
             binding.ingridenName.setText(item.Name);
-            binding.txtNumId.setText(""+item.Id);
-            binding.quantitive.setText(item.Quantitative+" g");
+            binding.txtNumId.setText("" + item.Id);
+            binding.quantitive.setText(item.Quantitative + " g");
+        }
+    }
+
+    public class AdminIngridentViewholder extends RecyclerView.ViewHolder {
+        private final ItemIngredentsViewAdminBinding binding;
+
+        AdminIngridentViewholder(ItemIngredentsViewAdminBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        @SuppressLint("SetTextI18n")
+        void onBind(Ingredients item) {
+            binding.ingridenName.setText(item.Name);
+            binding.txtNumId.setText("" + item.Id);
+            binding.quantitive.setText(item.Quantitative + " g");
         }
     }
 

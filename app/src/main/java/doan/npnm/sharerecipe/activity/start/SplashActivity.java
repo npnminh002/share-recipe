@@ -40,9 +40,9 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
                                 finish();
                             } else {
 
-                                boolean isAdmin=   userViewModel.getUsers().getValue().AccountType==0;
+                                boolean isAdmin = userViewModel.getUsers().getValue().AccountType == 0;
                                 startActivity(new Intent(SplashActivity.this,
-                                   isAdmin   ? MainActivity.class : AdminMainActivity.class));
+                                        isAdmin ? MainActivity.class : AdminMainActivity.class));
                                 finish();
                             }
 

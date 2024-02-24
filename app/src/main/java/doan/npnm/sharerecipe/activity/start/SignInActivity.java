@@ -3,6 +3,7 @@ package doan.npnm.sharerecipe.activity.start;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import doan.npnm.sharerecipe.activity.admin.AdminMainActivity;
 import doan.npnm.sharerecipe.activity.user.MainActivity;
 import doan.npnm.sharerecipe.base.BaseActivity;
 import doan.npnm.sharerecipe.databinding.ActivitySignInBinding;
@@ -23,7 +24,8 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
     protected void createView() {
         userViewModel.getUsers().observe(this, users -> {
             if (users != null) {
-                startActivity(new Intent(SignInActivity.this, MainActivity.class));
+
+                startActivity(new Intent(SignInActivity.this, users.AccountType==1? AdminMainActivity.class : MainActivity.class));
                 finish();
             }
         });
@@ -48,7 +50,7 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
     private void signIn(String email, String pass) {
         auth.signInWithEmailAndPassword(email, pass).addOnSuccessListener(authResult -> {
             userViewModel.getDataFromUserId(authResult.getUser().getUid());
-           userViewModel.firstStartApp(authResult.getUser().getUid());
+            userViewModel.firstStartApp(authResult.getUser().getUid());
             showToast("Sign-in successful");
         }).addOnFailureListener(e -> {
 

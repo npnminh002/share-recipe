@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.dialog.LoaddingDialog;
 import doan.npnm.sharerecipe.lib.shared_preference.SharedPreference;
 public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
@@ -87,6 +88,7 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+        loaddingDialog = new LoaddingDialog(this.requireContext());
     }
 
 
@@ -114,7 +116,7 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initView();
         OnClick();
-        loaddingDialog = new LoaddingDialog(this.requireContext());
+
     }
 
     protected abstract T getBinding(LayoutInflater inflater, ViewGroup container);
@@ -190,6 +192,16 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
         if (getActivity() != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(requireContext(), idColor));
+
+            }
+        }
+    }
+    protected void setColorStatusDark() {
+        if (getActivity() != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.black));
+               getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
             }
         }
     }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import doan.npnm.sharerecipe.R;
+import doan.npnm.sharerecipe.activity.admin.AdminMainActivity;
 import doan.npnm.sharerecipe.adapter.users.LanguageAdapter;
 import doan.npnm.sharerecipe.app.lang.Language;
 import doan.npnm.sharerecipe.app.lang.LanguageUtil;
@@ -45,7 +46,7 @@ public class LanguageActivity extends BaseActivity<ActivityLanguageBinding> {
 
         LanguageUtil.changeLang(LanguageUtil.getLanguageCode(), this);
         LanguageUtil.setFirstOpenApp(false);
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, userViewModel.users.getValue().AccountType == 1 ? AdminMainActivity.class : MainActivity.class));
         finish();
     }
 
@@ -95,7 +96,7 @@ public class LanguageActivity extends BaseActivity<ActivityLanguageBinding> {
 
 
     private void initData() {
-        listLanguages= new ArrayList<>();
+        listLanguages = new ArrayList<>();
         listLanguages.add(new Language(R.drawable.flag_en, getString(R.string.language_english), "en"));
         listLanguages.add(new Language(R.drawable.flag_vn, "Vietnamese", "vi"));
         listLanguages.add(new Language(R.drawable.flag_es_spain, "Spanish", "es"));

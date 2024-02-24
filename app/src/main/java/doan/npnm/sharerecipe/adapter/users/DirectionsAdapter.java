@@ -11,21 +11,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import doan.npnm.sharerecipe.databinding.ItemDirectionViewAdminBinding;
 import doan.npnm.sharerecipe.databinding.ItemDirectionViewBinding;
 import doan.npnm.sharerecipe.databinding.ItemDirectionViewPreviewBinding;
 import doan.npnm.sharerecipe.model.recipe.Directions;
 
 public class DirectionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    final ArrayList<Directions> directions= new ArrayList<>();
+    final ArrayList<Directions> directions = new ArrayList<>();
     public OnDirectionEvent event;
     final DIR_TYPE dirType;
 
     public enum DIR_TYPE {
         EDIT,
-        PREVIEW
+        PREVIEW,
+        ADMIN
     }
 
-    public DirectionsAdapter( DIR_TYPE dirType,OnDirectionEvent event) {
+    public DirectionsAdapter(DIR_TYPE dirType, OnDirectionEvent event) {
 
         this.event = event;
         this.dirType = dirType;
@@ -35,6 +37,7 @@ public class DirectionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return dirType == DIR_TYPE.EDIT ? new DirectionViewholder(ItemDirectionViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false))
+                : dirType == DIR_TYPE.ADMIN ? new AdminDirectionViewholder(ItemDirectionViewAdminBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false))
                 : new PreviewDirectionViewholder(ItemDirectionViewPreviewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
@@ -42,10 +45,13 @@ public class DirectionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (dirType == DIR_TYPE.EDIT) {
             ((DirectionViewholder) holder).onBind(directions.get(position), position);
-        } else {
+        } else if (dirType == DIR_TYPE.PREVIEW) {
             ((PreviewDirectionViewholder) holder).onBind(directions.get(position));
+        } else {
+            ((AdminDirectionViewholder) holder).onBind(directions.get(position));
         }
     }
+
     public void setItems(ArrayList<Directions> items) {
         directions.clear();
         directions.addAll(items);
@@ -103,7 +109,22 @@ public class DirectionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @SuppressLint("SetTextI18n")
         void onBind(Directions item) {
             binding.ingridenName.setText(item.Name);
-            binding.txtNumId.setText(""+item.Id);
+            binding.txtNumId.setText("" + item.Id);
+        }
+    }
+
+    public class AdminDirectionViewholder extends RecyclerView.ViewHolder {
+        private final ItemDirectionViewAdminBinding binding;
+
+        AdminDirectionViewholder(ItemDirectionViewAdminBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        @SuppressLint("SetTextI18n")
+        void onBind(Directions item) {
+            binding.ingridenName.setText(item.Name);
+            binding.txtNumId.setText("" + item.Id);
         }
     }
 

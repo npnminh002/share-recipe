@@ -281,7 +281,6 @@ public class UserViewModel extends ViewModel {
                 .addSnapshotListener((value, error) -> {
                     if (value != null) {
                         Users us = value.toObject(Users.class);
-
                         users.postValue(us != null ? us : null);
                     } else {
                         showToast("Error: " + error.getMessage());
@@ -368,7 +367,6 @@ public class UserViewModel extends ViewModel {
         database.followerDao().SignOutApp();
         database.recipeDao().SignOutApp();
         database.saveRecipeDao().SignOutApp();
-
     }
 
 }

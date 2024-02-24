@@ -53,6 +53,7 @@ private final OnEventSelect eventSelect;
         binding.txtStatus.setText(getSatuts(item.RecipeStatus));
         binding.btnManager.setOnClickListener(v->eventSelect.onManager(item));
         binding.btnView.setOnClickListener(v->eventSelect.onView(item));
+        binding.getRoot().setOnClickListener(v->eventSelect.onView(item));
 
     }
 

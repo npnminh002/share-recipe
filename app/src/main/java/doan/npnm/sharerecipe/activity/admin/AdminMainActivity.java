@@ -1,5 +1,6 @@
 package doan.npnm.sharerecipe.activity.admin;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -18,7 +19,6 @@ import doan.npnm.sharerecipe.fragment.admin.NotificationAdminFragment;
 import doan.npnm.sharerecipe.fragment.admin.ReportAdminFragment;
 import doan.npnm.sharerecipe.fragment.admin.UsersAdminFragment;
 
-@RequiresApi(api = Build.VERSION_CODES.N)
 public class AdminMainActivity extends BaseActivity<ActivityAdminMainBinding> {
 
     private AdminViewModel adminViewModel;
@@ -28,6 +28,7 @@ public class AdminMainActivity extends BaseActivity<ActivityAdminMainBinding> {
         return ActivityAdminMainBinding.inflate(getLayoutInflater());
     }
 
+    @SuppressLint("NewApi")
     @Override
     protected void createView() {
         adminViewModel= new ViewModelProvider(this).get(AdminViewModel.class);
@@ -36,6 +37,7 @@ public class AdminMainActivity extends BaseActivity<ActivityAdminMainBinding> {
         binding.bottomNavigation.setOnNavigationItemSelectedListener(OnBottomEventSelect);
     }
 
+    @SuppressLint("NewApi")
     private BottomNavigationView.OnNavigationItemSelectedListener OnBottomEventSelect = item -> {
         if (item.getItemId() == R.id.icon_home_admin) {
             openFragment(new HomeAdminFragment(adminViewModel));

@@ -1,6 +1,7 @@
 package doan.npnm.sharerecipe.app;
 
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
@@ -15,8 +16,10 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
+import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.database.AppDatabase;
 import doan.npnm.sharerecipe.database.AppDatabaseProvider;
+import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.model.recipe.RecipeStatus;
@@ -84,4 +87,43 @@ public class AdminViewModel extends ViewModel {
 
                 });
     }
+
+    public void getDataFromUserId(String recipeAuth, FetchByID<Users> view) {
+        firestore.collection(Constant.KEY_USER)
+                .document(recipeAuth)
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        Users us = value.toObject(Users.class);
+                        view.onSuccess(us);
+                    } else {
+                        showToast("Error: " + error.getMessage());
+                        view.onErr(error);
+                    }
+
+                });
+    }
+
+    public void showToast(String mess) {
+        Toast.makeText(AppContext.getContext(), mess, Toast.LENGTH_LONG).show();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
