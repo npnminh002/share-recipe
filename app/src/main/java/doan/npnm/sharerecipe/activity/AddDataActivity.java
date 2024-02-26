@@ -1,8 +1,14 @@
 package doan.npnm.sharerecipe.activity;
 
+import android.net.Uri;
 import android.os.Build;
+import android.view.View;
 
 import androidx.annotation.RequiresApi;
+
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
@@ -60,6 +66,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
 
         }));
 
+        binding.btnAddCategory.setOnClickListener(v -> getListCategory());
     }
 
     String value = "";
@@ -92,112 +99,171 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
         return userList;
     }
 
-    public ArrayList<Category> getListCategory() {
-        ArrayList<Category> categories = new ArrayList<>();
-        categories.add(new Category("1", AppContext.getContext().getString(R.string.bakery), R.drawable.category_bakery));
-        categories.add(new Category("2", AppContext.getContext().getString(R.string.beverages), R.drawable.category_beverages));
-        categories.add(new Category("3", AppContext.getContext().getString(R.string.dairy), R.drawable.category_dairy));
-        categories.add(new Category("4", AppContext.getContext().getString(R.string.frozen), R.drawable.category_frozen));
-        categories.add(new Category("5", AppContext.getContext().getString(R.string.fruit), R.drawable.category_fruit));
-        categories.add(new Category("6", AppContext.getContext().getString(R.string.meat), R.drawable.category_meat));
-        categories.add(new Category("7", AppContext.getContext().getString(R.string.poultry), R.drawable.category_poultry));
-        categories.add(new Category("8", AppContext.getContext().getString(R.string.seafood), R.drawable.category_seafood));
-        categories.add(new Category("9", AppContext.getContext().getString(R.string.vegetable), R.drawable.category_vegettable));
-        return categories;
 
+    public void getListCategory() {
+        ArrayList<Integer> arrDrawable = new ArrayList<Integer>() {{
+            add(R.drawable.category_bakery);
+            add(R.drawable.category_beverages);
+            add(R.drawable.category_dairy);
+            add(R.drawable.category_frozen);
+            add(R.drawable.category_fruit);
+            add(R.drawable.category_meat);
+            add(R.drawable.category_poultry);
+            add(R.drawable.category_seafood);
+            add(R.drawable.category_vegettable);
+        }};
+
+        ArrayList<Category> categories = new ArrayList<>();
+        categories.add(new Category("1", AppContext.getContext().getString(R.string.bakery), ""));
+        categories.add(new Category("2", AppContext.getContext().getString(R.string.beverages), ""));
+        categories.add(new Category("3", AppContext.getContext().getString(R.string.dairy), ""));
+        categories.add(new Category("4", AppContext.getContext().getString(R.string.frozen), ""));
+        categories.add(new Category("5", AppContext.getContext().getString(R.string.fruit), ""));
+        categories.add(new Category("6", AppContext.getContext().getString(R.string.meat), ""));
+        categories.add(new Category("7", AppContext.getContext().getString(R.string.poultry), ""));
+        categories.add(new Category("8", AppContext.getContext().getString(R.string.seafood), ""));
+        categories.add(new Category("9", AppContext.getContext().getString(R.string.vegetable), ""));
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        for (int i = 0; i < arrDrawable.size(); i++) {
+            int drawableResId = arrDrawable.get(i);
+            String imageName = "category_image_" + i + ".png";
+            StorageReference imageRef = storageRef.child(Constant.CATEGORY + "/" + imageName);
+
+            final int index = i; // Capture the value of i locally
+
+            UploadTask uploadTask = imageRef.putFile(Uri.parse("android.resource://doan.npnm.sharerecipe/" + drawableResId));
+            uploadTask.continueWithTask(task -> {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+                return imageRef.getDownloadUrl();
+            }).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    categories.get(index).Image = downloadUri.toString();
+                    putCategory(categories.get(index));
+                }
+            });
+        }
+    }
+
+    private void putCategory(Category category) {
+        firestore.collection(Constant.CATEGORY)
+                .document(category.Id)
+                .set(category)
+                .addOnSuccessListener(task -> {
+                    onResult("Success");
+                }).addOnFailureListener(e -> {
+                    onResult(e.getMessage());
+                });
+    }
+
+
+    public ArrayList<String> getCategoryID() {
+        ArrayList<String> result = new ArrayList<>();
+        for (int i = 1; i < 10; i++) {
+            result.add("" + result);
+        }
+        return result;
     }
 
 
     public ArrayList<Recipe> getRecipe() {
+
+
         ArrayList<Recipe> listData = new ArrayList<>();
-        listData.add(new Recipe() {{
-            Id = "Recipe_001";
-            Name = "Cá bọc bột rán giòn xào cà tím";
-            Description = "Thịt cá ngọt được bọc trong một lớp bột vàng giòn, xào cùng với cà tím, bí ngồi, ăn không ngấy như món cá rán thông thường.";
-            TimeInit = "" + System.currentTimeMillis();
-            ImgUrl = "https://i1-ngoisao.vnecdn.net/2013/09/10/ca1-4367-1378804996.jpg?w=680&h=0&q=100&dpr=1&fit=crop&s=9P178VGqgPk2v6oybK8N2g";
-            RecipeAuth = "user_id_test_member1";
-            PrepareTime = new PrepareTime() {{
-                Time = "10";
-                TimeType = "m";
-            }};
-            CookTime = new CookTime() {{
-                Time = "30";
-                TimeType = "m";
-            }};
-            Level = "Difficult";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
-                add(new Ingredients() {{
-                    Id = 1;
-                    Name = "Phi lê cá";
-                    Quantitative = 400;
-                }});
-                add(new Ingredients() {{
-                    Id = 2;
-                    Name = "Cà tím";
-                    Quantitative = 100;
-                }});
-                add(new Ingredients() {{
-                    Id = 3;
-                    Name = "Bí ngòi";
-                    Quantitative = 100;
-                }});
+        listData.add(
+                new Recipe() {{
+                    Id = "Recipe_001";
+                    Name = "Cá bọc bột rán giòn xào cà tím";
+                    Description = "Thịt cá ngọt được bọc trong một lớp bột vàng giòn, xào cùng với cà tím, bí ngồi, ăn không ngấy như món cá rán thông thường.";
+                    TimeInit = "" + System.currentTimeMillis();
+                    ImgUrl = "https://i1-ngoisao.vnecdn.net/2013/09/10/ca1-4367-1378804996.jpg?w=680&h=0&q=100&dpr=1&fit=crop&s=9P178VGqgPk2v6oybK8N2g";
+                    RecipeAuth = "user_id_test_member1";
+                    PrepareTime = new PrepareTime() {{
+                        Time = "10";
+                        TimeType = "m";
+                    }};
+                    CookTime = new CookTime() {{
+                        Time = "30";
+                        TimeType = "m";
+                    }};
+                    Level = "Difficult";
+                    Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+                        add(new Ingredients() {{
+                            Id = 1;
+                            Name = "Phi lê cá";
+                            Quantitative = 400;
+                        }});
+                        add(new Ingredients() {{
+                            Id = 2;
+                            Name = "Cà tím";
+                            Quantitative = 100;
+                        }});
+                        add(new Ingredients() {{
+                            Id = 3;
+                            Name = "Bí ngòi";
+                            Quantitative = 100;
+                        }});
 
-                add(new Ingredients() {{
-                    Id = 4;
-                    Name = "Bột nămg hoặc ngô";
-                    Quantitative = 35;
-                }});
-                add(new Ingredients() {{
-                    Id = 5;
-                    Name = "Muối, dầu hào, xì dầu (nước tương), đường, hạt nêm, hạt tiêu, hành lá, tỏi";
-                    Quantitative = 15;
-                }});
+                        add(new Ingredients() {{
+                            Id = 4;
+                            Name = "Bột nămg hoặc ngô";
+                            Quantitative = 35;
+                        }});
+                        add(new Ingredients() {{
+                            Id = 5;
+                            Name = "Muối, dầu hào, xì dầu (nước tương), đường, hạt nêm, hạt tiêu, hành lá, tỏi";
+                            Quantitative = 15;
+                        }});
 
-            }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
-                add(new Directions() {{
-                    Id = 1;
-                    Name = "Phi lê cá rửa sạch, để ráo, cắt miếng vừa ăn, ướp vào cá một thìa nhỏ muối, nửa thìa nhỏ hạt nêm, một ít hạt tiêu, trộn đều, ướp khoảng 30 phút.";
+                    }};
+                    Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+                        add(new Directions() {{
+                            Id = 1;
+                            Name = "Phi lê cá rửa sạch, để ráo, cắt miếng vừa ăn, ướp vào cá một thìa nhỏ muối, nửa thìa nhỏ hạt nêm, một ít hạt tiêu, trộn đều, ướp khoảng 30 phút.";
 
-                }});
-                add(new Directions() {{
-                    Id = 2;
-                    Name = " Cà tím, bí ngồi rửa sạch, để ráo, cắt miếng vừa ăn.";
-                }});
-                add(new Directions() {{
-                    Id = 3;
-                    Name = "Cho bột năng vào âu cá và trộn đều, rũ bỏ những bột còn bám thừa xung quanh miếng cá.\n" +
-                            "Tiếp theo đun nóng nồi nhỏ, cho cá vào rán vàng đều hai mặt, vớt cá ra đĩa có lót giấy thấm bớt dầu ăn.";
+                        }});
+                        add(new Directions() {{
+                            Id = 2;
+                            Name = " Cà tím, bí ngồi rửa sạch, để ráo, cắt miếng vừa ăn.";
+                        }});
+                        add(new Directions() {{
+                            Id = 3;
+                            Name = "Cho bột năng vào âu cá và trộn đều, rũ bỏ những bột còn bám thừa xung quanh miếng cá.\n" +
+                                    "Tiếp theo đun nóng nồi nhỏ, cho cá vào rán vàng đều hai mặt, vớt cá ra đĩa có lót giấy thấm bớt dầu ăn.";
 
-                }});
-                add(new Directions() {{
-                    Id = 4;
-                    Name = "Đun nóng một ít dầu ăn, phi tỏi thơm, cho cà tím, bí ngồi vào xào, rưới vào một ít xì dầu, dầu hào, nửa thìa nhỏ đường, xào đến khi cà tím và bí ngồi chín vừa ý.";
+                        }});
+                        add(new Directions() {{
+                            Id = 4;
+                            Name = "Đun nóng một ít dầu ăn, phi tỏi thơm, cho cà tím, bí ngồi vào xào, rưới vào một ít xì dầu, dầu hào, nửa thìa nhỏ đường, xào đến khi cà tím và bí ngồi chín vừa ý.";
 
-                }});
-                add(new Directions() {{
-                    Id = 5;
-                    Name = "ho tiếp cá đã rán vào, xào nhanh tay, đảo đều, đậy kín nắp nồi khoảng 5 phút tiếp theo mở nắp ra, đun tiếp khoảng 5 phút nữa. Nếu khô bạn có thể rưới vào một ít xì dầu và nước lọc, nêm nếm lại gia vị tùy theo sở thích của bạn. Tắt bếp, thêm hành lá thái nhỏ, dùng làm món mặn ăn với cơm.";
+                        }});
+                        add(new Directions() {{
+                            Id = 5;
+                            Name = "ho tiếp cá đã rán vào, xào nhanh tay, đảo đều, đậy kín nắp nồi khoảng 5 phút tiếp theo mở nắp ra, đun tiếp khoảng 5 phút nữa. Nếu khô bạn có thể rưới vào một ít xì dầu và nước lọc, nêm nếm lại gia vị tùy theo sở thích của bạn. Tắt bếp, thêm hành lá thái nhỏ, dùng làm món mặn ăn với cơm.";
 
-                }});
-            }};
-            View = 0;
-            Share = 0;
-            History = new ArrayList<String>() {{
-                add("Add Time=" + getTimeNow());
-            }};
+                        }});
+                    }};
+                    View = 0;
+                    Share = 0;
+                    History = new ArrayList<String>() {{
+                        add("Add Time=" + getTimeNow());
+                    }};
 
-            Love = 0;
-            RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
-            ImagePreview = new ArrayList<String>() {{
-                add("https://i1-ngoisao.vnecdn.net/2013/09/10/ca3-8382-1378805776.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=aaKX_AyHxICsPmtJR5s4tg");
-                add("https://i1-ngoisao.vnecdn.net/2013/09/10/ca4-7404-1378805777.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=hFJeJJPYJZoqNS-xDW4peA");
-                add("https://i1-ngoisao.vnecdn.net/2013/09/10/ca5-6464-1378805777.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=9dZNg8dpvJ3Ng-AhUHWqEQ");
-                add("https://i1-ngoisao.vnecdn.net/2013/09/10/ca7-5617-1378805777.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=Mo2rH8pttH6tMPWt9AoycQ");
-            }};
-        }});
+                    Love = 0;
+                    RecipeStatus = RecipeStatus.PREVIEW;
+                    Category = getCategoryID();
+                    ImagePreview = new ArrayList<String>() {{
+                        add("https://i1-ngoisao.vnecdn.net/2013/09/10/ca3-8382-1378805776.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=aaKX_AyHxICsPmtJR5s4tg");
+                        add("https://i1-ngoisao.vnecdn.net/2013/09/10/ca4-7404-1378805777.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=hFJeJJPYJZoqNS-xDW4peA");
+                        add("https://i1-ngoisao.vnecdn.net/2013/09/10/ca5-6464-1378805777.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=9dZNg8dpvJ3Ng-AhUHWqEQ");
+                        add("https://i1-ngoisao.vnecdn.net/2013/09/10/ca7-5617-1378805777.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=Mo2rH8pttH6tMPWt9AoycQ");
+                    }};
+                }});
         listData.add(new Recipe() {{
             Id = "Recipe_002";
             Name = "Mực ống xào với dứa và hành tây";
@@ -278,8 +344,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2021/07/CookRecipe/GalleryStep/thanh-pham-1497.jpg");
                 add("https://cdn.tgdd.vn/2021/07/CookRecipe/GalleryStep/thanh-pham-1498.jpg");
@@ -368,8 +434,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2021/05/CookRecipe/GalleryStep/thanh-pham-68.jpg");
                 add("https://cdn.tgdd.vn/2021/05/CookProduct/CachlamBOXAOCANTAYngonngatngaybovuamemvuathamBepCuaVo0-18screenshot-1200x676.jpg");
@@ -453,8 +519,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2021/01/CookRecipe/GalleryStep/thanh-pham-268.jpg");
                 add("https://cdn.tgdd.vn/2021/01/CookRecipe/GalleryStep/thanh-pham-269.jpg");
@@ -532,8 +598,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2021/04/CookRecipe/GalleryStep/1-3.jpg");
                 add("https://cdn.tgdd.vn/2022/01/CookRecipe/Avatar/cai-ngot-xao-toi-cong-thuc-duoc-chia-se-tu-nguoi-dung-thumbnail.jpg");
@@ -624,8 +690,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2021/04/CookRecipe/GalleryStep/1-3.jpg");
                 add("https://cdn.tgdd.vn/Files/2019/08/21/1190109/cach-nau-canh-xuong-ham-rau-cu-ngot-nuoc-an-ai-cung-gat-gu-khen-ngon-201908211519024049.jpg");
@@ -715,8 +781,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/Files/2017/03/22/963778/bi-quyet-nau-mien-ga-thom-ngon-da-ga-vang-gion-202208261323269332.jpg");
                 add("https://cdn.tgdd.vn/Files/2017/03/22/963778/bi-quyet-nau-mien-ga-thom-ngon-da-ga-vang-gion-202203151059564429.jpg");
@@ -793,8 +859,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/Files/2019/11/11/1217662/cach-lam-tra-sua-thai-voi-bot-beo-don-gian-vua-ngon-vua-thom-mat-cho-nang-sanh-an-vat-202103111454181920.jpg");
                 add("https://cdn.tgdd.vn/Files/2019/11/11/1217662/4-cach-nau-tra-sua-thai-xanh-va-tra-sua-thai-do-ngon-tai-nha-202203180949391758.jpg");
@@ -871,8 +937,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/Files/2019/11/11/1217662/4-cach-nau-tra-sua-thai-xanh-va-tra-sua-thai-do-ngon-tai-nha-202203181033463219.jpg");
                 add("https://cdn.tgdd.vn/Files/2019/11/11/1217662/4-cach-nau-tra-sua-thai-xanh-va-tra-sua-thai-do-ngon-tai-nha-202203181002366801.jpg");
@@ -1028,8 +1094,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                     add("Add Time=" + getTimeNow());
                 }};
                 Love = 0;
-                   RecipeStatus = RecipeStatus.PREVIEW;
-                Category = getListCategory().get(7);
+                RecipeStatus = RecipeStatus.PREVIEW;
+                Category = getCategoryID();
                 ImagePreview = new ArrayList<String>() {{
                     add("https://cdn.tgdd.vn/2021/09/CookRecipe/GalleryStep/thanh-pham-1092.jpg");
                     add("https://cdn.tgdd.vn/2021/09/CookRecipe/GalleryStep/thanh-pham-1093.jpg");
@@ -1124,8 +1190,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2020/12/CookRecipe/GalleryStep/thanh-pham-1107.jpg");
                 add("https://cdn.tgdd.vn/2020/12/CookRecipe/GalleryStep/xao-suon-chua-ngot-1.jpg");
@@ -1235,8 +1301,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2022/10/CookRecipe/GalleryStep/thanh-pham-19.jpg");
                 add("https://cdn.tgdd.vn/2020/09/CookRecipe/Avatar/lau-ech-com-me-thumbnail.jpg");
@@ -1333,8 +1399,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/Files/2021/08/02/1372370/lam-nom-hoa-chuoi-tai-heo-khong-tham-gion-ngon-doi-vi-cho-bua-an-gia-dinh-202108020053597667.jpg");
                 add("hhttps://cdn.tgdd.vn/Files/2021/08/02/1372370/lam-nom-hoa-chuoi-tai-heo-khong-tham-gion-ngon-doi-vi-cho-bua-an-gia-dinh-202108020032423746.jpg");
@@ -1433,8 +1499,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2022/10/CookRecipe/GalleryStep/thanh-pham-49.jpg");
                 add("https://cdn.tgdd.vn/2020/07/CookRecipe/Avatar/mieng-mang-vit-thumbnail.jpg");
@@ -1565,8 +1631,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2021/06/CookRecipe/GalleryStep/thanh-pham-175.jpg");
                 add("https://cdn.tgdd.vn/2021/06/CookProduct/1200-1200x676-4.jpg");
@@ -1653,8 +1719,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2021/08/CookRecipe/GalleryStep/canh-ga-chien-nuoc-mam-cong-thuc-duoc-chia-se-tu-nguoi-dung-9.jpg");
                 add("https://cdn.tgdd.vn/2021/08/CookRecipe/Avatar/canh-ga-chien-nuoc-mam-cong-thuc-duoc-chia-se-tu-nguoi-dung-thumbnail-2.jpg");
@@ -1741,8 +1807,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2021/12/CookRecipe/GalleryStep/thanh-pham-1009.jpg");
                 add("hhttps://cdn.tgdd.vn/2021/12/CookRecipe/GalleryStep/thanh-pham-1093.jpg");
@@ -1850,8 +1916,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2020/09/CookRecipe/GalleryStep/thanh-pham-297.jpg");
                 add("https://cdn.tgdd.vn/2020/09/CookRecipe/GalleryStep/thanh-pham-298.jpg");
@@ -1974,8 +2040,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2022/07/CookRecipe/GalleryStep/thanh-pham-4.jpg");
                 add("https://cdn.tgdd.vn/2022/05/CookRecipe/Avatar/mi-tom-xao-hai-san-cong-thuc-chia-se-tu-nguoi-dung-thumbnail.jpg");
@@ -2088,8 +2154,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2021/11/CookRecipe/GalleryStep/thanh-pham-1788.jpg");
                 add("https://cdn.tgdd.vn/2021/11/CookRecipe/Avatar/canh-ngao-ngheu-nau-sau-thumbnail-2.jpg");
@@ -2188,8 +2254,8 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 add("Add Time=" + getTimeNow());
             }};
             Love = 0;
-               RecipeStatus = RecipeStatus.PREVIEW;
-            Category = getListCategory().get(7);
+            RecipeStatus = RecipeStatus.PREVIEW;
+            Category = getCategoryID();
             ImagePreview = new ArrayList<String>() {{
                 add("https://cdn.tgdd.vn/2021/11/CookRecipe/GalleryStep/thanh-pham-1716.jpg");
                 add("https://www.disneycooking.com/wp-content/uploads/2019/11/canh-ngao-nau-sau.jpg");

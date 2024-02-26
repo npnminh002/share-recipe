@@ -52,7 +52,7 @@
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:backgroundTint="#8ABABABA"
-                android:background="@drawable/bg_input_start"
+                android:background="@drawable/bg_input_start_disable"
                 android:src="@drawable/ic_bookmark_add"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

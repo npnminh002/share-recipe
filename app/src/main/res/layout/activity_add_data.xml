@@ -8,6 +8,22 @@
     android:padding="@dimen/_12sdp">
 
     <TextView
+        android:layout_marginTop="@dimen/_12sdp"
+        android:id="@+id/btnAddCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/active_background"
+        android:backgroundTint="@color/appcolor"
+        android:fontFamily="@font/poppins_semibold"
+        android:paddingVertical="@dimen/_8sdp"
+        android:text="Add Category Test"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14sdp"
+        app:layout_constraintTop_toBottomOf="@+id/btnAddRecipe"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <TextView
         android:id="@+id/textView6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

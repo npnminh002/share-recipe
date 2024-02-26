@@ -7,7 +7,7 @@
             android:id="@+id/shareFacebook"
             android:layout_width="@dimen/_120sdp"
             android:layout_height="@dimen/_36sdp"
-            android:background="@drawable/bg_input_start"
+            android:background="@drawable/bg_input_start_disable"
             android:backgroundTint="@color/blue"
             android:drawableTint="@color/white"
             android:textColor="@color/white"

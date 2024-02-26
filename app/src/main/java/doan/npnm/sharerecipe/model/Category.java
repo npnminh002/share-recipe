@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 public class Category implements Serializable {
 
-    public String Id,Name;
-    public Object Image;
+    public String Id="",Name="";
+    public String Image="";
 
-    public Category(String id, String name, Object image) {
+    public Category(String id, String name, String image) {
         Id = id;
         Name = name;
         Image = image;

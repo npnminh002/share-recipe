@@ -88,7 +88,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_input_start"
+                        android:background="@drawable/bg_input_start_disable"
                         android:fontFamily="@font/poppins_light"
                         android:paddingHorizontal="@dimen/_12sdp"
                         android:paddingVertical="@dimen/_6sdp"
@@ -101,7 +101,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_240sdp"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:background="@drawable/bg_input_start"
+                        android:background="@drawable/bg_input_start_disable"
                         android:backgroundTint="#F4F4F4">
 
                         <com.google.android.material.imageview.ShapeableImageView
@@ -127,7 +127,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_120sdp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_input_start"
+                        android:background="@drawable/bg_input_start_disable"
                         android:fontFamily="@font/poppins_light"
                         android:gravity="start|top"
                         android:paddingHorizontal="@dimen/_12sdp"
@@ -179,7 +179,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_6sdp"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_input_start"
+                            android:background="@drawable/bg_input_start_disable"
                             android:padding="@dimen/_3sdp"
                             android:weightSum="3">
 
@@ -247,7 +247,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_6sdp"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_input_start"
+                            android:background="@drawable/bg_input_start_disable"
                             android:padding="@dimen/_3sdp"
                             android:weightSum="3">
 
@@ -314,7 +314,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_6sdp"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_input_start"
+                            android:background="@drawable/bg_input_start_disable"
                             android:padding="@dimen/_3sdp"
                             android:weightSum="3">
 

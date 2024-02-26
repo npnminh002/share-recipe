@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/_36sdp"
         android:layout_marginStart="@dimen/_12sdp"
-        android:background="@drawable/bg_input_start"
+        android:background="@drawable/bg_input_start_disable"
         android:backgroundTint="@color/aliceblue"
 
         android:paddingStart="@dimen/_6sdp"

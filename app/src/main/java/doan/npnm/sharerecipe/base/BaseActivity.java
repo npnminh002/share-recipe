@@ -34,6 +34,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -41,10 +42,14 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.function.Consumer;
+
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.AdminViewModel;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.lang.LanguageUtil;
+import doan.npnm.sharerecipe.dialog.LoaddingDialog;
+import doan.npnm.sharerecipe.firebase.FirebaseService;
 import doan.npnm.sharerecipe.lib.shared_preference.SharedPreference;
 
 public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActivity {
@@ -58,6 +63,7 @@ public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActiv
     protected V binding;
     public boolean onFullscreen = false;
     public View decorView;
+    public LoaddingDialog loaddingDialog;
 
     public SharedPreference sharedPreference= new SharedPreference();
 
@@ -69,12 +75,19 @@ public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActiv
         binding = getViewBinding();
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(binding.getRoot());
+        loaddingDialog= new LoaddingDialog(this);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
+
+        userViewModel.users.observe(this,users -> {
+           userViewModel.updateToken(users.UserID);
+        });
         decorView = getWindow().getDecorView();
         createView();
         OnClick();
         LanguageUtil.setupLanguage(this);
+
+
 
 //        try {
 //            PackageInfo info = getPackageManager().getPackageInfo(

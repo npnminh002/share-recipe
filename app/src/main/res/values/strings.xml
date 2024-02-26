@@ -108,4 +108,6 @@
     <string name="id">Id</string>
     <string name="number">Number</string>
     <string name="history">History</string>
+    <string name="add_success">The recipes are added successfully!</string>
+    <string name="search_value">Search</string>
 </resources>

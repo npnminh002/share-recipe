@@ -17,7 +17,6 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -30,14 +29,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.dialog.LoaddingDialog;
 import doan.npnm.sharerecipe.lib.shared_preference.SharedPreference;
+
 public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
 
     public FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -46,10 +50,38 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
     public StorageReference storageReference = storage.getReference();
     protected T binding;
     public OnBackPressedCallback callback;
+
+    public BaseFragment() {
+    }
+
     public SharedPreference preference = new SharedPreference();
 
     public void handlerBackPressed() {
     }
+
+    public BaseFragment<T> newInstance(HashMap<String, Serializable> data) {
+        BaseFragment<T> fragment = this;
+        Bundle args = new Bundle();
+        if (data != null) {
+            for (Map.Entry<String, Serializable> entry : data.entrySet()) {
+                String key = entry.getKey();
+                Serializable value = entry.getValue();
+                args.putSerializable(key, value);
+            }
+        }
+
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public Serializable getData(String key) {
+        Bundle args = getArguments();
+        if (args != null && args.containsKey(key)) {
+            return args.getSerializable(key);
+        }
+        return null;
+    }
+
 
     public LoaddingDialog loaddingDialog;
 
@@ -108,6 +140,7 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = getBinding(inflater, container);
+
         return binding.getRoot();
     }
 
@@ -196,11 +229,12 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
             }
         }
     }
+
     protected void setColorStatusDark() {
         if (getActivity() != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.black));
-               getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
             }
         }

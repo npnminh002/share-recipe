@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.ImageRecipeAdapter;
-import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentFiveRecipeBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
@@ -43,7 +43,9 @@ public class FiveRecipeFragment extends BaseFragment<FragmentFiveRecipeBinding> 
 
     @Override
     protected void initView() {
-
+        viewModel.isAddRecipe.observe(this, val -> {
+            if (val) closeFragment(FiveRecipeFragment.this);
+        });
         adapter = new ImageRecipeAdapter(new ImageRecipeAdapter.ImageItemEvent() {
             @Override
             public void onAdd() {
@@ -74,7 +76,8 @@ public class FiveRecipeFragment extends BaseFragment<FragmentFiveRecipeBinding> 
 
         binding.listImg.setAdapter(adapter);
     }
-    ArrayList<Uri> listUri =new ArrayList<>();
+
+    ArrayList<Uri> listUri = new ArrayList<>();
 
     private void selectImages() {
         Intent intent = new Intent();
@@ -101,12 +104,12 @@ public class FiveRecipeFragment extends BaseFragment<FragmentFiveRecipeBinding> 
                 Uri imageUri = data.getData();
                 listUri.add(imageUri);
             }
-            int indexNull= listUri.indexOf(null);
-            if(indexNull>=0){
+            int indexNull = listUri.indexOf(null);
+            if (indexNull >= 0) {
                 listUri.remove(indexNull);
             }
 
-            listUri.add(0,null);
+            listUri.add(0, null);
             recipeViewModel.listSelect.postValue(listUri);
             adapter.setItems(listUri);
         }
@@ -116,13 +119,13 @@ public class FiveRecipeFragment extends BaseFragment<FragmentFiveRecipeBinding> 
     @Override
     public void OnClick() {
         binding.backIcon.setOnClickListener(v -> closeFragment(FiveRecipeFragment.this));
-        binding.btnNext.setOnClickListener(v -> putDataToFireStore());
+        binding.btnNext.setOnClickListener(v -> {
+            if (recipeViewModel.listSelect.getValue().size() == 0) {
+                replaceFragment(new PreviewRecipeFragment(viewModel, recipeViewModel), android.R.id.content, true);
+            } else {
+                showToast("Please choose image ");
+            }
+        });
         binding.btnPrev.setOnClickListener(v -> closeFragment(FiveRecipeFragment.this));
     }
-
-    private void putDataToFireStore() {
-        replaceFragment(new PreviewRecipeFragment(viewModel,recipeViewModel),android.R.id.content,true);
-    }
-
-
 }

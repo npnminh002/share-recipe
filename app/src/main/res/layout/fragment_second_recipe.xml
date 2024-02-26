@@ -119,7 +119,7 @@
                         android:layout_weight="1"
                         android:weightSum="3"
                         android:padding="@dimen/_3sdp"
-                        android:background="@drawable/bg_input_start">
+                        android:background="@drawable/bg_input_start_disable">
 
                         <EditText
                             android:textAlignment="textEnd"
@@ -200,7 +200,7 @@
                         android:layout_weight="1"
                         android:weightSum="3"
                         android:padding="@dimen/_3sdp"
-                        android:background="@drawable/bg_input_start">
+                        android:background="@drawable/bg_input_start_disable">
 
                         <EditText
                             android:textAlignment="textEnd"
@@ -280,7 +280,7 @@
                         android:layout_weight="1"
                         android:weightSum="3"
                         android:padding="@dimen/_3sdp"
-                        android:background="@drawable/bg_input_start">
+                        android:background="@drawable/bg_input_start_disable">
 
                         <EditText
                             android:layout_marginEnd="@dimen/_12sdp"

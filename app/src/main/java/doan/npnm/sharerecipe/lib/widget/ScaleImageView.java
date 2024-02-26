@@ -4,13 +4,21 @@ import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.widget.EditText;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import java.util.function.Consumer;
+
+import doan.npnm.sharerecipe.R;
 
 public class ScaleImageView extends androidx.appcompat.widget.AppCompatImageView implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
@@ -299,3 +307,4 @@ public class ScaleImageView extends androidx.appcompat.widget.AppCompatImageView
         fixTrans();
     }
 }
+

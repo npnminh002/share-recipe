@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import doan.npnm.sharerecipe.model.Category;
 
@@ -24,19 +25,11 @@ public class Recipe implements Serializable {
 
     public int View = 0, Love = 0, Share = 0;
     public RecipeStatus RecipeStatus = doan.npnm.sharerecipe.model.recipe.RecipeStatus.PREVIEW;
-    public Category Category = new Category();
+    public ArrayList<String> Category = new ArrayList<>();
     public ArrayList<String> ImagePreview = new ArrayList<>();
     public ArrayList<String> History = new ArrayList<>();
 
-
-
-    public Recipe(String id, String name, String description, String timeInit, String imgUrl,
-                  String recipeAuth,
-                  doan.npnm.sharerecipe.model.recipe.PrepareTime prepareTime,
-                  doan.npnm.sharerecipe.model.recipe.CookTime cookTime, String level,
-                  ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients> ingredients,
-                  ArrayList<doan.npnm.sharerecipe.model.recipe.Directions> directions, int view,
-                  int love, RecipeStatus isConfirm, Category category, ArrayList<String> imagePreview, ArrayList<String> history) {
+    public Recipe(String id, String name, String description, String timeInit, String imgUrl, String recipeAuth, doan.npnm.sharerecipe.model.recipe.PrepareTime prepareTime, doan.npnm.sharerecipe.model.recipe.CookTime cookTime, String level, ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients> ingredients, ArrayList<doan.npnm.sharerecipe.model.recipe.Directions> directions, int view, int love, int share, doan.npnm.sharerecipe.model.recipe.RecipeStatus recipeStatus, ArrayList<String> category, ArrayList<String> imagePreview, ArrayList<String> history) {
         Id = id;
         Name = name;
         Description = description;
@@ -50,10 +43,11 @@ public class Recipe implements Serializable {
         Directions = directions;
         View = view;
         Love = love;
-        RecipeStatus = isConfirm;
+        Share = share;
+        RecipeStatus = recipeStatus;
         Category = category;
         ImagePreview = imagePreview;
-        this.History = history;
+        History = history;
     }
 
     @Keep
@@ -68,17 +62,20 @@ public class Recipe implements Serializable {
                 ", Name='" + Name + '\'' +
                 ", Description='" + Description + '\'' +
                 ", TimeInit='" + TimeInit + '\'' +
-                ", ImgUrl=" + ImgUrl +
-                ", RecipeAuth=" + RecipeAuth.toString() +
+                ", ImgUrl='" + ImgUrl + '\'' +
+                ", RecipeAuth='" + RecipeAuth + '\'' +
                 ", PrepareTime=" + PrepareTime +
-                ", CookTime=" + CookTime.toString() +
+                ", CookTime=" + CookTime +
                 ", Level='" + Level + '\'' +
-                ", Ingredients=" + Ingredients.toString() +
-                ", Directions=" + Directions.toString() +
+                ", Ingredients=" + Ingredients +
+                ", Directions=" + Directions +
                 ", View=" + View +
                 ", Love=" + Love +
-                ",ImagePreview" + ImagePreview +
+                ", Share=" + Share +
                 ", RecipeStatus=" + RecipeStatus +
+                ", Category=" + Category +
+                ", ImagePreview=" + ImagePreview +
+                ", History=" + History +
                 '}';
     }
 

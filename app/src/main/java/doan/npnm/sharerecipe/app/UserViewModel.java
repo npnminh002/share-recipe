@@ -1,8 +1,10 @@
 package doan.npnm.sharerecipe.app;
 
 import android.content.ContentResolver;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -32,6 +35,7 @@ import doan.npnm.sharerecipe.database.AppDatabaseProvider;
 import doan.npnm.sharerecipe.database.models.Follower;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
+import doan.npnm.sharerecipe.lib.BitmapUtils;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
@@ -51,16 +55,36 @@ public class UserViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Recipe>> recipeLiveData = new MutableLiveData<>(new ArrayList<>());
 
     public AppDatabase database = AppDatabaseProvider.getDatabase();
-    public ArrayList<Uri> listDeleted= new ArrayList<>();
+    public ArrayList<Uri> listDeleted = new ArrayList<>();
+
+    public MutableLiveData<String> searchKey= new MutableLiveData<>("");
+
+    public MutableLiveData<ArrayList<Category>> categoriesArr = new MutableLiveData<>();
 
     public UserViewModel() {
         if (auth.getCurrentUser() != null) {
             getDataFromUserId(auth.getCurrentUser().getUid());
-            new Thread(this::onGetRecipeData).start();
+            new Thread(() -> {
+                ongetCategory();
+                onGetRecipeData();
+            }).start();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 new Thread(this::onGetAuth).start();
             }
         }
+    }
+
+    private void ongetCategory() {
+        ArrayList<Category> categories = new ArrayList<>();
+        firestore.collection(Constant.CATEGORY)
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        for (DocumentSnapshot doc : value.getDocuments()) {
+                            categories.add(doc.toObject(Category.class));
+                        }
+                        categoriesArr.postValue(categories);
+                    }
+                });
     }
 
     public MutableLiveData<Boolean> isFollow = new MutableLiveData<>(false);
@@ -191,12 +215,14 @@ public class UserViewModel extends ViewModel {
                             Recipe rcp = documentSnapshot.toObject(Recipe.class);
                             if (rcp != null) {
                                 rcpList.add(rcp);
-                                if (rcp.RecipeAuth.equals(loginID)) {
-                                    myRecipeArr.add(rcp.toJson());
-                                }
+//                                if (rcp.RecipeAuth.equals(loginID)) {
+//                                    myRecipeArr.add(rcp.toJson());
+//                                }
                             } else {
                                 showToast("Recipe is null");
                             }
+
+
                         } else {
 
                             showToast("Document does not exist");
@@ -234,15 +260,16 @@ public class UserViewModel extends ViewModel {
 
     public ArrayList<Category> getListCategory() {
         ArrayList<Category> categories = new ArrayList<>();
-        categories.add(new Category("1", AppContext.getContext().getString(R.string.bakery), R.drawable.category_bakery));
-        categories.add(new Category("2", AppContext.getContext().getString(R.string.beverages), R.drawable.category_beverages));
-        categories.add(new Category("3", AppContext.getContext().getString(R.string.dairy), R.drawable.category_dairy));
-        categories.add(new Category("4", AppContext.getContext().getString(R.string.frozen), R.drawable.category_frozen));
-        categories.add(new Category("5", AppContext.getContext().getString(R.string.fruit), R.drawable.category_fruit));
-        categories.add(new Category("6", AppContext.getContext().getString(R.string.meat), R.drawable.category_meat));
-        categories.add(new Category("7", AppContext.getContext().getString(R.string.poultry), R.drawable.category_poultry));
-        categories.add(new Category("8", AppContext.getContext().getString(R.string.seafood), R.drawable.category_seafood));
-        categories.add(new Category("9", AppContext.getContext().getString(R.string.vegetable), R.drawable.category_vegettable));
+        categories.add(new Category("1", AppContext.getContext().getString(R.string.bakery),
+                BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_bakery))));
+        categories.add(new Category("2", AppContext.getContext().getString(R.string.beverages), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_beverages))));
+        categories.add(new Category("3", AppContext.getContext().getString(R.string.dairy), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_dairy))));
+        categories.add(new Category("4", AppContext.getContext().getString(R.string.frozen), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_frozen))));
+        categories.add(new Category("5", AppContext.getContext().getString(R.string.fruit), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_fruit))));
+        categories.add(new Category("6", AppContext.getContext().getString(R.string.meat), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_meat))));
+        categories.add(new Category("7", AppContext.getContext().getString(R.string.poultry), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_poultry))));
+        categories.add(new Category("8", AppContext.getContext().getString(R.string.seafood), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_seafood))));
+        categories.add(new Category("9", AppContext.getContext().getString(R.string.vegetable), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_vegettable))));
         return categories;
 
     }
@@ -263,6 +290,19 @@ public class UserViewModel extends ViewModel {
         return mime.getExtensionFromMimeType(cr.getType(uri));
     }
 
+    public void getRecipeByID(String data, FetchByID<Recipe> fetchByID) {
+        firestore.collection(Constant.RECIPE)
+                .document(data)
+                .get().addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        fetchByID.onSuccess(documentSnapshot.toObject(Recipe.class));
+                    } else {
+                        fetchByID.onErr("Can't not get value");
+                    }
+                });
+
+    }
+
     public interface OnPutImageListener {
         void onComplete(String url);
 
@@ -281,13 +321,26 @@ public class UserViewModel extends ViewModel {
                 .addSnapshotListener((value, error) -> {
                     if (value != null) {
                         Users us = value.toObject(Users.class);
-                        users.postValue(us != null ? us : null);
+
+                        users.postValue(us);
                     } else {
                         showToast("Error: " + error.getMessage());
                         users.postValue(null);
                     }
 
                 });
+    }
+
+    public void updateToken(String userID) {
+
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(s -> FirebaseFirestore.getInstance()
+                .collection(Constant.KEY_USER)
+                .document(userID)
+                .update("Token", s).addOnSuccessListener(unused -> Log.d("Test", "Update Token Success"))
+                .addOnFailureListener(e -> Log.d("Test", "Update Token Error: " + e.getMessage()))).addOnFailureListener(e -> {
+            showToast(e.getMessage());
+        });
+
     }
 
     public void getDataFromUserId(String uid, FetchByID<Users> fetch) {
@@ -361,11 +414,11 @@ public class UserViewModel extends ViewModel {
     }
 
 
-
-    public void signOutDatabase(){
+    public void signOutDatabase() {
         database.recentViewDao().SignOutApp();
         database.followerDao().SignOutApp();
         database.recipeDao().SignOutApp();
+        database.searchDao().SignOutApp();
         database.saveRecipeDao().SignOutApp();
     }
 

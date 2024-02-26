@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/_36sdp"
         android:layout_marginHorizontal="@dimen/_12sdp"
-        android:background="@drawable/bg_input_start"
+        android:background="@drawable/bg_input_start_disable"
         android:backgroundTint="@color/aliceblue"
 
         android:paddingStart="@dimen/_6sdp"
@@ -41,7 +41,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="@dimen/_60sdp"
         android:layout_height="@dimen/_36sdp"
-        android:background="@drawable/bg_input_start"
+        android:background="@drawable/bg_input_start_disable"
         android:orientation="horizontal"
         android:padding="@dimen/_3sdp"
         android:backgroundTint="@color/aliceblue"

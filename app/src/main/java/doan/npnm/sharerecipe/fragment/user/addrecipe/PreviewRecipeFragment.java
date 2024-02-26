@@ -1,6 +1,7 @@
 package doan.npnm.sharerecipe.fragment.user.addrecipe;
 
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -15,6 +16,8 @@ import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentPreviewRecipeBinding;
+import doan.npnm.sharerecipe.firebase.FCMNotificationSender;
+import doan.npnm.sharerecipe.interfaces.DataEventListener;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
 
@@ -43,6 +46,9 @@ public class PreviewRecipeFragment extends BaseFragment<FragmentPreviewRecipeBin
 
     @Override
     protected void initView() {
+        viewModel.isAddRecipe.observe(this, val -> {
+            if (val) closeFragment(PreviewRecipeFragment.this);
+        });
 
         directionsAdapter = new DirectionsAdapter(DirectionsAdapter.DIR_TYPE.PREVIEW, null);
         binding.rcvDirection.setAdapter(directionsAdapter);
@@ -92,6 +98,7 @@ public class PreviewRecipeFragment extends BaseFragment<FragmentPreviewRecipeBin
                 public void onAddSuccess(String docID, String img, ArrayList<String> listUrl) {
                     recipe.ImagePreview = listUrl;
                     recipe.Id = docID;
+                    recipe.RecipeAuth= viewModel.auth.getCurrentUser().getUid();
                     recipeViewModel.recipeLiveData.postValue(recipe);
                     putDataRecipe(recipeViewModel.recipeLiveData.getValue());
                 }
@@ -153,6 +160,18 @@ public class PreviewRecipeFragment extends BaseFragment<FragmentPreviewRecipeBin
                     showToast("Add data success full");
                     loaddingDialog.dismiss();
                     viewModel.isAddRecipe.postValue(true);
+                    FCMNotificationSender.sendNotiAddRecipe(viewModel.users.getValue().Token,value, new DataEventListener<String>() {
+                        @Override
+                        public void onSuccess(String data) {
+                            Log.d("TAG", "onSuccess"+data);
+                        }
+
+                        @Override
+                        public void onErr(Object err) {
+                            showToast("Error:"+err);
+
+                        }
+                    });
 
                 }).addOnFailureListener(e -> {
                     showToast(e.getMessage());
