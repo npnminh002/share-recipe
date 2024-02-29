@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doan.npnm.sharerecipe.lib.widget.MyConstrainLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingVertical="@dimen/_12sdp"
+    tools:context=".fragment.user.addrecipe.FirstRecipeFragment">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/backIcon"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="start"
+            android:background="@drawable/button_app_background"
+            android:padding="@dimen/_3sdp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/white" />
+
+
+        <TextView
+            android:id="@+id/cancelIcon"
+            android:paddingHorizontal="@dimen/_6sdp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins_semibold"
+            android:lineHeight="@dimen/_28sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/button_app_background"
+            android:text="@string/cancel"
+            android:gravity="center_vertical" />
+        <TextView
+            android:id="@+id/Profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/preview_recipe"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14sdp" />
+
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_12sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/_32sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/name_of_recipes"
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_16sdp" />
+
+                    <EditText
+                        android:id="@+id/nameOfRecipe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_input_start_disable"
+                        android:fontFamily="@font/poppins_light"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:paddingVertical="@dimen/_6sdp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/darkgray"
+                        android:textSize="@dimen/_13sdp" />
+
+                    <RelativeLayout
+                        android:id="@+id/llChoseImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_240sdp"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:background="@drawable/bg_input_start_disable"
+                        android:backgroundTint="#F4F4F4">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/img_Product"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            app:shapeAppearanceOverlay="@style/RivCorner_16" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/description"
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_16sdp" />
+
+                    <EditText
+                        android:id="@+id/description"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_120sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_input_start_disable"
+                        android:fontFamily="@font/poppins_light"
+                        android:gravity="start|top"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:paddingVertical="@dimen/_6sdp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/darkgray"
+                        android:textSize="@dimen/_13sdp" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/_32sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/information"
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_16sdp" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="@string/preparation_time"
+                            android:textColor="@color/textcolor"
+                            android:textSize="@dimen/_13sdp" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_6sdp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_input_start_disable"
+                            android:padding="@dimen/_3sdp"
+                            android:weightSum="3">
+
+                            <EditText
+                                android:id="@+id/timePrepare"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:fontFamily="@font/poppins_light"
+                                android:paddingVertical="@dimen/_3sdp"
+                                android:paddingStart="@dimen/_12sdp"
+                                android:paddingEnd="@dimen/_3sdp"
+                                android:text="0"
+                                android:textAlignment="textEnd"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/darkgray"
+                                android:textSize="@dimen/_14sdp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/selectMinutePP"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:ignore="NestedWeights" />
+
+                            <TextView
+                                android:id="@+id/selectMinutePP"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:fontFamily="@font/poppins_light"
+                                android:paddingVertical="@dimen/_3sdp"
+                                android:text="s"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/darkgray"
+                                android:textSize="@dimen/_14sdp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:layout_editor_absoluteX="112dp" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="@string/cooking_time"
+                            android:textColor="@color/textcolor"
+                            android:textSize="@dimen/_13sdp" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_6sdp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_input_start_disable"
+                            android:padding="@dimen/_3sdp"
+                            android:weightSum="3">
+
+                            <EditText
+                                android:id="@+id/timeCook"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:fontFamily="@font/poppins_light"
+                                android:paddingVertical="@dimen/_3sdp"
+                                android:paddingStart="@dimen/_12sdp"
+                                android:paddingEnd="@dimen/_3sdp"
+                                android:text="10"
+                                android:textAlignment="textEnd"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/darkgray"
+                                android:textSize="@dimen/_14sdp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/selectMinuteCook"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:ignore="NestedWeights" />
+
+                            <TextView
+                                android:id="@+id/selectMinuteCook"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:background="@color/white"
+                                android:fontFamily="@font/poppins_light"
+                                android:paddingVertical="@dimen/_3sdp"
+                                android:text="s"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/darkgray"
+                                android:textSize="@dimen/_14sdp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:layout_editor_absoluteX="112dp" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="@string/difficulity"
+                            android:textColor="@color/textcolor"
+                            android:textSize="@dimen/_13sdp" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_6sdp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_input_start_disable"
+                            android:padding="@dimen/_3sdp"
+                            android:weightSum="3">
+
+                            <EditText
+                                android:id="@+id/txtLever"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:enabled="false"
+                                android:fontFamily="@font/poppins_light"
+                                android:paddingVertical="@dimen/_3sdp"
+                                android:paddingStart="@dimen/_12sdp"
+                                android:paddingEnd="@dimen/_3sdp"
+                                android:text="10"
+                                android:textAlignment="textEnd"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/darkgray"
+                                android:textSize="@dimen/_14sdp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:ignore="NestedWeights" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/ingredients"
+                    android:textColor="@color/textcolor"
+                    android:textSize="@dimen/_16sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcvIngrident"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_130sdp"
+                    android:layout_marginVertical="@dimen/_12sdp"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_ingredents_view" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/directions"
+                    android:textColor="@color/textcolor"
+                    android:textSize="@dimen/_16sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcvDirection"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_130sdp"
+                    android:layout_marginVertical="@dimen/_12sdp"
+                    android:layout_marginBottom="157dp"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_direction_view" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+
+                    android:paddingBottom="@dimen/_32sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/optional"
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_16sdp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="@string/gallery"
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/listImg"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_170sdp"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="3" />
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <TextView
+                        android:id="@+id/btn_save_data"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/active_background"
+                        android:backgroundTint="@color/appcolor"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:paddingVertical="@dimen/_8sdp"
+                        android:text="@string/save"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_14sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</doan.npnm.sharerecipe.lib.widget.MyConstrainLayout>

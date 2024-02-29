@@ -3,11 +3,17 @@ package doan.npnm.sharerecipe.activity.start;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import doan.npnm.sharerecipe.activity.admin.AdminMainActivity;
 import doan.npnm.sharerecipe.activity.user.MainActivity;
 import doan.npnm.sharerecipe.base.BaseActivity;
 import doan.npnm.sharerecipe.databinding.ActivitySignInBinding;
 
 public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
+
+    @Override
+    public void OnClick() {
+
+    }
 
     @Override
     protected ActivitySignInBinding getViewBinding() {
@@ -16,17 +22,19 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
 
     @Override
     protected void createView() {
-        appViewModel.getUsers().observe(this,users -> {
-            startActivity(new Intent(SignInActivity.this, MainActivity.class));
-            finish();
+        userViewModel.getUsers().observe(this, users -> {
+            if (users != null) {
+
+                startActivity(new Intent(SignInActivity.this, users.AccountType==1? AdminMainActivity.class : MainActivity.class));
+                finish();
+            }
         });
 
         binding.signIn.setOnClickListener(v -> {
-            startActivity(new Intent(SignInActivity.this,SignUpActivity.class));
+            startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
             finish();
         });
         binding.signInApp.setOnClickListener(v -> {
-
             String email = binding.email.getText().toString();
             String pass = binding.passs.getText().toString();
 
@@ -40,16 +48,14 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
 
 
     private void signIn(String email, String pass) {
-        auth.signInWithEmailAndPassword(email, pass)
-                .addOnSuccessListener(authResult -> {
-                    appViewModel.getDataFromUser(authResult.getUser().getUid());
+        auth.signInWithEmailAndPassword(email, pass).addOnSuccessListener(authResult -> {
+            userViewModel.getDataFromUserId(authResult.getUser().getUid());
+            userViewModel.firstStartApp(authResult.getUser().getUid());
+            showToast("Sign-in successful");
+        }).addOnFailureListener(e -> {
 
-                    showToast("Sign-in successful");
-                })
-                .addOnFailureListener(e -> {
-                    // If sign in fails, display a message to the user.
-                    showToast("Authentication failed: " + e.getMessage());
-                });
+            showToast("Authentication failed: " + e.getMessage());
+        });
 
 
     }

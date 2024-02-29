@@ -20,7 +20,7 @@ public class BaseDialog extends Dialog {
     private final String TAG = BaseDialog.class.getName();
 
     public BaseDialog(Context context) {
-        this(context, R.style.Base_Theme_ShareRecipe);
+        this(context, R.style.Base_Theme_Dialog);
     }
 
     public BaseDialog(Context context, int theme) {
@@ -45,6 +45,8 @@ public class BaseDialog extends Dialog {
             getWindow().getDecorView().setSystemUiVisibility(hideSystemBars());
         }
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

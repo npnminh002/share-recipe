@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/icon_home_admin"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home"
+        tools:ignore="MenuTitle" />
+
+    <item
+        android:id="@+id/icon_chart_admin"
+        android:icon="@drawable/ic_insert_chart"
+        android:title="@string/chart"
+        tools:ignore="MenuTitle" />
+    <item
+        android:id="@+id/icon_report_admin"
+        android:icon="@drawable/ic_report_gmailerrorred"
+        android:title="@string/report" />
+    <item
+        android:id="@+id/icon_notification_admin"
+        android:icon="@drawable/ic_notification"
+        android:title="@string/notification" />
+    <item
+        android:id="@+id/icon_users_admin"
+        android:icon="@drawable/ic_person"
+        android:title="@string/notification" />
+
+</menu>

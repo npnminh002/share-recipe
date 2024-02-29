@@ -2,20 +2,28 @@ package doan.npnm.sharerecipe.base;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
+
+import doan.npnm.sharerecipe.app.context.AppContext;
 
 public abstract class BaseAdapter<T, VB extends ViewBinding> extends RecyclerView.Adapter<BaseAdapter<T, VB>.ViewHolder> {
 
     private final ArrayList<T> listItem = new ArrayList<>();
     private VB binding;
 
-    private int currentPosition = RecyclerView.NO_POSITION;
+    public int currentPosition = RecyclerView.NO_POSITION;
 
     protected abstract VB createBinding(LayoutInflater inflater, ViewGroup parent, int viewType);
 
@@ -37,6 +45,18 @@ public abstract class BaseAdapter<T, VB extends ViewBinding> extends RecyclerVie
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(locale);
         return currencyFormat.format(value);
     }
+    public  String dateFromString(String inputDate) {
+        try {
+            SimpleDateFormat inputDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.US);
+            Date date = inputDateFormat.parse(inputDate);
+
+            SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+            return outputDateFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
     @Override
     public int getItemCount() {
         return listItem.size();
@@ -48,6 +68,22 @@ public abstract class BaseAdapter<T, VB extends ViewBinding> extends RecyclerVie
         listItem.clear();
         listItem.addAll(items);
         notifyDataSetChanged();
+    }
+
+    public void loadImage(String imageLink, final ImageView imageView) {
+        Glide.with(AppContext.getContext())
+                .load(imageLink)
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
+    }
+
+    public void loadImage(Object imageLink, final ImageView imageView) {
+        Glide.with(AppContext.getContext())
+                .load(imageLink)
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
     }
 
     public void removeItem(int position) {

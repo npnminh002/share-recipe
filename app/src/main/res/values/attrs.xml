@@ -41,11 +41,34 @@
         <attr name="bt_badgeTextColor" format="color" />
         <attr name="bt_badgeText" format="string" />
     </declare-styleable>
+    <declare-styleable name="CircleImageView">
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+        <attr name="civ_border_overlay" format="boolean" />
+        <attr name="civ_circle_background_color" format="color" />
+    </declare-styleable>
     <declare-styleable name="BubbleNavigationConstraintView">
         <attr name="bnc_mode">
             <enum name="spread" value="0" />
             <enum name="inside" value="1" />
             <enum name="packed" value="2" />
         </attr>
+    </declare-styleable>
+    <declare-styleable name="AutoAnnimte">
+        <attr name="viewColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="CustomLinearLayout">
+        <attr name="cornerRadius" format="dimension"/>
+        <attr name="strokeWidth" format="dimension"/>
+        <attr name="strokeColor" format="color"/>
+        <attr name="gradientColors" format="reference"/>
+        <attr name="backgroundColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="CheckBoxImageView">
+        <attr name="default_img" format="integer"/>
+        <attr name="checked_img" format="integer"/>
+        <attr name="checked" format="boolean"/>
     </declare-styleable>
 </resources>

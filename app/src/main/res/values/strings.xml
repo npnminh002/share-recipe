@@ -1,5 +1,119 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Share Recipe</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="username">UserName</string>
+    <string name="language">Language</string>
+    <string name="notifications">Notifications</string>
+    <string name="edit_profile_information">Edit profile information</string>
+    <string name="help_support"><![CDATA[Help & Support]]></string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="save">Save</string>
+    <string name="update_info">Update Info</string>
+    <string name="language_english" translatable="false" tools:ignore="DuplicateDefinition">English</string>
+    <string name="language_spain" translatable="false">Espalier</string>
+    <string name="language_portugal" translatable="false">Portuguese</string>
+    <string name="language_hindi" translatable="false">भारतीय भाषा</string>
+    <string name="language_germany" translatable="false">Deutsch</string>
+    <string name="language_brazil" translatable="false">Lingua Brasilia</string>
+    <string name="language_japan" translatable="false">日本</string>
+    <string name="language_korean" translatable="false">한국어</string>
+    <string name="language_france" translatable="false">Francais</string>
+    <string name="profile">Profile</string>
+    <string name="contact_us">Contact us</string>
+    <string name="full_name">Full name</string>
+    <string name="nickname">Nickname</string>
+    <string name="country">Country</string>
+    <string name="gender">Gender</string>
+    <string name="vi_t_nam">Việt Nam</string>
+    <string name="address">Address</string>
+    <string name="email">Email</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="gender_femail">Female</string>
+    <string name="undisclosed">Undisclosed</string>
+    <string name="cofirm_update">Are you sure to update the information?</string>
+    <string name="gender_male">Male</string>
+    <string name="profile_update_success">Update profile successfull</string>
+    <string name="add_recipe">Add Recipe</string>
+    <string name="name_of_recipes">Name of recipes</string>
+    <string name="description">Description</string>
+    <string name="next">Next</string>
+    <string name="select_photo">Select photo</string>
+    <string name="preparation_time">Preparation Time</string>
+    <string name="information">Information</string>
+    <string name="difficulity">Difficulity</string>
+    <string name="cooking_time">Cooking Time</string>
+    <string name="difficul">Difficult</string>
+    <string name="easy">Easy</string>
+    <string name="normal">Normal</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="cf_delete">Do you want to delete this data?</string>
+    <string name="directions">Directions</string>
+    <string name="optional">Optional</string>
+    <string name="gallery">Gallery</string>
+    <string name="preview_recipe">Preview Recipe</string>
+    <string name="recipe">Recipe</string>
+    <string name="follow">Follow</string>
+    <string name="followers">Followers</string>
+    <string name="recently_view">Recently view</string>
+    <string name="my_recipe">My recipe</string>
+    <string name="bakery">Bakery</string>
+    <string name="beverages">Beverages</string>
+    <string name="dairy">Dairy</string>
+    <string name="frozen">Frozen food</string>
+    <string name="fruit">Fruit</string>
+    <string name="meat">Meat</string>
+    <string name="poultry">Poultry</string>
+    <string name="seafood">Seafood</string>
+    <string name="vegetable">Vegetable</string>
+    <string name="hello">Hello</string>
+    <string name="what_are_you_cooking_today">What are you cooking today?</string>
+    <string name="search">Search...</string>
+    <string name="category">Category</string>
+    <string name="top_chef">Top Chef</string>
+    <string name="popular">Popular</string>
+    <string name="save_recipes">Save recipes</string>
+    <string name="discussion">Discussion</string>
+    <string name="write_some_thing">Write some thing</string>
+    <string name="reply">Reply</string>
+    <string name="facebook_client_token">3bff09d823583c0ff009624938cbed5d</string>
+    <string name="facebook_app_id">1321037335188570</string>
+    <string name="step">Step</string>
+    <string name="un_follow">Unfollow</string>
+    <string name="edit_recipe">Edit recipe</string>
+    <string name="have_an_err">Error occurs when viewing this recipe for copyright reasons</string>
+    <string name="report">Report</string>
+    <string name="share">Share</string>
+    <string name="chart">Chart</string>
+    <string name="home">Home</string>
+    <string name="notification">Notification</string>
+    <string name="cf_sign_Out">Do you want to log out of this application?</string>
+    <string name="recipe_to_be_approved">Recipe to be approved</string>
+    <string name="account">Account</string>
+    <string name="approved">Approved</string>
+    <string name="recipe_id">Recipe ID</string>
+    <string name="name">Name</string>
+    <string name="auth_id">Auth Id</string>
+    <string name="level">Level</string>
+    <string name="view">View</string>
+    <string name="love">Love</string>
+    <string name="init_time">Init time</string>
+    <string name="locked">Locked</string>
+    <string name="wait_cf">Waitting Confirm</string>
+    <string name="status">Status</string>
+    <string name="manager">Manager</string>
+    <string name="detail">Detail</string>
+    <string name="cf_download">Are you sure you want to download this photo?</string>
+    <string name="content">Content</string>
+    <string name="id">Id</string>
+    <string name="number">Number</string>
+    <string name="history">History</string>
+    <string name="add_success">The recipes are added successfully!</string>
+    <string name="search_value">Search</string>
+    <string name="result_for">Result for</string>
+    <string name="no_matching_results_were_found">No matching results were found</string>
+    <string name="speech_prompt">Say something…</string>
+    <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
+    <string name="tap_on_mic">Tap on mic to speak</string>
+    <string name="friend_add_recipe">has added a new recipe, See it</string>
 </resources>
