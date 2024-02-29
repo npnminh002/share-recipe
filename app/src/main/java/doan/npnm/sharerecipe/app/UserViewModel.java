@@ -215,9 +215,12 @@ public class UserViewModel extends ViewModel {
                             Recipe rcp = documentSnapshot.toObject(Recipe.class);
                             if (rcp != null) {
                                 rcpList.add(rcp);
-//                                if (rcp.RecipeAuth.equals(loginID)) {
-//                                    myRecipeArr.add(rcp.toJson());
-//                                }
+                                if(loginID!=null){
+                                    if (rcp.RecipeAuth.equals(loginID)) {
+                                    myRecipeArr.add(rcp.toJson());
+                                    }
+                                }
+
                             } else {
                                 showToast("Recipe is null");
                             }
@@ -321,7 +324,6 @@ public class UserViewModel extends ViewModel {
                 .addSnapshotListener((value, error) -> {
                     if (value != null) {
                         Users us = value.toObject(Users.class);
-
                         users.postValue(us);
                     } else {
                         showToast("Error: " + error.getMessage());

@@ -33,4 +33,7 @@ public class Constant {
         );
         return header;
     }
+
+
+    public static final String NOTIFICATION="Notification";
 }

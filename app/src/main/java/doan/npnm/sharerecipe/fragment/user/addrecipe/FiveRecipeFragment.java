@@ -67,7 +67,7 @@ public class FiveRecipeFragment extends BaseFragment<FragmentFiveRecipeBinding> 
             recipe.RecipeAuth = users.Id;
         });
         recipeViewModel.listSelect.observe(this, data -> {
-            if (data == null) {
+            if (data.size()==0) {
                 data = new ArrayList<>();
                 data.add(null);
             }
@@ -120,7 +120,7 @@ public class FiveRecipeFragment extends BaseFragment<FragmentFiveRecipeBinding> 
     public void OnClick() {
         binding.backIcon.setOnClickListener(v -> closeFragment(FiveRecipeFragment.this));
         binding.btnNext.setOnClickListener(v -> {
-            if (recipeViewModel.listSelect.getValue().size() == 0) {
+            if (recipeViewModel.listSelect.getValue().size()!=0) {
                 replaceFragment(new PreviewRecipeFragment(viewModel, recipeViewModel), android.R.id.content, true);
             } else {
                 showToast("Please choose image ");

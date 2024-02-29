@@ -5,19 +5,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
+import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.DirectionsAdapter;
 import doan.npnm.sharerecipe.adapter.users.ImageRecipeAdapter;
 import doan.npnm.sharerecipe.adapter.users.IngridentsAdapter;
-import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
+import doan.npnm.sharerecipe.database.models.UserFollower;
 import doan.npnm.sharerecipe.databinding.FragmentPreviewRecipeBinding;
 import doan.npnm.sharerecipe.firebase.FCMNotificationSender;
 import doan.npnm.sharerecipe.interfaces.DataEventListener;
+import doan.npnm.sharerecipe.model.notification.Notification;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
 
@@ -98,7 +105,7 @@ public class PreviewRecipeFragment extends BaseFragment<FragmentPreviewRecipeBin
                 public void onAddSuccess(String docID, String img, ArrayList<String> listUrl) {
                     recipe.ImagePreview = listUrl;
                     recipe.Id = docID;
-                    recipe.RecipeAuth= viewModel.auth.getCurrentUser().getUid();
+                    recipe.RecipeAuth = viewModel.auth.getCurrentUser().getUid();
                     recipeViewModel.recipeLiveData.postValue(recipe);
                     putDataRecipe(recipeViewModel.recipeLiveData.getValue());
                 }
@@ -151,8 +158,8 @@ public class PreviewRecipeFragment extends BaseFragment<FragmentPreviewRecipeBin
     }
 
     private void putDataRecipe(Recipe value) {
-        recipe.History= new ArrayList<String>(){{
-            add("Time Add"+getTimeNow());
+        recipe.History = new ArrayList<String>() {{
+            add("Time Add" + getTimeNow());
         }};
         firestore.collection(Constant.RECIPE)
                 .document(value.Id)
@@ -160,23 +167,61 @@ public class PreviewRecipeFragment extends BaseFragment<FragmentPreviewRecipeBin
                     showToast("Add data success full");
                     loaddingDialog.dismiss();
                     viewModel.isAddRecipe.postValue(true);
-                    FCMNotificationSender.sendNotiAddRecipe(viewModel.users.getValue().Token,value, new DataEventListener<String>() {
-                        @Override
-                        public void onSuccess(String data) {
-                            Log.d("TAG", "onSuccess"+data);
-                        }
-
-                        @Override
-                        public void onErr(Object err) {
-                            showToast("Error:"+err);
-
-                        }
-                    });
+                    postNotification(recipe);
 
                 }).addOnFailureListener(e -> {
                     showToast(e.getMessage());
                     loaddingDialog.dismiss();
                 });
+    }
+
+    private void postNotification(Recipe recipe) {
+        DatabaseReference youfirebaseDatabase = viewModel.fbDatabase.getReference(Constant.NOTIFICATION)
+                .child(recipe.RecipeAuth).push();
+
+
+        String id = youfirebaseDatabase.getKey();
+        Notification yourNotification = new Notification() {{
+            Id = id;
+            Content = getString(R.string.add_success);
+            Time = getTimeNow();
+            AuthID = recipe.RecipeAuth;
+            IsView = false;
+            Value = recipe.Id;
+            NotyType = doan.npnm.sharerecipe.model.notification.NotyType.USER_ADD;
+        }};
+
+        Notification followNotification = new Notification() {{
+            Id = id;
+            Content =viewModel.users.getValue().UserName+" "+  getString(R.string.friend_add_recipe);
+            Time = getTimeNow();
+            AuthID = recipe.RecipeAuth;
+            IsView = false;
+            Value = recipe.Id;
+            NotyType = doan.npnm.sharerecipe.model.notification.NotyType.USER_ADD;
+        }};
+        youfirebaseDatabase.setValue(yourNotification);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            viewModel.database.userFollowerDao().getDataList().forEach(userFollower -> {
+                DatabaseReference otherfirebaseDatabase = viewModel.fbDatabase.getReference(Constant.NOTIFICATION)
+                        .child(userFollower.AuthID).push();
+                followNotification.Id=otherfirebaseDatabase.getKey();
+                otherfirebaseDatabase.setValue(followNotification);
+            });
+        }
+
+        FCMNotificationSender.sendNotiAddRecipe(viewModel.users.getValue().Token, recipe, new DataEventListener<String>() {
+            @Override
+            public void onSuccess(String data) {
+                Log.d("TAG", "onSuccess" + data);
+            }
+
+            @Override
+            public void onErr(Object err) {
+                showToast("Error:" + err);
+
+            }
+        });
     }
 }
 

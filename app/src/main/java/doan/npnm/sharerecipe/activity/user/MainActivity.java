@@ -9,6 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -18,6 +21,7 @@ import javax.annotation.Nullable;
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.base.BaseActivity;
 import doan.npnm.sharerecipe.database.models.Search;
+import doan.npnm.sharerecipe.database.models.UserFollower;
 import doan.npnm.sharerecipe.databinding.ActivityMainBinding;
 import doan.npnm.sharerecipe.fragment.user.DetailRecipeFragment;
 import doan.npnm.sharerecipe.fragment.user.HomeUserFragment;
@@ -25,6 +29,7 @@ import doan.npnm.sharerecipe.fragment.user.NotificationFragment;
 import doan.npnm.sharerecipe.fragment.user.ProfileUserFragment;
 import doan.npnm.sharerecipe.fragment.user.SeachFragment;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
+import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
 
@@ -36,17 +41,18 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         return ActivityMainBinding.inflate(getLayoutInflater());
     }
 
+    String key = "";
+
     @Override
     protected void createView() {
+
         loaddingDialog.show();
-        userViewModel.searchKey.observe(this,key->{
-            if(!key.isEmpty()){
-                userViewModel.database.searchDao().addRecentView(new Search(){{
-                    CurrentKey=key;
+        userViewModel.searchKey.observe(this, key -> {
+            if (!key.isEmpty()) {
+                this.key = key;
+                userViewModel.database.searchDao().addRecentView(new Search() {{
+                    CurrentKey = key;
                 }});
-                openFragment(new SeachFragment(userViewModel).newInstance(new HashMap<String, Serializable>(){{
-                    put("Key",key);
-                }}),true,true);
                 binding.bottomNavigation.setSelectedItemId(R.id.icon_search_user);
             }
 
@@ -68,14 +74,39 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         }
 
         openFragment(new HomeUserFragment(userViewModel), true, true);
-        new Handler().postDelayed(()->{
+        new Handler().postDelayed(() -> {
             binding.getRoot().setVisibility(View.VISIBLE);
             loaddingDialog.dismiss();
-        },2000);
+        }, 2000);
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener(OnBottomEventSelect);
+        userViewModel.users.observe(this, users -> {
+            listenerUserFollow(users);
+        });
+    }
 
+    private void listenerUserFollow(Users users) {
+        userViewModel.fbDatabase.getReference(Constant.FOLLOW_USER)
+                .child(users.UserID)
+                .child("OtherFollow")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        userViewModel.database.userFollowerDao().SignOutApp();
+                        for (DataSnapshot doc : snapshot.getChildren()) {
+                            userViewModel.database.userFollowerDao()
+                                    .addUserFollower(new UserFollower() {{
+                                        AuthID = doc.getKey();
+                                    }});
 
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     @SuppressLint("NewApi")
@@ -83,21 +114,22 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         if (item.getItemId() == R.id.icon_home_user) {
             openFragment(new HomeUserFragment(userViewModel), true, true);
             return true;
-        }  else if (item.getItemId() == R.id.icon_search_user) {
-            openFragment(new SeachFragment(userViewModel).newInstance(new HashMap<String, Serializable>(){{
-                put("Key","Test");
-            }}),true,true);
+        } else if (item.getItemId() == R.id.icon_search_user) {
+            openFragment(new SeachFragment(userViewModel).newInstance(new HashMap<String, Serializable>() {{
+                put("Key", key);
+            }}), true, true);
             return true;
         } else if (item.getItemId() == R.id.icon_notification_user) {
-            openFragment(new NotificationFragment(userViewModel),false,false);
+            openFragment(new NotificationFragment(userViewModel), true, false);
             return true;
-        } else if (item.getItemId() == R.id.icon_users_admin) {
+        } else if (item.getItemId() == R.id.icon_users_user) {
             openFragment(new ProfileUserFragment(userViewModel), true, true);
             return true;
         } else {
             return false;
         }
     };
+
     @Override
     public void OnClick() {
     }

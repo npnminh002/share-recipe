@@ -29,6 +29,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:background="@drawable/bg_menu_item_unselect"
             android:id="@+id/icSetting"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_32sdp"
@@ -38,7 +39,20 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/lightgray" />
+            app:tint="#686767" />
+
+        <ImageView
+            android:background="@drawable/bg_menu_item_unselect"
+            android:id="@+id/icAddRecipe"
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:padding="@dimen/_4sdp"
+            android:src="@drawable/ic_round_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/icSetting"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#686767" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

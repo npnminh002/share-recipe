@@ -165,7 +165,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
     public ArrayList<String> getCategoryID() {
         ArrayList<String> result = new ArrayList<>();
         for (int i = 1; i < 10; i++) {
-            result.add("" + result);
+            result.add("" + i);
         }
         return result;
     }

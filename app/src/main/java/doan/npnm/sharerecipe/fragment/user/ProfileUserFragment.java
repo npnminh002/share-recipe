@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -13,12 +14,15 @@ import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.MyRecipeViewAdapter;
 import doan.npnm.sharerecipe.adapter.users.RecipeRecentViewAdapter;
 import doan.npnm.sharerecipe.adapter.users.RecipeSaveViewAdapter;
+import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.RecentView;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.databinding.FragmentProfileUserBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
+import doan.npnm.sharerecipe.fragment.user.addrecipe.FirstRecipeFragment;
+import doan.npnm.sharerecipe.fragment.user.addrecipe.FiveRecipeFragment;
 import doan.npnm.sharerecipe.interfaces.OnRecipeEvent;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
@@ -35,6 +39,8 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
         binding.icSetting.setOnClickListener(v -> {
             addFragment(new SettingFragment(viewModel), android.R.id.content, true);
         });
+
+        binding.icAddRecipe.setOnClickListener(v -> addFragment(new FirstRecipeFragment(viewModel), android.R.id.content, true));
     }
 
     @Override
@@ -42,7 +48,6 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
         return FragmentProfileUserBinding.inflate(getLayoutInflater());
     }
 
-    ArrayList<RecentView> recentView = new ArrayList<>();
     private RecipeRecentViewAdapter recentViewAdapter;
     private RecipeSaveViewAdapter saveViewAdapter;
 
@@ -131,7 +136,7 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
 
             @Override
             public void onEdit(Recipe recipe) {
-                replaceFullViewFragment(new EditRecipeFragment(viewModel,recipe),android.R.id.content,true);
+                replaceFullViewFragment(new EditRecipeFragment(viewModel, recipe), android.R.id.content, true);
             }
         });
 
@@ -151,7 +156,6 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
 
         binding.rcvMyRecipe.setAdapter(myViewAdapter);
         myViewAdapter.setItems(viewModel.myRecipeArr);
-
 
 
     }

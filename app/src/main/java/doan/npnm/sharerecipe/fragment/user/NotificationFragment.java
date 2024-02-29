@@ -8,7 +8,10 @@ import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentNotificationBinding;
 
 public class NotificationFragment extends BaseFragment<FragmentNotificationBinding> {
+
+    private UserViewModel viewModel;
     public NotificationFragment(UserViewModel userViewModel) {
+        this.viewModel=userViewModel;
     }
 
     @Override
@@ -18,7 +21,7 @@ public class NotificationFragment extends BaseFragment<FragmentNotificationBindi
 
     @Override
     protected void initView() {
-
+        binding.edtSearchData.setText(""+viewModel.database.userFollowerDao().getDataList().size());
     }
 
     @Override
