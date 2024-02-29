@@ -28,7 +28,8 @@ public class NotificationDialog {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             Intent intent = new Intent(context, MainActivity.class);
             intent.putExtra(Constant.RECIPE, recipe.Id);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
             RemoteViews notificationLayout = new RemoteViews(context.getPackageName(), R.layout.notification_add_recipe_small);
             @SuppressLint("RemoteViewLayout") RemoteViews notificationLayoutBig = new RemoteViews(context.getPackageName(), R.layout.notification_add_recipe_big);
             notificationLayoutBig.setImageViewBitmap(R.id.img_product_header, bitmap);

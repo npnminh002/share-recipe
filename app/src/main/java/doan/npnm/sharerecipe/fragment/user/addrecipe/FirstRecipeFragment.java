@@ -107,15 +107,11 @@ public class FirstRecipeFragment extends BaseFragment<FragmentFirstRecipeBinding
         if (recipe.Name.isEmpty()) {
             name.onError();
             return false;
-        } else if (recipe.Description.isEmpty()) {
+        } else if (recipe.Description==null || recipe.Description.equals("") ) {
             description.onError();
             return false;
         }
-        else if(recipeViewModel.imgUri==null){
-            return false;
-        }else {
-            return true;
-        }
+        else return recipeViewModel.imgUri != null;
     }
 
 

@@ -4,13 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.interfaces.DataEventListener;
+import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.network.ApiClient;
 import doan.npnm.sharerecipe.network.ApiService;
@@ -25,7 +22,7 @@ public class FCMNotificationSender {
         ADD_RECIPE
     }
 
-    public static void sendNotiAddRecipe(String reciveToken, Recipe recipe, DataEventListener<String> event){
+    public static void sendNotiAddRecipe(String reciveToken, Users isUser, Recipe recipe, DataEventListener<String> event){
         try {
             JSONArray tokens = new JSONArray();
             tokens.put(reciveToken);
@@ -33,7 +30,7 @@ public class FCMNotificationSender {
             JSONObject data = new JSONObject();
             data.put(Constant.NOTIFICATION_TYPE,"AddRecipe");
 
-            data.put(Constant.NOTI_CONTENT, AppContext.getContext().getString(R.string.add_success));
+            data.put(Constant.NOTI_CONTENT,(isUser==null ?"":isUser.UserName)+ AppContext.getContext().getString(R.string.add_success));
             data.put(Constant.RECIPE,recipe.toJson());
 
             body.put(Constant.REMOTE_MSG_DATA, data);

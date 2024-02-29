@@ -1,7 +1,9 @@
 package doan.npnm.sharerecipe.fragment.user;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.RequiresApi;
@@ -53,6 +55,7 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
 
     private MyRecipeViewAdapter myViewAdapter;
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initView() {
@@ -150,9 +153,23 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
         });
 
         binding.rcvRecentView.setAdapter(recentViewAdapter);
-        recentViewAdapter.setItems((ArrayList<RecentView>) viewModel.database.recentViewDao().getListRecentView());
+        ArrayList<RecentView> recentViews=  (ArrayList<RecentView>) viewModel.database.recentViewDao().getListRecentView();
+        if(recentViews.size()==0){
+            binding.txtNo1.setVisibility(View.VISIBLE);
+        }
+        recentViewAdapter.setItems(recentViews);
+
         binding.rcvSaveRecipe.setAdapter(saveViewAdapter);
-        saveViewAdapter.setItems((ArrayList<SaveRecipe>) viewModel.database.saveRecipeDao().getListRecentView());
+
+        ArrayList<SaveRecipe> saveRecipes= (ArrayList<SaveRecipe>) viewModel.database.saveRecipeDao().getListRecentView();
+        if(saveRecipes.size()==0){
+            binding.txtNo2.setVisibility(View.VISIBLE);
+        }
+        saveViewAdapter.setItems(saveRecipes);
+
+        if(viewModel.myRecipeArr.size()==0){
+            binding.txtNo3.setVisibility(View.VISIBLE);
+        }
 
         binding.rcvMyRecipe.setAdapter(myViewAdapter);
         myViewAdapter.setItems(viewModel.myRecipeArr);
