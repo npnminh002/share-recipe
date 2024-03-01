@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,6 +20,7 @@ import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentSettingBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
+import doan.npnm.sharerecipe.lib.shared_preference.SharedPreference;
 
 public class SettingFragment extends BaseFragment<FragmentSettingBinding> {
     public UserViewModel viewModel;
@@ -41,10 +43,9 @@ public class SettingFragment extends BaseFragment<FragmentSettingBinding> {
 
     private void onLoadUserProfile() {
         viewModel.users.observe(this, users -> {
-            if(users==null){
+            if (users == null) {
                 startActivity(new Intent(requireContext(), SignInActivity.class));
-            }
-            else {
+            } else {
                 if (!users.UrlImg.isEmpty()) {
                     loadImage(users.UrlImg, binding.ImgUser);
                 }
@@ -57,6 +58,8 @@ public class SettingFragment extends BaseFragment<FragmentSettingBinding> {
 
     @Override
     public void OnClick() {
+        boolean isChecked = new SharedPreference().getBoolean("IsNoty", true);
+        binding.onOfNoti.setChecked(isChecked);
         binding.icEitImage.setOnClickListener(v -> {
             if (allPermissionsGranted()) {
                 permissionLauncher.launch(permissions);
@@ -79,14 +82,16 @@ public class SettingFragment extends BaseFragment<FragmentSettingBinding> {
                 viewModel.auth.signOut();
                 viewModel.signOutDatabase();
 
-                 new Handler().postDelayed(()->{
+                new Handler().postDelayed(() -> {
                     loaddingDialog.dismiss();
                     viewModel.users.postValue(null);
                     startActivity(new Intent(requireContext(), SignInActivity.class));
-                     viewModel= new ViewModelProvider(SettingFragment.this).get(UserViewModel.class);
-                 },1500);
+                    viewModel = new ViewModelProvider(SettingFragment.this).get(UserViewModel.class);
+                }, 1500);
             }).show();
         });
+
+        binding.onOfNoti.setOnCheckedChangeListener((buttonView, isChecked1) -> new SharedPreference().putBoolean("IsNoty", isChecked1));
     }
 
     private void openImagePicker() {

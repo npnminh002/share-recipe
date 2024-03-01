@@ -116,6 +116,21 @@
                     app:layout_constraintStart_toEndOf="@+id/ImgUser"
                     app:layout_constraintTop_toBottomOf="@id/userName" />
 
+                <TextView
+                    android:id="@+id/txtNickName"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/poppins_light"
+                    android:gravity="center"
+                    android:text="@string/recipe"
+                    android:textColor="@color/textcolor"
+                    android:textSize="@dimen/_13sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ImgUser"
+                    app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Build;
 import android.util.Log;
 
@@ -16,7 +17,9 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.activity.user.MainActivity;
+import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.dialog.NotificationDialog;
+import doan.npnm.sharerecipe.lib.shared_preference.SharedPreference;
 import doan.npnm.sharerecipe.utility.Constant;
 
 public class FirebaseService extends FirebaseMessagingService {
@@ -31,10 +34,13 @@ public class FirebaseService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        String notyType = remoteMessage.getData().get(Constant.NOTIFICATION_TYPE);
-        if (notyType.equals("AddRecipe")) {
-            NotificationDialog.pushNotiAddSuccess(getApplicationContext(),remoteMessage);
+        if(new SharedPreference().getBoolean("IsNoty",true)) {
+            String notyType = remoteMessage.getData().get(Constant.NOTIFICATION_TYPE);
+            if (notyType.equals("AddRecipe")) {
+                NotificationDialog.pushNotiAddSuccess(getApplicationContext(),remoteMessage);
+            }
         }
+
     }
 
 }

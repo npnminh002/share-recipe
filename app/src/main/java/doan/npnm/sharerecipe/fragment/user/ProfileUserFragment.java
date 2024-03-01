@@ -68,6 +68,7 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
             binding.txtRecipe.setText("" + users.Recipe);
             binding.txtFollow.setText("" + users.Follow);
             binding.txtFollower.setText("" + users.Follower);
+            binding.txtNickName.setText("#"+users.NickName);
 
         });
         recentViewAdapter = new RecipeRecentViewAdapter(new OnRecipeEvent() {
