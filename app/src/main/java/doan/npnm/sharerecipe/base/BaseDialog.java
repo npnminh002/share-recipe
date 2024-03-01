@@ -14,10 +14,16 @@ import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 
+import androidx.viewbinding.ViewBinding;
+
 import doan.npnm.sharerecipe.R;
 
-public class BaseDialog extends Dialog {
+public abstract class BaseDialog<V extends ViewBinding> extends Dialog {
     private final String TAG = BaseDialog.class.getName();
+    public V binding;
+
+    protected abstract V getBinding();
+    protected abstract void initView();
 
     public BaseDialog(Context context) {
         this(context, R.style.Base_Theme_Dialog);
@@ -47,10 +53,11 @@ public class BaseDialog extends Dialog {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding= getBinding();
+        setContentView(binding.getRoot());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             Log.d(TAG, "onCreate: versioncode >= R : " + Build.VERSION.SDK_INT);
             getWindow().setDecorFitsSystemWindows(false);
@@ -63,6 +70,10 @@ public class BaseDialog extends Dialog {
             Log.d(TAG, "onCreate: versioncode < R : " + Build.VERSION.SDK_INT);
             getWindow().getDecorView().setSystemUiVisibility(hideSystemBars());
         }
+
+        initView();
+
+
     }
 
     private int hideSystemBars() {

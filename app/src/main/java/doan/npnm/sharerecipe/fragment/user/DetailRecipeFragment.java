@@ -44,6 +44,8 @@ import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.Follower;
 import doan.npnm.sharerecipe.databinding.FragmentDetailRecipeBinding;
 import doan.npnm.sharerecipe.databinding.PopupReportRecipeBinding;
+import doan.npnm.sharerecipe.dialog.WarningDialog;
+import doan.npnm.sharerecipe.interfaces.DataEventListener;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.lib.BitmapUtils;
 import doan.npnm.sharerecipe.lib.ImageDownloader;
@@ -119,7 +121,7 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
             public void onSuccess(Users users) {
                 if (data != null) {
                     viewModel.firestore.collection(Constant.RECIPE).document(data.Id)
-                            .update("View",data.View+1);
+                            .update("View", data.View + 1);
                     binding.llAnErr.setVisibility(View.GONE);
                     binding.chefName.setText(users.UserName);
                     binding.recipeCount.setText(users.Recipe + " " + getString(R.string.recipe));
@@ -190,6 +192,7 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
                             discussionAdapter.setItem(discussions);
                         }
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                     }
@@ -213,10 +216,31 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
                 PopUpDialog.showPopupMenu(v, PopupReportRecipeBinding::inflate, Utils.getWidthPercent(35), ViewGroup.LayoutParams.WRAP_CONTENT, locationX, locationY, (binding, popup) -> {
                     binding.llShare.setOnClickListener(v2 -> {
                         shareWithFacebook();
+                        popup.dismiss();
+
+                    });
+                    binding.llReport.setOnClickListener(v1 -> {
+                        reportRecipe(new DataEventListener<String>() {
+                            @Override
+                            public void onSuccess(String data) {
+
+                            }
+
+                            @Override
+                            public void onErr(Object err) {
+
+                            }
+                        });
                     });
                 });
             }
         });
+    }
+
+    private void reportRecipe(DataEventListener<String> dataEventListener) {
+        new WarningDialog(getContext(), getString(R.string.cf_report), (s) -> {
+
+        }).show();
     }
 
     public void isStoragePermissionGranted() {
@@ -263,6 +287,7 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
     }
 
     private static final int SHARE_REQUEST_CODE = 101;
+
     private void shareImages(ArrayList<Uri> imageUris) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         shareIntent.setType("image/*");
@@ -293,7 +318,7 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
                     }
                 }, 600000);
                 viewModel.firestore.collection(Constant.RECIPE).document(this.data.Id)
-                        .update("Share",this.data.Share+1);
+                        .update("Share", this.data.Share + 1);
             } else {
                 Toast.makeText(requireContext(), "Sharing cancelled or failed", Toast.LENGTH_SHORT).show();
             }

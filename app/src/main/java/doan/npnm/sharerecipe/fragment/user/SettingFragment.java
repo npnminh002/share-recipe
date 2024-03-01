@@ -92,6 +92,18 @@ public class SettingFragment extends BaseFragment<FragmentSettingBinding> {
         });
 
         binding.onOfNoti.setOnCheckedChangeListener((buttonView, isChecked1) -> new SharedPreference().putBoolean("IsNoty", isChecked1));
+
+        binding.changeContact.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_EMAIL, "bdong0610@gmail.com");
+            intent.setType("message/rfc822");
+            startActivity(Intent.createChooser(intent, "Choose an Email client :"));
+        });
+
+        binding.helpSupport.setOnClickListener(v -> {
+            addFragment(new HelpSupportFragment(viewModel),android.R.id.content,true);
+        });
+        binding.privacyPolicy.setOnClickListener(v -> replaceFragment(new PrivacyFragment(),android.R.id.content,true));
     }
 
     private void openImagePicker() {

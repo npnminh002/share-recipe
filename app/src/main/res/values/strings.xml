@@ -118,4 +118,8 @@
     <string name="friend_add_recipe">has added a new recipe, See it</string>
     <string name="user">User</string>
     <string name="no_recipe">No Recipe</string>
+    <string name="admin_support">Admin Support</string>
+    <string name="send">Send</string>
+    <string name="cf_report">Are you sure you want to report this recipe?</string>
+    <string name="reasons">Reasons</string>
 </resources>

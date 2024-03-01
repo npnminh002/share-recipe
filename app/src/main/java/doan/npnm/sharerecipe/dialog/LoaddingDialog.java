@@ -8,18 +8,25 @@ import android.widget.ImageView;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.base.BaseDialog;
+import doan.npnm.sharerecipe.databinding.DialogLoaddingBinding;
 
 
-public class LoaddingDialog extends BaseDialog {
-    public LoaddingDialog(Context context) {
-        super(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_loadding, null);
-        setContentView(view);
-        ImageView image = view.findViewById(R.id.img_loading);
-        ObjectAnimator rotation = ObjectAnimator.ofFloat(image, "rotation", -360f, 0f);
+public class LoaddingDialog extends BaseDialog<DialogLoaddingBinding> {
+    @Override
+    protected DialogLoaddingBinding getBinding() {
+        return DialogLoaddingBinding.inflate(getLayoutInflater());
+    }
+
+    @Override
+    protected void initView() {
+        ObjectAnimator rotation = ObjectAnimator.ofFloat(binding.imgLoading, "rotation", -360f, 0f);
         rotation.setDuration(800);
         rotation.setRepeatCount(ObjectAnimator.INFINITE);
         rotation.start();
         setCancelable(false);
+    }
+
+    public LoaddingDialog(Context context) {
+        super(context);
     }
 }

@@ -32,6 +32,10 @@ public class TextValue {
         return editText.getText().toString();
     }
 
+    public boolean isEmty(){
+        return editText.getText().toString().isEmpty();
+    }
+
     public TextValue onValueChange(Consumer<String> value) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override

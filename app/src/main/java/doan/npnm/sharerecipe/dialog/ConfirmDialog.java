@@ -5,12 +5,22 @@ import android.content.Context;
 import doan.npnm.sharerecipe.base.BaseDialog;
 import doan.npnm.sharerecipe.databinding.DialogConfirmBinding;
 
-public class ConfirmDialog extends BaseDialog {
+public class ConfirmDialog extends BaseDialog<DialogConfirmBinding> {
+    final String message;
+    final OnUpdateSelect select;
     public ConfirmDialog(Context context, String message, OnUpdateSelect select) {
         super(context);
+        this.message=message;
+        this.select=select;
+    }
 
-        DialogConfirmBinding binding = DialogConfirmBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+    @Override
+    protected DialogConfirmBinding getBinding() {
+        return DialogConfirmBinding.inflate(getLayoutInflater());
+    }
+
+    @Override
+    protected void initView() {
         setCancelable(false);
 
         binding.txtContent.setText(message);
@@ -20,7 +30,8 @@ public class ConfirmDialog extends BaseDialog {
             dismiss();
         });
     }
-     public interface OnUpdateSelect{
+
+    public interface OnUpdateSelect{
         void onSelect();
     }
 }
