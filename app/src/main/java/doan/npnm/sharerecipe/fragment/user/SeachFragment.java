@@ -29,6 +29,7 @@ import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.database.models.Search;
 import doan.npnm.sharerecipe.databinding.FragmentSearchBinding;
 import doan.npnm.sharerecipe.interfaces.OnGetEvent;
+import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
 
@@ -68,7 +69,14 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
 
         String key = getData("Key").toString();
         if (key.length() != 0) {
-            binding.edtSearchData.setText(key);
+            Category ct = checkCategory(key);
+
+            if (ct != null) {
+                binding.edtSearchData.setText(key);
+            } else {
+                binding.edtSearchData.setText(key);
+            }
+
             searchValue(key, this::setToView);
         }
         binding.rcvManufact.setAdapter(categoryAdapter);
@@ -103,6 +111,17 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
             }
         });
         binding.rcvResultSreach.setAdapter(recipeAdapter);
+
+    }
+
+    private Category checkCategory(String key) {
+        ArrayList<Category> categories = viewModel.categoriesArr.getValue();
+        for (Category ct : categories) {
+            if (ct.Id.equals(key)) {
+                return ct;
+            }
+        }
+        return null;
 
     }
 

@@ -12,6 +12,6 @@
         android:strokeColor="#FF4700C6"
         tools:ignore="VectorRaster" />
     <path
-        android:fillColor="#E4E4E4"
+        android:fillColor="#673AB7"
         android:pathData="M12,12m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0" />
 </vector>

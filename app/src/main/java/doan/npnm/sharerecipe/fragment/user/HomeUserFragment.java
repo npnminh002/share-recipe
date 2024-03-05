@@ -77,7 +77,7 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
         binding.rcvTopChef.setAdapter(topChefAdapter);
 
         categoryAdapter = new CategoryAdapter(category -> {
-
+            homeviewModel.searchKey.postValue(category.Id);
         });
 
         recipeAdapter = new RecipeAdapter(new RecipeAdapter.OnRecipeEvent() {
@@ -107,12 +107,13 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
                     SaveTime = getTimeNow();
                     Recipe = rcp.toJson();
                 }});
+                showToast(getString(R.string.save_recipes));
             }
         });
-        binding.imgUsers.setOnClickListener(v -> {
-            startActivity(new Intent(this.getContext(), AddDataActivity.class));
-
-        });
+//        binding.imgUsers.setOnClickListener(v -> {
+//            startActivity(new Intent(this.getContext(), AddDataActivity.class));
+//
+//        });
 
 
         binding.rcvItemCategory.setAdapter(categoryAdapter);

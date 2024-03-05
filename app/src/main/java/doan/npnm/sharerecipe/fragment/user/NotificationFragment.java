@@ -1,6 +1,8 @@
 package doan.npnm.sharerecipe.fragment.user;
 
 import android.os.Build;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -10,15 +12,11 @@ import androidx.annotation.RequiresApi;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-
-import org.checkerframework.checker.units.qual.N;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.function.Consumer;
 
+import doan.npnm.sharerecipe.adapter.users.ChildNotiAdapter;
 import doan.npnm.sharerecipe.adapter.users.ParentNotiAdapter;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
@@ -33,35 +31,43 @@ import doan.npnm.sharerecipe.utility.Constant;
 public class NotificationFragment extends BaseFragment<FragmentNotificationBinding> {
 
     private UserViewModel viewModel;
+
     public NotificationFragment(UserViewModel userViewModel) {
-        this.viewModel=userViewModel;
+        this.viewModel = userViewModel;
     }
 
     @Override
     protected FragmentNotificationBinding getBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentNotificationBinding.inflate(inflater);
     }
+
+    private ArrayList<Notification> listNoti = new ArrayList<>();
+    private ArrayList<ParentNotification> parentNotifications = new ArrayList<>();
     private ParentNotiAdapter adapter;
+    private ChildNotiAdapter childNotiAdapter;
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initView() {
-        parentNotifications= new ArrayList<>();
-        adapter= new ParentNotiAdapter(notification -> {
+        childNotiAdapter = new ChildNotiAdapter(notification -> {
+            redirectToView(notification);
+        });
+        parentNotifications = new ArrayList<>();
+        adapter = new ParentNotiAdapter(notification -> {
             redirectToView(notification);
         });
         binding.rcvNotification.setAdapter(adapter);
-        binding.edtSearchData.setText(""+viewModel.database.userFollowerDao().getDataList().size());
         getNotification();
 
     }
 
     private void redirectToView(Notification notification) {
-        if(notification.NotyType.equals(NotyType.USER_ADD)){
+        if (notification.NotyType.equals(NotyType.USER_ADD)) {
             viewModel.getRecipeByID(notification.Value, new FetchByID<Recipe>() {
                 @Override
                 public void onSuccess(Recipe data) {
-                    replaceFullViewFragment(new DetailRecipeFragment(data,viewModel),android.R.id.content,true);
+                    replaceFullViewFragment(new DetailRecipeFragment(data, viewModel), android.R.id.content, true);
                 }
 
                 @Override
@@ -74,7 +80,6 @@ public class NotificationFragment extends BaseFragment<FragmentNotificationBindi
 
 
     private void getNotification() {
-
         viewModel.fbDatabase.getReference(Constant.NOTIFICATION)
                 .child(viewModel.getUsers().getValue().UserID)
                 .addValueEventListener(new ValueEventListener() {
@@ -82,17 +87,19 @@ public class NotificationFragment extends BaseFragment<FragmentNotificationBindi
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String currentTime = "";
 
-                        ArrayList<Notification> sortData= new ArrayList<>();
-                        ArrayList<ParentNotification> parentNotifications = new ArrayList<>();
-                        ArrayList<Notification> listNoti = new ArrayList<>();
+                        ArrayList<Notification> sortData = new ArrayList<>();
+                        parentNotifications = new ArrayList<>();
+
 
                         for (DataSnapshot doc : snapshot.getChildren()) {
                             Notification notification = doc.getValue(Notification.class);
                             sortData.add(notification);
                         }
-                        Collections.sort(sortData, (o1, o2) ->o2.Time.compareTo(o1.Time));
+                        binding.txtCountNoti.setText(""+sortData.size());
 
-                        for (Notification notification:sortData){
+                        Collections.sort(sortData, (o1, o2) -> o2.Time.compareTo(o1.Time));
+
+                        for (Notification notification : sortData) {
 
                             if (!currentTime.equals(notification.Time.substring(0, 10))) {
                                 if (!listNoti.isEmpty()) {
@@ -109,10 +116,6 @@ public class NotificationFragment extends BaseFragment<FragmentNotificationBindi
                         if (!listNoti.isEmpty()) {
                             parentNotifications.add(new ParentNotification(currentTime, listNoti));
                         }
-                        Collections.sort(parentNotifications, (o1, o2) -> {
-                            return o2.Time.compareTo(o1.Time);
-                        });
-
                         adapter.setItems(parentNotifications);
                     }
 
@@ -124,11 +127,42 @@ public class NotificationFragment extends BaseFragment<FragmentNotificationBindi
     }
 
 
-    ArrayList<ParentNotification> parentNotifications;
-
     @Override
     public void OnClick() {
+        binding.icSearch.setOnClickListener(v -> {
+            ArrayList<Notification> searchArr = new ArrayList<>();
+            String serachKey = binding.edtSearchNoti.getText().toString();
+            if (serachKey != "") {
+                for (Notification noti : listNoti) {
+                    if (noti.Time.contains(serachKey) || noti.Content.contains(serachKey)) {
+                        searchArr.add(noti);
+                    }
+                }
+                childNotiAdapter.setItems(searchArr);
+                binding.rcvNotification.setAdapter(childNotiAdapter);
+            }
+        });
 
+        binding.edtSearchNoti.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().equals("")) {
+                    adapter.setItems(parentNotifications);
+                    binding.rcvNotification.setAdapter(adapter);
+                }
+
+            }
+        });
 
     }
 }

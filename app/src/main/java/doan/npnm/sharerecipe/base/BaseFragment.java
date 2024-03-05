@@ -199,6 +199,7 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
 
     public void closeFragment(Fragment fragment) {
         ((BaseActivity<?>) requireActivity()).handleBackpress();
+        hideKeyboard();
     }
 
     public void addAndRemoveCurrentFragment(Fragment currentFragment, Fragment newFragment, boolean addToBackStack) {

@@ -7,6 +7,7 @@ import doan.npnm.sharerecipe.activity.admin.AdminMainActivity;
 import doan.npnm.sharerecipe.activity.user.MainActivity;
 import doan.npnm.sharerecipe.base.BaseActivity;
 import doan.npnm.sharerecipe.databinding.ActivitySignInBinding;
+import doan.npnm.sharerecipe.lib.widget.TextValue;
 
 public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
 
@@ -15,6 +16,9 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
 
     }
 
+    private TextValue email;
+    private TextValue password;
+
     @Override
     protected ActivitySignInBinding getViewBinding() {
         return ActivitySignInBinding.inflate(getLayoutInflater());
@@ -22,6 +26,8 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
 
     @Override
     protected void createView() {
+        email=new TextValue(binding.email);
+        password= new TextValue(binding.passs);
         userViewModel.getUsers().observe(this, users -> {
             if (users != null) {
 
@@ -35,13 +41,10 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
             finish();
         });
         binding.signInApp.setOnClickListener(v -> {
-            String email = binding.email.getText().toString();
-            String pass = binding.passs.getText().toString();
-
-            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pass)) {
+            if (TextUtils.isEmpty(email.value()) || TextUtils.isEmpty(password.value())) {
                 showToast("Please input all values");
             } else {
-                signIn(email, pass);
+                signIn(email.value(), password.value());
             }
         });
     }

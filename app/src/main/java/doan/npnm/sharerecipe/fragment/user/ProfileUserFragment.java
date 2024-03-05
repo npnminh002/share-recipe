@@ -160,14 +160,12 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
         }
         recentViewAdapter.setItems(recentViews);
 
-        binding.rcvSaveRecipe.setAdapter(saveViewAdapter);
-
         ArrayList<SaveRecipe> saveRecipes= (ArrayList<SaveRecipe>) viewModel.database.saveRecipeDao().getListRecentView();
         if(saveRecipes.size()==0){
             binding.txtNo2.setVisibility(View.VISIBLE);
         }
+        binding.rcvSaveRecipe.setAdapter(saveViewAdapter);
         saveViewAdapter.setItems(saveRecipes);
-
         if(viewModel.myRecipeArr.size()==0){
             binding.txtNo3.setVisibility(View.VISIBLE);
         }

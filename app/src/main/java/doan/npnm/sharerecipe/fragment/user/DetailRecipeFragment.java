@@ -42,6 +42,7 @@ import doan.npnm.sharerecipe.adapter.users.IngridentsAdapter;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.Follower;
+import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.databinding.FragmentDetailRecipeBinding;
 import doan.npnm.sharerecipe.databinding.PopupReportRecipeBinding;
 import doan.npnm.sharerecipe.dialog.WarningDialog;
@@ -125,7 +126,7 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
                     binding.llAnErr.setVisibility(View.GONE);
                     binding.chefName.setText(users.UserName);
                     binding.recipeCount.setText(users.Recipe + " " + getString(R.string.recipe));
-                    binding.circleImageView.loadImage(users.UrlImg);
+                    binding.circleImageView.loadImage(users.UrlImg==""? R.drawable.img_demo_user: users.UrlImg);
 
                     directionsAdapter = new DirectionsAdapter(DirectionsAdapter.DIR_TYPE.PREVIEW, null);
                     binding.rcvDirection.setAdapter(directionsAdapter);
@@ -205,15 +206,28 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
         binding.backIcon2.setOnClickListener(v -> closeFragment(DetailRecipeFragment.this));
         binding.icSendDiscuss.setOnClickListener(v -> sendDisscuss());
 
-        binding.llSaveRecipe.setOnClickListener(v -> viewModel.database.followerDao().addRecentView(new Follower() {{
-            AuthID = data.Id;
-        }}));
+        binding.llSaveRecipe.setOnClickListener(v -> {
+            if (viewModel.database.saveRecipeDao().checkExistence(data.Id)) {
+                viewModel.database.saveRecipeDao().removeRecent(data.Id);
+            }
+            viewModel.database.saveRecipeDao().addRecentView(new SaveRecipe() {{
+                AuthID = data.RecipeAuth;
+                RecipeID = data.Id;
+                SaveTime = getTimeNow();
+                Recipe = data.toJson();
+            }});
+
+            showToast(getString(R.string.save));
+        });
 
         binding.llReport.setOnClickListener(v -> {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 int locationY = Utils.getHeightPercent(5);
                 int locationX = v.getRight() - Utils.getWidthPercent(30);
                 PopUpDialog.showPopupMenu(v, PopupReportRecipeBinding::inflate, Utils.getWidthPercent(35), ViewGroup.LayoutParams.WRAP_CONTENT, locationX, locationY, (binding, popup) -> {
+                   if(data.RecipeAuth.equals(viewModel.users.getValue().UserID)){
+                       binding.llLock.setVisibility(View.VISIBLE);
+                   }
                     binding.llShare.setOnClickListener(v2 -> {
                         shareWithFacebook();
                         popup.dismiss();
@@ -231,6 +245,10 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
 
                             }
                         });
+                    });
+
+                    binding.llLock.setOnClickListener(v12 -> {
+
                     });
                 });
             }
