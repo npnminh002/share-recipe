@@ -7,7 +7,6 @@ import androidx.room.Query;
 
 import java.util.List;
 
-import doan.npnm.sharerecipe.database.models.RecentView;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
 
 @Dao

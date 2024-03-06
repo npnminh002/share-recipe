@@ -1,14 +1,8 @@
 package doan.npnm.sharerecipe.fragment.user;
 
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
-import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentHelpSupportBinding;

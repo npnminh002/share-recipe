@@ -1,23 +1,12 @@
 package doan.npnm.sharerecipe.firebase;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Paint;
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.activity.user.MainActivity;
-import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.dialog.NotificationDialog;
 import doan.npnm.sharerecipe.lib.shared_preference.SharedPreference;
 import doan.npnm.sharerecipe.utility.Constant;

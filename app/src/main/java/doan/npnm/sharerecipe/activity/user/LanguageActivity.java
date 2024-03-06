@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.activity.admin.AdminMainActivity;
 import doan.npnm.sharerecipe.adapter.users.LanguageAdapter;
+import doan.npnm.sharerecipe.activity.admin.AdminMainActivity;
 import doan.npnm.sharerecipe.app.lang.Language;
 import doan.npnm.sharerecipe.app.lang.LanguageUtil;
 import doan.npnm.sharerecipe.base.BaseActivity;
@@ -46,8 +46,15 @@ public class LanguageActivity extends BaseActivity<ActivityLanguageBinding> {
 
         LanguageUtil.changeLang(LanguageUtil.getLanguageCode(), this);
         LanguageUtil.setFirstOpenApp(false);
-        startActivity(new Intent(this, userViewModel.users.getValue().AccountType == 1 ? AdminMainActivity.class : MainActivity.class));
-        finish();
+        if(userViewModel.auth.getCurrentUser()!=null){
+            startActivity(new Intent(this, userViewModel.users.getValue().AccountType == 1 ? AdminMainActivity.class : MainActivity.class));
+            finish();
+        }
+        else {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
+
     }
 
 

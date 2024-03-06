@@ -10,6 +10,7 @@ public class Constant {
     public static final String CATEGORY="Category";
     public static final String KEY_DICUSSION = "Discussion";
     public static final String FOLLOW_USER = "Single_Follow";
+    public static final String LOVE = "LOVE_RECIPE";
     public static String REMOTE_NOTIFICATION_AUTHORIZATION = "Authorization";
     public static String REMOTE_MSG_CONTENT_TYPE = "Content-Type";
     public static String REMOTE_MSG_DATA = "data";

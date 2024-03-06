@@ -8,13 +8,13 @@ import java.util.Arrays;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.DirectionsAdapter;
-import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.databinding.FragmentFourRecipeBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
 import doan.npnm.sharerecipe.model.recipe.Directions;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
+import doan.npnm.sharerecipe.databinding.FragmentFourRecipeBinding;
 
 public class FourRecipeFragment extends BaseFragment<FragmentFourRecipeBinding> {
     public UserViewModel viewModel;

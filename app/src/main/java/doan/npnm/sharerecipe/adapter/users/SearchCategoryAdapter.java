@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import doan.npnm.sharerecipe.base.BaseAdapter;
-import doan.npnm.sharerecipe.databinding.ItemCategoryFoodBinding;
 import doan.npnm.sharerecipe.databinding.ItemCategorySearchBinding;
 import doan.npnm.sharerecipe.model.Category;
 

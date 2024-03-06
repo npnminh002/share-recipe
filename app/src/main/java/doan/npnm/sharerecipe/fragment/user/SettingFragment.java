@@ -9,7 +9,6 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,9 +17,9 @@ import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.activity.start.SignInActivity;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.databinding.FragmentSettingBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
 import doan.npnm.sharerecipe.lib.shared_preference.SharedPreference;
+import doan.npnm.sharerecipe.databinding.FragmentSettingBinding;
 
 public class SettingFragment extends BaseFragment<FragmentSettingBinding> {
     public UserViewModel viewModel;
@@ -85,9 +84,10 @@ public class SettingFragment extends BaseFragment<FragmentSettingBinding> {
                 new Handler().postDelayed(() -> {
                     loaddingDialog.dismiss();
                     viewModel.users.postValue(null);
-                    startActivity(new Intent(requireContext(), SignInActivity.class));
+                    viewModel.isSingApp.postValue(true);
                     viewModel = new ViewModelProvider(SettingFragment.this).get(UserViewModel.class);
                 }, 1500);
+
             }).show();
         });
 

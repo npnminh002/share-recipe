@@ -27,11 +27,11 @@ import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.RecentView;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.database.models.Search;
-import doan.npnm.sharerecipe.databinding.FragmentSearchBinding;
 import doan.npnm.sharerecipe.interfaces.OnGetEvent;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
+import doan.npnm.sharerecipe.databinding.FragmentSearchBinding;
 
 public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
     private UserViewModel viewModel;
@@ -98,18 +98,18 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
             }
 
             @Override
-            public void onSave(Recipe rcp) {
-                if (viewModel.database.saveRecipeDao().checkExistence(rcp.Id)) {
-                    viewModel.database.saveRecipeDao().removeRecent(rcp.Id);
+            public void onLove(Recipe rcp,boolean isLove) {
+                if (viewModel.auth.getCurrentUser() == null) {
+                    showToast(getString(R.string.no_us));
+                } else {
+                    if (isLove) {
+                        viewModel.onLoveRecipe(rcp);
+                    } else {
+                        viewModel.onUnlove(rcp);
+                    }
                 }
-                viewModel.database.saveRecipeDao().addRecentView(new SaveRecipe() {{
-                    AuthID = rcp.RecipeAuth;
-                    RecipeID = rcp.Id;
-                    SaveTime = getTimeNow();
-                    Recipe = rcp.toJson();
-                }});
             }
-        });
+        }, viewModel.database);
         binding.rcvResultSreach.setAdapter(recipeAdapter);
 
     }

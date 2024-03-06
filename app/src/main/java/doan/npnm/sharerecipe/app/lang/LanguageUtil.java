@@ -3,11 +3,9 @@ package doan.npnm.sharerecipe.app.lang;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import java.util.Locale;
 
-import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.lib.shared_preference.SharedPreference;
 
 public class LanguageUtil  {

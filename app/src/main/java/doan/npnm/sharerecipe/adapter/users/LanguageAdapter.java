@@ -1,6 +1,5 @@
 package doan.npnm.sharerecipe.adapter.users;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 
 import doan.npnm.sharerecipe.base.BaseDialog;
-import doan.npnm.sharerecipe.databinding.DialogConfirmBinding;
 import doan.npnm.sharerecipe.databinding.DialogWarningBinding;
 import doan.npnm.sharerecipe.lib.widget.TextValue;
 

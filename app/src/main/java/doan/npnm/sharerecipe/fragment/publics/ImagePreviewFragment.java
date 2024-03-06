@@ -1,23 +1,18 @@
 package doan.npnm.sharerecipe.fragment.publics;
 
-import static doan.npnm.sharerecipe.lib.BitmapUtils.downloadImage;
-
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.Serializable;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.databinding.FragmentImagePreviewBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
 import doan.npnm.sharerecipe.lib.BitmapUtils;
 import doan.npnm.sharerecipe.lib.ImageDownloader;
+import doan.npnm.sharerecipe.databinding.FragmentImagePreviewBinding;
 
 public class ImagePreviewFragment extends BaseFragment<FragmentImagePreviewBinding> {
 

@@ -9,6 +9,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -41,10 +43,10 @@ import doan.npnm.sharerecipe.adapter.users.ImageStringAdapter;
 import doan.npnm.sharerecipe.adapter.users.IngridentsAdapter;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.database.models.Follower;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.databinding.FragmentDetailRecipeBinding;
 import doan.npnm.sharerecipe.databinding.PopupReportRecipeBinding;
+import doan.npnm.sharerecipe.dialog.NoUserDialog;
 import doan.npnm.sharerecipe.dialog.WarningDialog;
 import doan.npnm.sharerecipe.interfaces.DataEventListener;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
@@ -121,12 +123,11 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
             @Override
             public void onSuccess(Users users) {
                 if (data != null) {
-                    viewModel.firestore.collection(Constant.RECIPE).document(data.Id)
-                            .update("View", data.View + 1);
+                    viewModel.firestore.collection(Constant.RECIPE).document(data.Id).update("View", data.View + 1);
                     binding.llAnErr.setVisibility(View.GONE);
                     binding.chefName.setText(users.UserName);
                     binding.recipeCount.setText(users.Recipe + " " + getString(R.string.recipe));
-                    binding.circleImageView.loadImage(users.UrlImg==""? R.drawable.img_demo_user: users.UrlImg);
+                    binding.circleImageView.loadImage(users.UrlImg == "" ? R.drawable.img_demo_user : users.UrlImg);
 
                     directionsAdapter = new DirectionsAdapter(DirectionsAdapter.DIR_TYPE.PREVIEW, null);
                     binding.rcvDirection.setAdapter(directionsAdapter);
@@ -179,77 +180,118 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
     private ArrayList<Discussion> discussions = new ArrayList<>();
 
     private void listenerDiscussion() {
-        viewModel.fbDatabase.getReference(Constant.KEY_DICUSSION)
-                .child(data.Id)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            ArrayList<Discussion> discussions = new ArrayList<>();
-                            for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                                Discussion dcs = childSnapshot.getValue(Discussion.class);
-                                discussions.add(dcs);
-                            }
-                            discussionAdapter.setItem(discussions);
-                        }
+        viewModel.fbDatabase.getReference(Constant.KEY_DICUSSION).child(data.Id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    ArrayList<Discussion> discussions = new ArrayList<>();
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                        Discussion dcs = childSnapshot.getValue(Discussion.class);
+                        discussions.add(dcs);
                     }
+                    discussionAdapter.setItem(discussions);
+                }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
 
     @Override
     public void OnClick() {
+        Users us = viewModel.users.getValue();
+
+        binding.llLove.setColorFilter(viewModel.database.loveRecipeDao().checkExist(data.Id)? Color.parseColor("#FF0000") : Color.parseColor("#ffffffmmN"));
+        binding.llLove.setOnClickListener(v -> {
+            if (viewModel.auth.getCurrentUser() == null) {
+                showToast(getString(R.string.no_us));
+            } else {
+                if (viewModel.database.loveRecipeDao().checkExist(data.Id)) {
+                    viewModel.onLoveRecipe(data);
+                } else {
+                    viewModel.onUnlove(data);
+                }
+            }
+            binding.llLove.setColorFilter(viewModel.database.loveRecipeDao().checkExist(data.Id)? R.color.red: R.color.white);
+        });
+
         binding.backIcon2.setOnClickListener(v -> closeFragment(DetailRecipeFragment.this));
-        binding.icSendDiscuss.setOnClickListener(v -> sendDisscuss());
+        binding.icSendDiscuss.setOnClickListener(v -> {
+            if (us == null) {
+                sendDisscuss();
+            } else {
+                new NoUserDialog(requireContext(), () -> {
+                    viewModel.isSingApp.postValue(true);
+                }).show();
+            }
+        });
 
         binding.llSaveRecipe.setOnClickListener(v -> {
-            if (viewModel.database.saveRecipeDao().checkExistence(data.Id)) {
-                viewModel.database.saveRecipeDao().removeRecent(data.Id);
-            }
-            viewModel.database.saveRecipeDao().addRecentView(new SaveRecipe() {{
-                AuthID = data.RecipeAuth;
-                RecipeID = data.Id;
-                SaveTime = getTimeNow();
-                Recipe = data.toJson();
-            }});
+            if (us != null) {
+                if (viewModel.database.saveRecipeDao().checkExistence(data.Id)) {
+                    viewModel.database.saveRecipeDao().removeRecent(data.Id);
+                }
+                viewModel.database.saveRecipeDao().addRecentView(new SaveRecipe() {{
+                    AuthID = data.RecipeAuth;
+                    RecipeID = data.Id;
+                    SaveTime = getTimeNow();
+                    Recipe = data.toJson();
+                }});
 
-            showToast(getString(R.string.save));
+                showToast(getString(R.string.save));
+            } else {
+                new NoUserDialog(requireContext(), () -> {
+                    viewModel.isSingApp.postValue(true);
+                }).show();
+            }
         });
 
         binding.llReport.setOnClickListener(v -> {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 int locationY = Utils.getHeightPercent(5);
                 int locationX = v.getRight() - Utils.getWidthPercent(30);
+
+
                 PopUpDialog.showPopupMenu(v, PopupReportRecipeBinding::inflate, Utils.getWidthPercent(35), ViewGroup.LayoutParams.WRAP_CONTENT, locationX, locationY, (binding, popup) -> {
-                   if(data.RecipeAuth.equals(viewModel.users.getValue().UserID)){
-                       binding.llLock.setVisibility(View.VISIBLE);
-                   }
+
+                    if (us != null) {
+                        if (data.RecipeAuth.equals(us.UserID)) {
+                            binding.llLock.setVisibility(View.VISIBLE);
+                        }
+                    }
                     binding.llShare.setOnClickListener(v2 -> {
                         shareWithFacebook();
                         popup.dismiss();
 
                     });
                     binding.llReport.setOnClickListener(v1 -> {
-                        reportRecipe(new DataEventListener<String>() {
-                            @Override
-                            public void onSuccess(String data) {
+                        if (us != null) {
+                            reportRecipe(new DataEventListener<String>() {
+                                @Override
+                                public void onSuccess(String data) {
 
-                            }
+                                }
 
-                            @Override
-                            public void onErr(Object err) {
+                                @Override
+                                public void onErr(Object err) {
 
-                            }
-                        });
+                                }
+                            });
+                        } else {
+                            new NoUserDialog(requireContext(), () -> {
+                                viewModel.isSingApp.postValue(true);
+                            }).show();
+                        }
                     });
 
                     binding.llLock.setOnClickListener(v12 -> {
 
                     });
+
+
                 });
             }
         });
@@ -335,8 +377,7 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
                         deleteImage(uri, requireContext());
                     }
                 }, 600000);
-                viewModel.firestore.collection(Constant.RECIPE).document(this.data.Id)
-                        .update("Share", this.data.Share + 1);
+                viewModel.firestore.collection(Constant.RECIPE).document(this.data.Id).update("Share", this.data.Share + 1);
             } else {
                 Toast.makeText(requireContext(), "Sharing cancelled or failed", Toast.LENGTH_SHORT).show();
             }
@@ -381,8 +422,7 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
     private void sendDisscuss() {
         Users us = viewModel.getUsers().getValue();
         String message = binding.txtDiscuss.getText().toString();
-        String id = viewModel.fbDatabase.getReference(Constant.KEY_DICUSSION).
-                child(data.Id).push().getKey();
+        String id = viewModel.fbDatabase.getReference(Constant.KEY_DICUSSION).child(data.Id).push().getKey();
         Discussion discussion = new Discussion() {{
             Id = id;
             DisscusAuth = new DisscusAuth() {{
@@ -400,30 +440,21 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
         }};
 
         if (!isReply) {
-            viewModel.fbDatabase.getReference(Constant.KEY_DICUSSION)
-                    .child(data.Id).child(id)
-                    .setValue(discussion)
-                    .addOnSuccessListener(unused -> {
-                        showToast("Success");
-                        binding.txtDiscuss.setText("");
-                    })
-                    .addOnFailureListener(e -> {
-                        showToast(e.getMessage());
-                    });
+            viewModel.fbDatabase.getReference(Constant.KEY_DICUSSION).child(data.Id).child(id).setValue(discussion).addOnSuccessListener(unused -> {
+                showToast("Success");
+                binding.txtDiscuss.setText("");
+            }).addOnFailureListener(e -> {
+                showToast(e.getMessage());
+            });
         } else {
             discussionReply.DiscussionArray.add(discussion);
-            viewModel.fbDatabase.getReference(Constant.KEY_DICUSSION)
-                    .child(data.Id).child(discussionReply.Id)
-                    .child("DiscussionArray")
-                    .setValue(discussionReply.DiscussionArray)
-                    .addOnSuccessListener(unused -> {
-                        showToast("Success");
-                        binding.txtDiscuss.setText("");
-                        binding.llReply.setVisibility(View.GONE);
-                    })
-                    .addOnFailureListener(e -> {
-                        showToast(e.getMessage());
-                    });
+            viewModel.fbDatabase.getReference(Constant.KEY_DICUSSION).child(data.Id).child(discussionReply.Id).child("DiscussionArray").setValue(discussionReply.DiscussionArray).addOnSuccessListener(unused -> {
+                showToast("Success");
+                binding.txtDiscuss.setText("");
+                binding.llReply.setVisibility(View.GONE);
+            }).addOnFailureListener(e -> {
+                showToast(e.getMessage());
+            });
         }
 
 

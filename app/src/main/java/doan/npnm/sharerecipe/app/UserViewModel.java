@@ -8,12 +8,20 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -33,13 +41,14 @@ import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.database.AppDatabase;
 import doan.npnm.sharerecipe.database.AppDatabaseProvider;
 import doan.npnm.sharerecipe.database.models.Follower;
+import doan.npnm.sharerecipe.database.models.LoveRecipe;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
-import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.lib.BitmapUtils;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
+import doan.npnm.sharerecipe.interfaces.FetchByID;
 
 public class UserViewModel extends ViewModel {
     public FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -49,6 +58,8 @@ public class UserViewModel extends ViewModel {
     public StorageReference storageReference = storage.getReference();
 
     public MutableLiveData<Users> users = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> isSingApp= new MutableLiveData<>(false);
 
     public MutableLiveData<Boolean> isAddRecipe = new MutableLiveData<>(false);
 
@@ -71,19 +82,47 @@ public class UserViewModel extends ViewModel {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 new Thread(this::onGetAuth).start();
             }
+        }else {
+            new Thread(() -> {
+                ongetCategory();
+                onGetRecipeDataNoUser();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    onGetAuth();
+                }
+            }).start();
         }
     }
 
-    private void ongetCategory() {
+    private void onGetRecipeDataNoUser() {
+        ArrayList<Recipe> rcpList = new ArrayList<>();
+        firestore.collection(Constant.RECIPE)
+                .addSnapshotListener((value, error) -> {
+                    for (DocumentSnapshot documentSnapshot : value) {
+                        if (documentSnapshot.exists()) {
+                            Recipe rcp = documentSnapshot.toObject(Recipe.class);
+                            if (rcp != null) {
+                                rcpList.add(rcp);
+                            } else {
+                                showToast("Recipe is null");
+                            }
+
+                        } else {
+
+                            showToast("Document does not exist");
+                        }
+                    }
+                    recipeLiveData.postValue(rcpList);
+                });
+    }
+
+    private  void ongetCategory() {
         ArrayList<Category> categories = new ArrayList<>();
         firestore.collection(Constant.CATEGORY)
-                .addSnapshotListener((value, error) -> {
-                    if (value != null) {
-                        for (DocumentSnapshot doc : value.getDocuments()) {
-                            categories.add(doc.toObject(Category.class));
-                        }
-                        categoriesArr.postValue(categories);
+                .get().addOnCompleteListener(task -> {
+                    for (DocumentSnapshot doc : task.getResult()) {
+                        categories.add(doc.toObject(Category.class));
                     }
+                    categoriesArr.postValue(categories);
                 });
     }
 
@@ -162,6 +201,23 @@ public class UserViewModel extends ViewModel {
     public void firstStartApp(String uId) {
         onLoadFollower(uId);
         loadSaveRecipe(uId);
+        loadOnLoveRecipe(uId);
+    }
+
+    private void loadOnLoveRecipe(String uId) {
+        fbDatabase.getReference(Constant.LOVE)
+                .child(uId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    for (DataSnapshot doc : task.getResult().getChildren()) {
+                        database.loveRecipeDao().saveNewLove(new LoveRecipe() {{
+                            RecipeID = doc.getKey();
+                        }});
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    showToast(e.getMessage());
+                });
     }
 
     private void loadSaveRecipe(String uId) {
@@ -306,6 +362,46 @@ public class UserViewModel extends ViewModel {
 
     }
 
+    public void onLoveRecipe(Recipe rcp) {
+        fbDatabase.getReference(Constant.LOVE)
+                .child(users.getValue().UserID)
+                .child(rcp.Id)
+                .setValue(rcp.Id)
+                .addOnSuccessListener(unused -> {
+                    if(!database.loveRecipeDao().checkExist(rcp.Id)){
+                        database.loveRecipeDao().saveNewLove(new LoveRecipe(){{
+                            RecipeID= rcp.Id;
+                        }});
+
+                        firestore.collection(Constant.RECIPE)
+                                .document(rcp.Id)
+                                .update("Love",rcp.Love+1)
+                                .addOnFailureListener(e -> {
+                                    Log.d("TAG", "onLoveRecipe: "+e.getMessage());
+                                });
+                    }
+
+                })
+                .addOnFailureListener(e -> showToast(e.getMessage()));
+    }
+
+    public void onUnlove(Recipe rcp) {
+        fbDatabase.getReference(Constant.LOVE)
+                .child(users.getValue().UserID)
+                .child(rcp.Id)
+                .removeValue((error, ref) -> {
+                    if(database.loveRecipeDao().checkExist(rcp.Id)){
+                        database.loveRecipeDao().unLove(rcp.Id);
+                        firestore.collection(Constant.RECIPE)
+                                .document(rcp.Id)
+                                .update("Love",rcp.Love-1)
+                                .addOnFailureListener(e -> {
+                                    Log.d("TAG", "onLoveRecipe: "+e.getMessage());
+                                });
+                    }
+                });
+    }
+
     public interface OnPutImageListener {
         void onComplete(String url);
 
@@ -422,6 +518,7 @@ public class UserViewModel extends ViewModel {
         database.recipeDao().SignOutApp();
         database.searchDao().SignOutApp();
         database.saveRecipeDao().SignOutApp();
+        database.loveRecipeDao().SignOutApp();
     }
 
 }

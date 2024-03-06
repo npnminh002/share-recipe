@@ -22,13 +22,13 @@ import doan.npnm.sharerecipe.adapter.users.IngridentsAdapter;
 import doan.npnm.sharerecipe.app.AdminViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.Follower;
-import doan.npnm.sharerecipe.databinding.FragmentDetailAdminRecipeBinding;
 import doan.npnm.sharerecipe.fragment.publics.ImagePreviewFragment;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.disscus.Discussion;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
+import doan.npnm.sharerecipe.databinding.FragmentDetailAdminRecipeBinding;
 
 public class DetailAdminRecipeFragment extends BaseFragment<FragmentDetailAdminRecipeBinding> {
     private Recipe data;

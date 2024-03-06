@@ -2,7 +2,6 @@ package doan.npnm.sharerecipe.activity;
 
 import android.net.Uri;
 import android.os.Build;
-import android.view.View;
 
 import androidx.annotation.RequiresApi;
 
@@ -192,7 +191,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                         TimeType = "m";
                     }};
                     Level = "Difficult";
-                    Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+                    Ingredients = new ArrayList<Ingredients>() {{
                         add(new Ingredients() {{
                             Id = 1;
                             Name = "Phi lê cá";
@@ -221,7 +220,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                         }});
 
                     }};
-                    Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+                    Directions = new ArrayList<Directions>() {{
                         add(new Directions() {{
                             Id = 1;
                             Name = "Phi lê cá rửa sạch, để ráo, cắt miếng vừa ăn, ướp vào cá một thìa nhỏ muối, nửa thìa nhỏ hạt nêm, một ít hạt tiêu, trộn đều, ướp khoảng 30 phút.";
@@ -280,7 +279,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Easy";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Mực ống";
@@ -314,7 +313,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Mực làm sạch nội tạng bên trong, rửa sạch với nước, cắt thành từng miếng vừa ăn khoảng 1 lóng tay rồi để ráo.";
@@ -369,7 +368,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Easy";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Thịt bò";
@@ -399,7 +398,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Thịt bò mua về dùng muối chà xát, sau đó rửa sạch lại với nước, cắt lát mỏng rồi cho vào tô.";
@@ -458,7 +457,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Difficult";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Thịt ba chỉ hay thịt chân giò";
@@ -488,7 +487,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Thịt ba chỉ hay thịt chân giò sau khi mua về thì rửa sạch với nước muối, để ráo sau đó cắt miếng vừa ăn rồi cho vào tô, nên chọn thịt có da mỏng để kho được ngon, mau mềm hơn và không bị ngấy.";
@@ -546,7 +545,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Difficult";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Cải ngọt";
@@ -570,7 +569,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Cải ngọt bạn nhặt bỏ những cọng bị héo, úa rồi đem đi rửa sạch, sau đó cắt khúc dài khoảng 1/2 gang tay. Tỏi bóc vỏ, gừng cạo vỏ, sau đó đập dập và cắt mỏng.";
@@ -625,7 +624,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Difficult";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Xương heo";
@@ -658,7 +657,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Xương heo bạn có thể nhờ người bán chặt sẵn thành miếng vừa ăn. Về nhà bạn chỉ cần trụng sơ qua với nước sôi để sạch bẩn và mùi hôi. Các loại củ gọt vỏ, cắt miếng vừa ăn rồi rửa sạch.";
@@ -716,7 +715,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Difficult";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Gà";
@@ -749,7 +748,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Thịt gà, mề gà các bạn rửa thật sạch với nước. Hành tây các thái lát mỏng. Giá rửa sạch. Hành lá, ngò rí cắt nhỏ. Nấm mèo xắt sợi. Nướng 4 - 5 củ hành tím sơ qua trên vỉ rồi bóc vỏ";
@@ -807,7 +806,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Difficult";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Trà thái xanh";
@@ -830,7 +829,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Bạn bắc nồi lên bếp, cho vào 2.5 lít nước sau đó đun sôi. Có thể gia giảm lượng nước tùy theo số lượng ly trà bạn nấu nhé. Khi nước đã sôi bạn tắt bếp, cho toàn bộ phần trà vào. Đậy nắp và ủ trà trong khoảng 10 phút.";
@@ -886,7 +885,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Difficult";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Trà thái đỏ";
@@ -909,7 +908,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Đầu tiên, bạn cho vào bình 2 muỗng canh trà thái đỏ, 180ml nước nóng để ủ trà trong vòng 20 phút. ";
@@ -965,7 +964,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                     TimeType = "m";
                 }};
                 Level = "Normal";
-                Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+                Ingredients = new ArrayList<Ingredients>() {{
                     add(new Ingredients() {{
                         Id = 1;
                         Name = "Nạm thịt bò";
@@ -1023,7 +1022,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                     }});
 
                 }};
-                Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+                Directions = new ArrayList<Directions>() {{
                     add(new Directions() {{
                         Id = 1;
                         Name = "Cà chua bạn rửa sạch với nước sau đó cắt cà chua thành các múi cau nhỏ. Sau đó bạn dùng dao lọc bỏ phần ruột cà chua đi để tránh cho món ăn của mình bị chua quá nhé.";
@@ -1119,7 +1118,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Difficult";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Sườn heo non";
@@ -1152,7 +1151,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Để sườn non sạch và hết mùi hôi bạn rửa sạch với nước, sau đó bắc 1 cái nồi lên bếp cho vào 1 chút muối. Khi nước sôi, cho sườn vào chần sơ khoảng 3 - 5 phút.";
@@ -1215,7 +1214,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Difficult";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Sườn heo non";
@@ -1248,7 +1247,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Đầu tiên, bạn đem ếch đi làm sạch rồi rửa với muối, giấm để giảm bớt mùi tanh.";
@@ -1325,7 +1324,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Difficult";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Tai heo";
@@ -1358,7 +1357,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Làm sạch tai heo: Tai heo dùng dao cạo sạch phần lông bám trên tai và phần chất bẩn bên trong tai heo. Sau đó lấy muối hòa với chanh chà sạch trên phần tai. Lấy giấm hoặc rượu ngâm tai heo khoảng tầm 10 - 15 phút để loại bỏ hoàn toàn mùi hôi của tai.";
@@ -1424,7 +1423,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Easy";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Thịt vịt";
@@ -1457,7 +1456,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Vịt làm sạch, dùng gừng, muối xát xung quanh, sau đó dùng rượu trắng rửa lại để khử sạch mùi hôi, rửa lại bằng nước sạch.";
@@ -1524,7 +1523,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Easy";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Thịt ốc bưu";
@@ -1562,7 +1561,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Ốc mua về để khử mùi hôi và làm rửa sạch, loại bỏ phần ruột ốc. Bóp muối 2 - 3 lần cho sạch nhớt rồi xả lại nước.";
@@ -1656,7 +1655,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Easy";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Cánh gà";
@@ -1680,7 +1679,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Cánh gà mua về rửa thật sạch với nước và để ra rổ cho ráo, để cánh gà khi chiên được giòn và ngon hơn bạn cho 2 muỗng canh bột mì vào trộn đều và để trong vòng 5 phút.";
@@ -1744,7 +1743,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Easy";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Ốc hương";
@@ -1768,7 +1767,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Ốc hương bạn cho vào tô lớn, sau đó thêm 1 lít nước, 2 trái ớt cắt lát, đảo sơ và ngâm trong khoảng 1 - 2 tiếng cho ốc sạch.";
@@ -1832,7 +1831,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Easy";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Đế bánh Pizza";
@@ -1866,7 +1865,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Tôm bạn lột sạch vỏ, loại bỏ hết đầu và đuôi, dùng dao rạch 1 đường trên lưng tôm để dễ dàng lấy hết phần chỉ tôm.";
@@ -1941,7 +1940,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Easy";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Mì (2 vắt)";
@@ -1975,7 +1974,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "100gr tôm bạn mua về rửa sạch với nước và để ráo. Sau đó bóc hết vỏ, ngắt bỏ phần đầu tôm và dùng mũi dao nhọn rạch sống lưng của tôm để loại bỏ phần chỉ đen. Rửa sơ lại với nước rồi để ráo và cho tôm vào đĩa.";
@@ -2065,7 +2064,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Easy";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Ngao";
@@ -2099,7 +2098,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Ngao mua về, bạn vo mạnh tay trực tiếp dưới vòi nước rồi ngâm với nước muối ớt pha loãng trong khoảng 3 - 4 tiếng để ngao nhả bùn cát. Sau đó lại chà sạch vỏ ngao rồi rửa lại với nhiều lần nước.";
@@ -2179,7 +2178,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 TimeType = "m";
             }};
             Level = "Easy";
-            Ingredients = new ArrayList<doan.npnm.sharerecipe.model.recipe.Ingredients>() {{
+            Ingredients = new ArrayList<Ingredients>() {{
                 add(new Ingredients() {{
                     Id = 1;
                     Name = "Ngao";
@@ -2204,7 +2203,7 @@ public class AddDataActivity extends BaseActivity<ActivityAddDataBinding> {
                 }});
 
             }};
-            Directions = new ArrayList<doan.npnm.sharerecipe.model.recipe.Directions>() {{
+            Directions = new ArrayList<Directions>() {{
                 add(new Directions() {{
                     Id = 1;
                     Name = "Ngao mua về ngâm với nước pha loãng 1 muỗng canh muối với vài lát ớt cho ngao nhả cát. Sau đó chà rửa sạch vỏ ngao rồi cho vào nồi luộc khoảng 10 phút cho ngao há hết miệng.";

@@ -1,18 +1,17 @@
 package doan.npnm.sharerecipe.adapter.users;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.Objects;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.base.BaseAdapter;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
-import doan.npnm.sharerecipe.interfaces.OnRecipeEvent;
+import doan.npnm.sharerecipe.base.BaseAdapter;
+import doan.npnm.sharerecipe.databinding.ItemRecipeRecentBinding;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
-public class RecipeSaveViewAdapter extends BaseAdapter<SaveRecipe, doan.npnm.sharerecipe.databinding.ItemRecipeRecentBinding> {
+public class RecipeSaveViewAdapter extends BaseAdapter<SaveRecipe, ItemRecipeRecentBinding> {
 
     final OnRecipeEvent event;
 

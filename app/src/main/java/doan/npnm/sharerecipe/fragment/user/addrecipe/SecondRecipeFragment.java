@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.databinding.FragmentSecondRecipeBinding;
 import doan.npnm.sharerecipe.interfaces.OnAddedSuccess;
 import doan.npnm.sharerecipe.model.recipe.CookTime;
 import doan.npnm.sharerecipe.model.recipe.PrepareTime;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
+import doan.npnm.sharerecipe.databinding.FragmentSecondRecipeBinding;
 
 public class SecondRecipeFragment extends BaseFragment<FragmentSecondRecipeBinding> {
     public UserViewModel viewModel;

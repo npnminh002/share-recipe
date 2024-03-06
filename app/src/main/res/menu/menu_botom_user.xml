@@ -13,6 +13,7 @@
         android:title="@string/search_value"
         tools:ignore="MenuTitle" />
     <item
+        android:visible="false"
         android:id="@+id/icon_notification_user"
         android:icon="@drawable/ic_notification"
         android:title="@string/notification" />

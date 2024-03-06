@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.widget.RemoteViews;
 
@@ -16,9 +15,9 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.activity.user.MainActivity;
+import doan.npnm.sharerecipe.utility.Constant;
 import doan.npnm.sharerecipe.lib.ImageDownloader;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
-import doan.npnm.sharerecipe.utility.Constant;
 
 public class NotificationDialog {
     public static void pushNotiAddSuccess(Context context, RemoteMessage remoteMessage) {

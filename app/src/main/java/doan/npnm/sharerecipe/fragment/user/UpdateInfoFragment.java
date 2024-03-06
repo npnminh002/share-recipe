@@ -13,10 +13,10 @@ import java.util.Objects;
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.databinding.FragmentUpdateInfoBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.utility.Constant;
+import doan.npnm.sharerecipe.databinding.FragmentUpdateInfoBinding;
 
 @SuppressLint("ResourceType")
 public class UpdateInfoFragment extends BaseFragment<FragmentUpdateInfoBinding> {

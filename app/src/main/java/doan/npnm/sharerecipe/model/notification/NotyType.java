@@ -1,7 +1,5 @@
 package doan.npnm.sharerecipe.model.notification;
 
-import doan.npnm.sharerecipe.model.BaseModel;
-
 public  enum NotyType {
     DEFAULT,
     ADMIN_LOKED,

@@ -15,7 +15,6 @@ import androidx.viewbinding.ViewBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.app.context.AppContext;
 
 
 public abstract class BaseBottomSheet<V extends ViewBinding> extends BottomSheetDialogFragment {

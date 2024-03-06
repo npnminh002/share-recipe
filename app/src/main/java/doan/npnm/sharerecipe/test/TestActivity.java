@@ -1,34 +1,18 @@
 package doan.npnm.sharerecipe.test;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.RemoteViews;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-
-import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.ArrayList;
 
-import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.activity.user.MainActivity;
-import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.databinding.ActivityTestBinding;
-import doan.npnm.sharerecipe.dialog.NotificationDialog;
-import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.recipe.CookTime;
 import doan.npnm.sharerecipe.model.recipe.Directions;
 import doan.npnm.sharerecipe.model.recipe.Ingredients;
 import doan.npnm.sharerecipe.model.recipe.PrepareTime;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
-import doan.npnm.sharerecipe.utility.Constant;
 
 public class TestActivity extends AppCompatActivity {
     ActivityTestBinding binding;

@@ -1,28 +1,19 @@
 package doan.npnm.sharerecipe.fragment.user;
 
-import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.activity.AddDataActivity;
 import doan.npnm.sharerecipe.adapter.users.CategoryAdapter;
 import doan.npnm.sharerecipe.adapter.users.RecipeAdapter;
 import doan.npnm.sharerecipe.adapter.users.TopChefAdapter;
 import doan.npnm.sharerecipe.app.UserViewModel;
-import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.RecentView;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
-import doan.npnm.sharerecipe.databinding.FragmentHomeUserBinding;
-import doan.npnm.sharerecipe.lib.BitmapUtils;
 import doan.npnm.sharerecipe.lib.widget.TextValue;
-import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
+import doan.npnm.sharerecipe.databinding.FragmentHomeUserBinding;
 
 public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
 
@@ -97,19 +88,19 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
             }
 
             @Override
-            public void onSave(Recipe rcp) {
-                if (homeviewModel.database.saveRecipeDao().checkExistence(rcp.Id)) {
-                    homeviewModel.database.saveRecipeDao().removeRecent(rcp.Id);
+            public void onLove(Recipe rcp, boolean isLove) {
+                if (homeviewModel.auth.getCurrentUser() == null) {
+                    showToast(getString(R.string.no_us));
+                } else {
+                    if (!isLove) {
+                        homeviewModel.onLoveRecipe(rcp);
+                    } else {
+                        homeviewModel.onUnlove(rcp);
+                    }
                 }
-                homeviewModel.database.saveRecipeDao().addRecentView(new SaveRecipe() {{
-                    AuthID = rcp.RecipeAuth;
-                    RecipeID = rcp.Id;
-                    SaveTime = getTimeNow();
-                    Recipe = rcp.toJson();
-                }});
-                showToast(getString(R.string.save_recipes));
             }
-        });
+
+        }, homeviewModel.database);
 //        binding.imgUsers.setOnClickListener(v -> {
 //            startActivity(new Intent(this.getContext(), AddDataActivity.class));
 //

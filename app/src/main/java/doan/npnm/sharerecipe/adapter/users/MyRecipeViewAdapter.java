@@ -8,10 +8,10 @@ import java.util.Objects;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.base.BaseAdapter;
-import doan.npnm.sharerecipe.database.models.SaveRecipe;
+import doan.npnm.sharerecipe.databinding.ItemRecipeRecentBinding;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
-public class MyRecipeViewAdapter extends BaseAdapter<String, doan.npnm.sharerecipe.databinding.ItemRecipeRecentBinding> {
+public class MyRecipeViewAdapter extends BaseAdapter<String, ItemRecipeRecentBinding> {
 
     final OnRecipeEvent event;
 

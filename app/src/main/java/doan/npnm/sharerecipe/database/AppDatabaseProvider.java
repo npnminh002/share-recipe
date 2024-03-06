@@ -1,7 +1,5 @@
 package doan.npnm.sharerecipe.database;
 
-import android.content.Context;
-
 import androidx.room.Room;
 
 import doan.npnm.sharerecipe.app.context.AppContext;

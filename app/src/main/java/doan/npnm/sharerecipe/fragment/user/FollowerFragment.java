@@ -12,9 +12,9 @@ import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.FollowerAdapter;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.databinding.FragmentFollowerBinding;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.utility.Constant;
+import doan.npnm.sharerecipe.databinding.FragmentFollowerBinding;
 
 
 public class FollowerFragment extends BaseFragment<FragmentFollowerBinding> {

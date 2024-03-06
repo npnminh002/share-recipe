@@ -122,4 +122,6 @@
     <string name="send">Send</string>
     <string name="cf_report">Are you sure you want to report this recipe?</string>
     <string name="reasons">Reasons</string>
+    <string name="no_us">You have not logged in. Please login and continue</string>
+    <string name="sign_in">Sign In</string>
 </resources>

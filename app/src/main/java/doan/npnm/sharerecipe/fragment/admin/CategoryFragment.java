@@ -4,13 +4,12 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import doan.npnm.sharerecipe.app.AdminViewModel;
-import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentAdminChartBinding;
 
-public class ChartAdminFragment extends BaseFragment<FragmentAdminChartBinding> {
+public class CategoryFragment extends BaseFragment<FragmentAdminChartBinding> {
     private AdminViewModel viewModel;
-    public ChartAdminFragment(AdminViewModel userViewModel) {
+    public CategoryFragment(AdminViewModel userViewModel) {
         this.viewModel= userViewModel;
     }
 

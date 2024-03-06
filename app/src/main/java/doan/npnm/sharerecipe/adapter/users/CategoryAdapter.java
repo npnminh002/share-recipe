@@ -1,16 +1,13 @@
 package doan.npnm.sharerecipe.adapter.users;
 
 import android.annotation.SuppressLint;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.base.BaseAdapter;
 import doan.npnm.sharerecipe.databinding.ItemCategoryFoodBinding;
-import doan.npnm.sharerecipe.lib.BitmapUtils;
 import doan.npnm.sharerecipe.model.Category;
 
 public class CategoryAdapter extends BaseAdapter<Category, ItemCategoryFoodBinding> {

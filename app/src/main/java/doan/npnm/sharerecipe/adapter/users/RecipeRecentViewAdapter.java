@@ -5,10 +5,8 @@ import android.view.ViewGroup;
 
 import java.util.Objects;
 
-import doan.npnm.sharerecipe.base.BaseAdapter;
 import doan.npnm.sharerecipe.database.models.RecentView;
-import doan.npnm.sharerecipe.database.models.SaveRecipe;
-import doan.npnm.sharerecipe.databinding.ItemRecipeHomeBinding;
+import doan.npnm.sharerecipe.base.BaseAdapter;
 import doan.npnm.sharerecipe.databinding.ItemRecipeRecentBinding;
 import doan.npnm.sharerecipe.interfaces.OnRecipeEvent;
 import doan.npnm.sharerecipe.model.recipe.Recipe;

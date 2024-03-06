@@ -6,9 +6,6 @@ import com.google.gson.Gson;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-
-import doan.npnm.sharerecipe.model.Category;
 
 
 public class Recipe implements Serializable {

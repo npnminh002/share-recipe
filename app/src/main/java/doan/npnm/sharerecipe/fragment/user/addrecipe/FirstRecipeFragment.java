@@ -4,28 +4,21 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.function.Consumer;
-
-import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.databinding.FragmentFirstRecipeBinding;
 import doan.npnm.sharerecipe.interfaces.OnAddedSuccess;
 import doan.npnm.sharerecipe.lib.widget.TextValue;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
+import doan.npnm.sharerecipe.databinding.FragmentFirstRecipeBinding;
 
 public class FirstRecipeFragment extends BaseFragment<FragmentFirstRecipeBinding> {
     public UserViewModel viewModel;

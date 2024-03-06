@@ -2,11 +2,7 @@ package doan.npnm.sharerecipe.dialog;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
 
-import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.base.BaseDialog;
 import doan.npnm.sharerecipe.databinding.DialogLoaddingBinding;
 

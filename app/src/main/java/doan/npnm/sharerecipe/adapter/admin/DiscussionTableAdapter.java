@@ -10,10 +10,8 @@ import java.util.function.Consumer;
 import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.base.BaseTableAdapter;
 import doan.npnm.sharerecipe.databinding.RowDiscussionViewAdminBinding;
-import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.disscus.Discussion;
 import doan.npnm.sharerecipe.model.disscus.DisscusAuth;
-import doan.npnm.sharerecipe.model.recipe.Recipe;
 
 public class DiscussionTableAdapter extends BaseTableAdapter<Discussion, RowDiscussionViewAdminBinding> {
     private final Consumer<DisscusAuth> event;

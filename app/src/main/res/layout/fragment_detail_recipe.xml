@@ -19,6 +19,21 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:id="@+id/llLove"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_input_start_disable"
+            android:backgroundTint="#8ABABABA"
+            android:padding="@dimen/_3sdp"
+            android:src="@drawable/ic_round_favorite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/llSaveRecipe"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
+
+        <ImageView
             android:id="@+id/backIcon2"
             android:layout_width="@dimen/_28sdp"
             android:layout_height="@dimen/_28sdp"

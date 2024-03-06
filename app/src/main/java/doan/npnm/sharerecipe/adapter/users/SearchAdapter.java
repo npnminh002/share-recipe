@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 
 import java.util.function.Consumer;
 
-import doan.npnm.sharerecipe.base.BaseAdapter;
 import doan.npnm.sharerecipe.database.models.Search;
+import doan.npnm.sharerecipe.base.BaseAdapter;
 import doan.npnm.sharerecipe.databinding.ItemSearchViewBinding;
 
 public class SearchAdapter extends BaseAdapter<Search, ItemSearchViewBinding> {

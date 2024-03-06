@@ -21,15 +21,15 @@ import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.DirectionsAdapter;
 import doan.npnm.sharerecipe.adapter.users.ImageRecipeAdapter;
 import doan.npnm.sharerecipe.adapter.users.IngridentsAdapter;
-import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.databinding.FragmentEditRecipeBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
 import doan.npnm.sharerecipe.model.recipe.Directions;
 import doan.npnm.sharerecipe.model.recipe.Ingredients;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
+import doan.npnm.sharerecipe.databinding.FragmentEditRecipeBinding;
 
 public class EditRecipeFragment extends BaseFragment<FragmentEditRecipeBinding> {
 

@@ -15,8 +15,8 @@ import doan.npnm.sharerecipe.adapter.users.RecipeAdapter;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.RecentView;
-import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.databinding.FragmentDetailAuthBinding;
+import doan.npnm.sharerecipe.dialog.NoUserDialog;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
@@ -46,32 +46,32 @@ public class DetailAuthFragment extends BaseFragment<FragmentDetailAuthBinding> 
         recipeAdapter = new RecipeAdapter(new RecipeAdapter.OnRecipeEvent() {
             @Override
             public void onView(Recipe rcp) {
-                if( viewModel.database.recentViewDao().checkExistence(rcp.Id)){
+                if (viewModel.database.recentViewDao().checkExistence(rcp.Id)) {
                     viewModel.database.recentViewDao().removeRecent(rcp.Id);
                 }
-                viewModel.database.recentViewDao().addRecentView(new RecentView(){{
-                    AuthID=rcp.RecipeAuth;
-                    RecipeID=rcp.Id;
-                    ViewTime=getTimeNow();
-                    Recipe= rcp.toJson();
+                viewModel.database.recentViewDao().addRecentView(new RecentView() {{
+                    AuthID = rcp.RecipeAuth;
+                    RecipeID = rcp.Id;
+                    ViewTime = getTimeNow();
+                    Recipe = rcp.toJson();
                 }});
 
-                addFragment(new DetailRecipeFragment(rcp,viewModel),android.R.id.content,true);
+                addFragment(new DetailRecipeFragment(rcp, viewModel), android.R.id.content, true);
             }
 
             @Override
-            public void onSave(Recipe rcp) {
-                if( viewModel.database.saveRecipeDao().checkExistence(rcp.Id)){
-                    viewModel.database.saveRecipeDao().removeRecent(rcp.Id);
+            public void onLove(Recipe rcp, boolean isLove) {
+                if (viewModel.auth.getCurrentUser() == null) {
+                    showToast(getString(R.string.no_us));
+                } else {
+                    if (!isLove) {
+                        viewModel.onLoveRecipe(rcp);
+                    } else {
+                        viewModel.onUnlove(rcp);
+                    }
                 }
-                viewModel.database.saveRecipeDao().addRecentView(new SaveRecipe(){{
-                    AuthID=rcp.RecipeAuth;
-                    RecipeID=rcp.Id;
-                    SaveTime=getTimeNow();
-                    Recipe= rcp.toJson();
-                }});
             }
-        });
+        }, viewModel.database);
         binding.rcvRecipe.setAdapter(recipeAdapter);
 
         if (!Objects.equals(users.UrlImg, "")) {
@@ -83,11 +83,12 @@ public class DetailAuthFragment extends BaseFragment<FragmentDetailAuthBinding> 
         binding.txtFollow.setText("" + users.Follow);
         binding.txtFollower.setText("" + users.Follower);
 
-        viewModel.checkFollowByUid(users.UserID);
-        viewModel.isFollow.observe(this, isFollow -> {
-            binding.btnFollow.setText(getString(isFollow ? R.string.un_follow : R.string.follow));
-        });
-
+        if (viewModel.auth.getCurrentUser() != null) {
+            viewModel.checkFollowByUid(users.UserID);
+            viewModel.isFollow.observe(this, isFollow -> {
+                binding.btnFollow.setText(getString(isFollow ? R.string.un_follow : R.string.follow));
+            });
+        }
 
         onFetchRecipeyUs(new FetchByID<ArrayList<Recipe>>() {
             @Override
@@ -122,7 +123,6 @@ public class DetailAuthFragment extends BaseFragment<FragmentDetailAuthBinding> 
                     binding.prLoadData.setVisibility(View.GONE);
                 })
                 .addOnFailureListener(e -> {
-
                     arrayListFetchByID.onErr(e.getMessage());
                     binding.prLoadData.setVisibility(View.GONE);
                 });
@@ -134,16 +134,21 @@ public class DetailAuthFragment extends BaseFragment<FragmentDetailAuthBinding> 
             closeFragment(DetailAuthFragment.this);
         });
         binding.btnFollow.setOnClickListener(v -> {
-            if (viewModel.isFollow.getValue()) {
-                binding.txtFollower.setText("" + (users.Follower - 1));
-                viewModel.onUnFollow(users);
-
+            if (viewModel.auth.getCurrentUser() == null) {
+                new NoUserDialog(requireContext(), () -> {
+                    viewModel.isSingApp.postValue(true);
+                }).show();
             } else {
-                viewModel.onFollow(users);
-                binding.txtFollower.setText("" + (users.Follower + 1));
-            }
-            viewModel.checkFollowByUid(users.UserID);
+                if (viewModel.isFollow.getValue()) {
+                    binding.txtFollower.setText("" + (users.Follower - 1));
+                    viewModel.onUnFollow(users);
 
+                } else {
+                    viewModel.onFollow(users);
+                    binding.txtFollower.setText("" + (users.Follower + 1));
+                }
+                viewModel.checkFollowByUid(users.UserID);
+            }
         });
 
 

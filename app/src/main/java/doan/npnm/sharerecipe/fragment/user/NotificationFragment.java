@@ -20,13 +20,13 @@ import doan.npnm.sharerecipe.adapter.users.ChildNotiAdapter;
 import doan.npnm.sharerecipe.adapter.users.ParentNotiAdapter;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.databinding.FragmentNotificationBinding;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.model.notification.Notification;
 import doan.npnm.sharerecipe.model.notification.NotyType;
 import doan.npnm.sharerecipe.model.notification.ParentNotification;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
+import doan.npnm.sharerecipe.databinding.FragmentNotificationBinding;
 
 public class NotificationFragment extends BaseFragment<FragmentNotificationBinding> {
 

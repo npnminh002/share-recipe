@@ -7,8 +7,6 @@ import androidx.room.Query;
 
 import java.util.List;
 
-import doan.npnm.sharerecipe.database.models.Follower;
-import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.database.models.UserFollower;
 
 @Dao

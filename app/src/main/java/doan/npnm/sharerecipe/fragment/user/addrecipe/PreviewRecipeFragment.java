@@ -5,9 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 
@@ -20,13 +17,13 @@ import doan.npnm.sharerecipe.adapter.users.IngridentsAdapter;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.databinding.FragmentPreviewRecipeBinding;
-import doan.npnm.sharerecipe.firebase.FCMNotificationSender;
 import doan.npnm.sharerecipe.interfaces.DataEventListener;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.notification.Notification;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
+import doan.npnm.sharerecipe.databinding.FragmentPreviewRecipeBinding;
+import doan.npnm.sharerecipe.firebase.FCMNotificationSender;
 
 public class PreviewRecipeFragment extends BaseFragment<FragmentPreviewRecipeBinding> {
 

@@ -1,10 +1,8 @@
 package doan.npnm.sharerecipe.activity.admin;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
+import android.view.View;
 
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -13,9 +11,8 @@ import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.AdminViewModel;
 import doan.npnm.sharerecipe.base.BaseActivity;
 import doan.npnm.sharerecipe.databinding.ActivityAdminMainBinding;
-import doan.npnm.sharerecipe.fragment.admin.ChartAdminFragment;
+import doan.npnm.sharerecipe.fragment.admin.CategoryFragment;
 import doan.npnm.sharerecipe.fragment.admin.HomeAdminFragment;
-import doan.npnm.sharerecipe.fragment.admin.NotificationAdminFragment;
 import doan.npnm.sharerecipe.fragment.admin.ReportAdminFragment;
 import doan.npnm.sharerecipe.fragment.admin.UsersAdminFragment;
 
@@ -31,38 +28,45 @@ public class AdminMainActivity extends BaseActivity<ActivityAdminMainBinding> {
     @SuppressLint("NewApi")
     @Override
     protected void createView() {
-        adminViewModel= new ViewModelProvider(this).get(AdminViewModel.class);
+        adminViewModel = new ViewModelProvider(this).get(AdminViewModel.class);
         adminViewModel.userLogin.postValue(userViewModel.getUsers().getValue());
-        openFragment(new HomeAdminFragment(adminViewModel));
+        addFragment(new HomeAdminFragment(adminViewModel), R.id.llViewAdminHome, true);
+        addFragment(new CategoryFragment(adminViewModel),R.id.llViewCategory,true);
+        addFragment(new ReportAdminFragment(adminViewModel),R.id.llReport,true);
+        addFragment(new UsersAdminFragment(adminViewModel),R.id.llUsers,true);
         binding.bottomNavigation.setOnNavigationItemSelectedListener(OnBottomEventSelect);
     }
 
     @SuppressLint("NewApi")
     private BottomNavigationView.OnNavigationItemSelectedListener OnBottomEventSelect = item -> {
         if (item.getItemId() == R.id.icon_home_admin) {
-            openFragment(new HomeAdminFragment(adminViewModel));
+            binding.llViewAdminHome.setVisibility(View.VISIBLE);
+            binding.llViewCategory.setVisibility(View.GONE);
+            binding.llReport.setVisibility(View.GONE);
+            binding.llReport.setVisibility(View.GONE);
             return true;
-        } else if (item.getItemId() == R.id.icon_chart_admin) {
-            openFragment(new ChartAdminFragment(adminViewModel));
-            return true;
-        } else if (item.getItemId() == R.id.icon_notification_admin) {
-            openFragment(new NotificationAdminFragment(adminViewModel));
+        } else if (item.getItemId() == R.id.icon_category_admin) {
+            binding.llViewAdminHome.setVisibility(View.GONE);
+            binding.llViewCategory.setVisibility(View.VISIBLE);
+            binding.llReport.setVisibility(View.GONE);
+            binding.llReport.setVisibility(View.GONE);
             return true;
         } else if (item.getItemId() == R.id.icon_users_admin) {
-            openFragment(new UsersAdminFragment(adminViewModel));
+            binding.llViewAdminHome.setVisibility(View.GONE);
+            binding.llViewCategory.setVisibility(View.GONE);
+            binding.llReport.setVisibility(View.VISIBLE);
+            binding.llReport.setVisibility(View.GONE);
             return true;
         } else if (item.getItemId() == R.id.icon_report_admin) {
-            openFragment(new ReportAdminFragment(adminViewModel));
+            binding.llViewAdminHome.setVisibility(View.GONE);
+            binding.llViewCategory.setVisibility(View.GONE);
+            binding.llReport.setVisibility(View.GONE);
+            binding.llReport.setVisibility(View.VISIBLE);
             return true;
         } else {
             return false;
         }
     };
-
-    private void openFragment(Fragment fragment) {
-        addFragment(fragment, R.id.llViewAdmin, true);
-    }
-
 
     @Override
     public void OnClick() {

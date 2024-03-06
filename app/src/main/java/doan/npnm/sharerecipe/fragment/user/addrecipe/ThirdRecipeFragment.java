@@ -8,14 +8,14 @@ import java.util.Arrays;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.IngridentsAdapter;
-import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
+import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.databinding.FragmentThirdRecipeBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
 import doan.npnm.sharerecipe.interfaces.OnAddedSuccess;
 import doan.npnm.sharerecipe.model.recipe.Ingredients;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
+import doan.npnm.sharerecipe.databinding.FragmentThirdRecipeBinding;
 
 public class ThirdRecipeFragment extends BaseFragment<FragmentThirdRecipeBinding> {
     public UserViewModel viewModel;

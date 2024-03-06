@@ -2,11 +2,9 @@ package doan.npnm.sharerecipe.fragment.user;
 
 import android.text.Html;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentPrivacyBinding;
 

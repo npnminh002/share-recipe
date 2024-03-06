@@ -31,18 +31,17 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
                 .progressEvent(new ProgressCustom.OnProgressListener() {
                     @Override
                     public void onEnd() {
-                        if (userViewModel.auth.getCurrentUser() == null) {
-                            startActivity(new Intent(SplashActivity.this, SignInActivity.class));
+                        if (LanguageUtil.isFirstOpenApp()) {
+                            startActivity(new Intent(SplashActivity.this, LanguageActivity.class));
                             finish();
                         } else {
-                            if (LanguageUtil.isFirstOpenApp()) {
-                                startActivity(new Intent(SplashActivity.this, LanguageActivity.class));
+                            if (userViewModel.users.getValue() == null) {
+                                startActivity(new Intent(SplashActivity.this, MainActivity.class));
                                 finish();
                             } else {
-
-                                boolean isAdmin = userViewModel.getUsers().getValue().AccountType == 0;
                                 startActivity(new Intent(SplashActivity.this,
-                                        isAdmin ? MainActivity.class : AdminMainActivity.class));
+                                        userViewModel.users.getValue().AccountType == 0 ?
+                                                MainActivity.class : AdminMainActivity.class));
                                 finish();
                             }
 

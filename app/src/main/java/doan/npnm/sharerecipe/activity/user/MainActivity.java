@@ -2,6 +2,7 @@ package doan.npnm.sharerecipe.activity.user;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
 
@@ -19,6 +20,7 @@ import java.util.HashMap;
 import javax.annotation.Nullable;
 
 import doan.npnm.sharerecipe.R;
+import doan.npnm.sharerecipe.activity.start.SignInActivity;
 import doan.npnm.sharerecipe.base.BaseActivity;
 import doan.npnm.sharerecipe.database.models.Search;
 import doan.npnm.sharerecipe.database.models.UserFollower;
@@ -45,6 +47,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Override
     protected void createView() {
+
+        userViewModel.isSingApp.observe(this, data -> {
+            if (data) {
+                startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                finish();
+            }
+        });
 
         loaddingDialog.show();
         userViewModel.searchKey.observe(this, key -> {
@@ -73,7 +82,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             });
         }
 
-        openFragment(new HomeUserFragment(userViewModel), true, true);
+        addFragment(new HomeUserFragment(userViewModel),R.id.layoutHome,true);
+        binding.layoutHome.setVisibility(View.VISIBLE);
         new Handler().postDelayed(() -> {
             binding.getRoot().setVisibility(View.VISIBLE);
             loaddingDialog.dismiss();
@@ -81,7 +91,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener(OnBottomEventSelect);
         userViewModel.users.observe(this, users -> {
-            listenerUserFollow(users);
+            if(users!=null){
+                listenerUserFollow(users);
+            }
         });
     }
 
@@ -112,17 +124,22 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @SuppressLint("NewApi")
     private BottomNavigationView.OnNavigationItemSelectedListener OnBottomEventSelect = item -> {
         if (item.getItemId() == R.id.icon_home_user) {
-            openFragment(new HomeUserFragment(userViewModel), true, true);
+            binding.layoutHome.setVisibility(View.VISIBLE);
+            binding.layoutMain.setVisibility(View.GONE);
+
             return true;
         } else if (item.getItemId() == R.id.icon_search_user) {
+            binding.layoutHome.setVisibility(View.GONE);
             openFragment(new SeachFragment(userViewModel).newInstance(new HashMap<String, Serializable>() {{
                 put("Key", key);
             }}), true, true);
             return true;
         } else if (item.getItemId() == R.id.icon_notification_user) {
+            binding.layoutHome.setVisibility(View.GONE);
             openFragment(new NotificationFragment(userViewModel), true, false);
             return true;
         } else if (item.getItemId() == R.id.icon_users_user) {
+            binding.layoutHome.setVisibility(View.GONE);
             openFragment(new ProfileUserFragment(userViewModel), true, true);
             return true;
         } else {

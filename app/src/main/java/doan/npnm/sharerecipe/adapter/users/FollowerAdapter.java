@@ -6,9 +6,8 @@ import android.view.ViewGroup;
 
 import java.util.Objects;
 
-import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.base.BaseAdapter;
 import doan.npnm.sharerecipe.database.AppDatabase;
+import doan.npnm.sharerecipe.base.BaseAdapter;
 import doan.npnm.sharerecipe.databinding.ItemFollowViewBinding;
 import doan.npnm.sharerecipe.model.Users;
 
