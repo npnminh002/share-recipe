@@ -76,10 +76,11 @@ public class EditRecipeFragment extends BaseFragment<FragmentEditRecipeBinding> 
         });
         directionsAdapter = new DirectionsAdapter(DirectionsAdapter.DIR_TYPE.EDIT, new DirectionsAdapter.OnDirectionEvent() {
             @Override
-            public void onNameChange(Directions directions, String value, int postion) {
-                int indexOf = recipe.Directions.indexOf(directions);
-                if (indexOf != -1) {
-                    recipe.Directions.get(indexOf).Name = value;
+            public void onNameChange(Directions directions) {
+                for (Directions id : recipe.Directions) {
+                    if (id.Id == directions.Id) {
+                        id.Name = directions.Name;
+                        break;  }
                 }
             }
 
@@ -107,16 +108,23 @@ public class EditRecipeFragment extends BaseFragment<FragmentEditRecipeBinding> 
 
         ingridentsAdapter = new IngridentsAdapter(IngridentsAdapter.IGR_TYPE.EDIT, new IngridentsAdapter.OnIngridentEvent() {
             @Override
-            public void onNameChange(Ingredients ingredients, String value, int po) {
-                int indexOf = recipe.Ingredients.indexOf(ingredients);
-                if (indexOf != -1) {
-                    recipe.Ingredients.get(indexOf).Name = value;
+            public void onNameChange(Ingredients ingredients) {
+                for (Ingredients id : recipe.Ingredients) {
+                    if (id.Id == ingredients.Id) {
+                        id.Name = ingredients.Name;
+                        break;  }
                 }
+
             }
 
+
             @Override
-            public void onQuantitiveChange(Ingredients ingredients, String value, int pos) {
-                recipe.Ingredients.get(pos).Quantitative = Float.parseFloat(value);
+            public void onQuantitiveChange(Ingredients ingredients) {
+                for (Ingredients id : recipe.Ingredients) {
+                    if (id.Id == ingredients.Id) {
+                        id.Quantitative = ingredients.Quantitative;
+                        break;  }
+                }
             }
 
             @Override

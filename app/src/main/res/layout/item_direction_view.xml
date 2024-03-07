@@ -9,7 +9,8 @@
     <EditText
         android:id="@+id/ingridenName"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_36sdp"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/_36sdp"
         android:layout_marginStart="@dimen/_12sdp"
         android:background="@drawable/bg_input_start_disable"
         android:backgroundTint="@color/aliceblue"

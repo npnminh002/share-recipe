@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -35,6 +34,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.DirectionsAdapter;
@@ -48,6 +49,7 @@ import doan.npnm.sharerecipe.databinding.FragmentDetailRecipeBinding;
 import doan.npnm.sharerecipe.databinding.PopupReportRecipeBinding;
 import doan.npnm.sharerecipe.dialog.NoUserDialog;
 import doan.npnm.sharerecipe.dialog.WarningDialog;
+import doan.npnm.sharerecipe.fragment.publics.ImagePreviewFragment;
 import doan.npnm.sharerecipe.interfaces.DataEventListener;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.lib.BitmapUtils;
@@ -132,17 +134,23 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
                     directionsAdapter = new DirectionsAdapter(DirectionsAdapter.DIR_TYPE.PREVIEW, null);
                     binding.rcvDirection.setAdapter(directionsAdapter);
                     adapter = new ImageStringAdapter(url -> {
-
+                        addFragment(new ImagePreviewFragment().newInstance(new HashMap<String, Object>() {
+                            {
+                                put("Source", url);
+                            }
+                        }), android.R.id.content, true);
                     });
 
                     ingridentsAdapter = new IngridentsAdapter(IngridentsAdapter.IGR_TYPE.PREVIEW, null);
                     binding.rcvIngrident.setAdapter(ingridentsAdapter);
+
                     binding.rcvGallery.setAdapter(adapter);
 
                     loadImage(data.ImgUrl, binding.imgProduct);
 
-
                     binding.foodName.setText(data.Name == null ? "" : data.Name);
+                    Collections.sort(data.Directions,((o1, o2) -> String.valueOf(o1.Id).compareTo(String.valueOf(o2.Id))));
+                    Collections.sort(data.Ingredients,((o1, o2) -> String.valueOf(o1.Id).compareTo(String.valueOf(o2.Id))));
                     directionsAdapter.setItems(data.Directions);
                     ingridentsAdapter.setItems(data.Ingredients);
                     adapter.setItems(data.ImagePreview);
@@ -163,7 +171,6 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
                 }
 
             }
-
             @Override
             public void onErr(Object err) {
                 binding.llAnErr.setVisibility(View.VISIBLE);
@@ -204,18 +211,19 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
     public void OnClick() {
         Users us = viewModel.users.getValue();
 
-        binding.llLove.setColorFilter(viewModel.database.loveRecipeDao().checkExist(data.Id)? Color.parseColor("#FF0000") : Color.parseColor("#ffffffmmN"));
+        binding.llLove.setColorFilter(viewModel.database.loveRecipeDao().checkExist(data.Id) ? Color.parseColor("#FF0000") : Color.parseColor("#ffffff"));
         binding.llLove.setOnClickListener(v -> {
             if (viewModel.auth.getCurrentUser() == null) {
                 showToast(getString(R.string.no_us));
             } else {
-                if (viewModel.database.loveRecipeDao().checkExist(data.Id)) {
+                if (!viewModel.database.loveRecipeDao().checkExist(data.Id)) {
                     viewModel.onLoveRecipe(data);
                 } else {
                     viewModel.onUnlove(data);
                 }
             }
-            binding.llLove.setColorFilter(viewModel.database.loveRecipeDao().checkExist(data.Id)? R.color.red: R.color.white);
+            binding.llLove.setColorFilter(viewModel.database.loveRecipeDao().checkExist(data.Id) ? Color.parseColor("#FF0000") : Color.parseColor("#ffffff"));
+
         });
 
         binding.backIcon2.setOnClickListener(v -> closeFragment(DetailRecipeFragment.this));

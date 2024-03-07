@@ -1,5 +1,6 @@
 package doan.npnm.sharerecipe.base;
 
+import android.content.Context;
 import android.widget.TableLayout;
 
 import androidx.viewbinding.ViewBinding;
@@ -13,8 +14,9 @@ public abstract class BaseTableAdapter<T, V extends ViewBinding> {
 
     private V binding;
 
-    public BaseTableAdapter(TableLayout tableLayout) {
+    public BaseTableAdapter(TableLayout tableLayout,Context context) {
         this.tableLayout = tableLayout;
+        initLayout(context);
     }
 
     private void setDataToView() {
@@ -23,7 +25,7 @@ public abstract class BaseTableAdapter<T, V extends ViewBinding> {
             tableLayout.removeViews(1, childCount - 1);
         }
         for (T item : listData) {
-            binding = initLayout();
+            binding = initLayout(tableLayout.getContext());
             onBind(binding, item, count);
             count++;
             tableLayout.addView(binding.getRoot());
@@ -36,7 +38,7 @@ public abstract class BaseTableAdapter<T, V extends ViewBinding> {
         }
     }
 
-    protected abstract V initLayout();
+    protected abstract V initLayout(Context context);
 
     protected abstract void onBind(V binding, T item, int position);
 

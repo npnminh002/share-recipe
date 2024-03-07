@@ -47,6 +47,7 @@ import doan.npnm.sharerecipe.lib.BitmapUtils;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
+import doan.npnm.sharerecipe.model.recipe.RecipeStatus;
 import doan.npnm.sharerecipe.utility.Constant;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 
@@ -71,6 +72,8 @@ public class UserViewModel extends ViewModel {
     public MutableLiveData<String> searchKey= new MutableLiveData<>("");
 
     public MutableLiveData<ArrayList<Category>> categoriesArr = new MutableLiveData<>();
+
+    public MutableLiveData<Recipe> onChangeLove= new MutableLiveData<>(null);
 
     public UserViewModel() {
         if (auth.getCurrentUser() != null) {
@@ -101,7 +104,10 @@ public class UserViewModel extends ViewModel {
                         if (documentSnapshot.exists()) {
                             Recipe rcp = documentSnapshot.toObject(Recipe.class);
                             if (rcp != null) {
-                                rcpList.add(rcp);
+                                if(rcp.RecipeStatus== RecipeStatus.PREVIEW){
+                                    rcpList.add(rcp);
+                                }
+
                             } else {
                                 showToast("Recipe is null");
                             }
@@ -262,7 +268,7 @@ public class UserViewModel extends ViewModel {
 
 
     public void onGetRecipeData() {
-        String loginID = auth.getCurrentUser().getUid();
+        recipeLiveData.postValue(new ArrayList<>());
         ArrayList<Recipe> rcpList = new ArrayList<>();
         firestore.collection(Constant.RECIPE)
                 .addSnapshotListener((value, error) -> {
@@ -270,11 +276,8 @@ public class UserViewModel extends ViewModel {
                         if (documentSnapshot.exists()) {
                             Recipe rcp = documentSnapshot.toObject(Recipe.class);
                             if (rcp != null) {
-                                rcpList.add(rcp);
-                                if(loginID!=null){
-                                    if (rcp.RecipeAuth.equals(loginID)) {
-                                    myRecipeArr.add(rcp.toJson());
-                                    }
+                                if(rcp.RecipeStatus== RecipeStatus.PREVIEW){
+                                    rcpList.add(rcp);
                                 }
 
                             } else {
@@ -317,21 +320,6 @@ public class UserViewModel extends ViewModel {
     }
 
 
-    public ArrayList<Category> getListCategory() {
-        ArrayList<Category> categories = new ArrayList<>();
-        categories.add(new Category("1", AppContext.getContext().getString(R.string.bakery),
-                BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_bakery))));
-        categories.add(new Category("2", AppContext.getContext().getString(R.string.beverages), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_beverages))));
-        categories.add(new Category("3", AppContext.getContext().getString(R.string.dairy), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_dairy))));
-        categories.add(new Category("4", AppContext.getContext().getString(R.string.frozen), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_frozen))));
-        categories.add(new Category("5", AppContext.getContext().getString(R.string.fruit), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_fruit))));
-        categories.add(new Category("6", AppContext.getContext().getString(R.string.meat), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_meat))));
-        categories.add(new Category("7", AppContext.getContext().getString(R.string.poultry), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_poultry))));
-        categories.add(new Category("8", AppContext.getContext().getString(R.string.seafood), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_seafood))));
-        categories.add(new Category("9", AppContext.getContext().getString(R.string.vegetable), BitmapUtils.bitmapToString(BitmapFactory.decodeResource(AppContext.getContext().getResources(), R.drawable.category_vegettable))));
-        return categories;
-
-    }
 
     public void putImgToStorage(StorageReference storageReference, Uri uri, OnPutImageListener onPutImage) {
         StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + file_extension(uri));

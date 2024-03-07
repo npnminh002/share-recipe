@@ -22,7 +22,7 @@
             android:id="@+id/constraintLayout6"
 
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_180sdp"
+            android:layout_height="wrap_content"
             android:background="@drawable/bg_admin_overview"
             android:padding="@dimen/_12sdp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/recipe"
+                    android:text="0"
                     android:textColor="@color/white" />
             </LinearLayout>
 
@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/recipe"
+                    android:text="0"
                     android:textColor="@color/white" />
             </LinearLayout>
 
@@ -105,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/recipe"
+                    android:text="0"
                     android:textColor="@color/white" />
             </LinearLayout>
 
@@ -132,7 +132,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/recipe"
+                    android:text="0"
                     android:textColor="@color/white" />
             </LinearLayout>
 
@@ -160,7 +160,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="@string/recipe"
+                    android:text="0"
                     android:textColor="@color/white" />
             </LinearLayout>
 

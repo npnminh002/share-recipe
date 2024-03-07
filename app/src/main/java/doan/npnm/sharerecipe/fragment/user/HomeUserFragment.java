@@ -51,6 +51,8 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
 
         searchKey= new TextValue(binding.txtSearch);
 
+
+
         homeviewModel.recipeLiveData.observe(this, arr -> {
             recipeAdapter.setItems(arr);
         });
@@ -106,9 +108,13 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
 //
 //        });
 
-
+        homeviewModel.onChangeLove.observe(this,data->{
+            categoryAdapter.setCurrentPos(homeviewModel.recipeLiveData.getValue().indexOf(data));
+        });
         binding.rcvItemCategory.setAdapter(categoryAdapter);
-        categoryAdapter.setItems(homeviewModel.getListCategory());
+        homeviewModel.categoriesArr.observe(this,data->{
+            categoryAdapter.setItems(data);
+        });
         binding.rcvRecipe.setAdapter(recipeAdapter);
     }
 }

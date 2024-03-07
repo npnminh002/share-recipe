@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:paddingVertical="@dimen/_12sdp"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:paddingVertical="@dimen/_12sdp"
     tools:context=".fragment.user.addrecipe.FirstRecipeFragment">
 
     <RelativeLayout
-        android:paddingHorizontal="@dimen/_12sdp"
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_12sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -77,9 +77,9 @@
 
 
             <LinearLayout
-                android:layout_marginHorizontal="@dimen/_12sdp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/_12sdp"
 
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/_32sdp"
@@ -107,32 +107,33 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:textSize="@dimen/_13sdp"
                         android:fontFamily="@font/poppins_medium"
                         android:text="@string/preparation_time"
-                        android:textColor="@color/textcolor" />
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_13sdp" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_marginStart="@dimen/_6sdp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_6sdp"
                         android:layout_weight="1"
-                        android:weightSum="3"
+                        android:background="@drawable/bg_input_start_disable"
                         android:padding="@dimen/_3sdp"
-                        android:background="@drawable/bg_input_start_disable">
+                        android:weightSum="3">
 
                         <EditText
-                            android:textAlignment="textEnd"
-                            android:text="0"
                             android:id="@+id/timePrepare"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@color/white"
                             android:fontFamily="@font/poppins_light"
+                            android:paddingVertical="@dimen/_3sdp"
                             android:paddingStart="@dimen/_12sdp"
                             android:paddingEnd="@dimen/_3sdp"
-                            android:paddingVertical="@dimen/_3sdp"
+                            android:text="0"
+                            android:inputType="number"
+                            android:textAlignment="textEnd"
                             android:textColor="@color/black"
                             android:textColorHint="@color/darkgray"
                             android:textSize="@dimen/_14sdp"
@@ -145,14 +146,14 @@
                         <TextView
                             android:id="@+id/selectMinutePP"
                             android:layout_width="wrap_content"
-                            android:layout_marginEnd="@dimen/_12sdp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="s"
                             android:layout_marginStart="@dimen/_6sdp"
+                            android:layout_marginEnd="@dimen/_12sdp"
+                            android:layout_weight="1"
                             android:background="@color/white"
                             android:fontFamily="@font/poppins_light"
                             android:paddingVertical="@dimen/_3sdp"
+                            android:text="s"
                             android:textColor="@color/black"
                             android:textColorHint="@color/darkgray"
                             android:textSize="@dimen/_14sdp"
@@ -161,12 +162,12 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
-                            android:padding="@dimen/_2sdp"
-                            android:layout_gravity="center"
                             android:id="@+id/changePPtime"
                             android:layout_width="@dimen/_32sdp"
                             android:layout_height="@dimen/_32sdp"
+                            android:layout_gravity="center"
                             android:layout_weight="1"
+                            android:padding="@dimen/_2sdp"
                             android:src="@drawable/ic_change_circle"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -177,43 +178,44 @@
 
 
                 <LinearLayout
-                    android:layout_marginTop="@dimen/_12sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:orientation="horizontal"
                     android:weightSum="2">
 
                     <TextView
-                        android:textSize="@dimen/_13sdp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:fontFamily="@font/poppins_medium"
                         android:text="@string/cooking_time"
-                        android:textColor="@color/textcolor" />
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_13sdp" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_marginStart="@dimen/_6sdp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_6sdp"
                         android:layout_weight="1"
-                        android:weightSum="3"
+                        android:background="@drawable/bg_input_start_disable"
                         android:padding="@dimen/_3sdp"
-                        android:background="@drawable/bg_input_start_disable">
+                        android:weightSum="3">
 
                         <EditText
-                            android:textAlignment="textEnd"
-                            android:text="10"
                             android:id="@+id/timeCook"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@color/white"
                             android:fontFamily="@font/poppins_light"
+                            android:paddingVertical="@dimen/_3sdp"
                             android:paddingStart="@dimen/_12sdp"
                             android:paddingEnd="@dimen/_3sdp"
-                            android:paddingVertical="@dimen/_3sdp"
+                            android:text="10"
+                            android:inputType="number"
+                            android:textAlignment="textEnd"
                             android:textColor="@color/black"
                             android:textColorHint="@color/darkgray"
                             android:textSize="@dimen/_14sdp"
@@ -225,15 +227,15 @@
 
                         <TextView
                             android:id="@+id/selectMinuteCook"
-                            android:layout_marginEnd="@dimen/_12sdp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="s"
                             android:layout_marginStart="@dimen/_6sdp"
+                            android:layout_marginEnd="@dimen/_12sdp"
+                            android:layout_weight="1"
                             android:background="@color/white"
                             android:fontFamily="@font/poppins_light"
                             android:paddingVertical="@dimen/_3sdp"
+                            android:text="s"
                             android:textColor="@color/black"
                             android:textColorHint="@color/darkgray"
                             android:textSize="@dimen/_14sdp"
@@ -242,12 +244,12 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
-                            android:padding="@dimen/_2sdp"
-                            android:layout_gravity="center"
                             android:id="@+id/changeCookTime"
                             android:layout_width="@dimen/_32sdp"
                             android:layout_height="@dimen/_32sdp"
+                            android:layout_gravity="center"
                             android:layout_weight="1"
+                            android:padding="@dimen/_2sdp"
                             android:src="@drawable/ic_change_circle"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -257,44 +259,44 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="@dimen/_12sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:orientation="horizontal"
                     android:weightSum="2">
 
                     <TextView
-                        android:textSize="@dimen/_13sdp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:fontFamily="@font/poppins_medium"
                         android:text="@string/difficulity"
-                        android:textColor="@color/textcolor" />
+                        android:textColor="@color/textcolor"
+                        android:textSize="@dimen/_13sdp" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_marginStart="@dimen/_6sdp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_6sdp"
                         android:layout_weight="1"
-                        android:weightSum="3"
+                        android:background="@drawable/bg_input_start_disable"
                         android:padding="@dimen/_3sdp"
-                        android:background="@drawable/bg_input_start_disable">
+                        android:weightSum="3">
 
                         <EditText
-                            android:layout_marginEnd="@dimen/_12sdp"
                             android:id="@+id/txtLever"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_12sdp"
                             android:layout_weight="1"
                             android:background="@color/white"
+                            android:enabled="false"
                             android:fontFamily="@font/poppins_light"
                             android:paddingVertical="@dimen/_3sdp"
                             android:paddingStart="@dimen/_12sdp"
                             android:paddingEnd="@dimen/_3sdp"
                             android:text="10"
-                            android:enabled="false"
                             android:textAlignment="textEnd"
                             android:textColor="@color/black"
                             android:textColorHint="@color/darkgray"
@@ -307,12 +309,12 @@
 
                         <ImageView
 
-                            android:layout_gravity="center"
                             android:id="@+id/changeLevel"
                             android:layout_width="@dimen/_32sdp"
-                            android:padding="@dimen/_2sdp"
                             android:layout_height="@dimen/_32sdp"
+                            android:layout_gravity="center"
                             android:layout_weight="1"
+                            android:padding="@dimen/_2sdp"
                             android:src="@drawable/ic_change_circle"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -321,15 +323,32 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
 
+                <TextView
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/category"
+                    android:textColor="@color/textcolor"
+                    android:textSize="@dimen/_16sdp" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="2"
+                    android:orientation="vertical"
+                    android:id="@+id/rcvCategory"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_height="match_parent"/>
 
             </LinearLayout>
         </ScrollView>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout3"
             android:layout_width="match_parent"
-            android:layout_marginHorizontal="@dimen/_12sdp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_12sdp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -370,7 +389,6 @@
                 app:layout_constraintWidth_percent="0.72" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

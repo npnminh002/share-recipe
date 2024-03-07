@@ -1,8 +1,6 @@
 package doan.npnm.sharerecipe.adapter.users;
 
 import android.annotation.SuppressLint;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -17,7 +15,7 @@ import doan.npnm.sharerecipe.databinding.ItemIngredentsViewPreviewBinding;
 import doan.npnm.sharerecipe.model.recipe.Ingredients;
 
 public class IngridentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    final ArrayList<Ingredients> ingridents = new ArrayList<>();
+    private ArrayList<Ingredients> ingridents = new ArrayList<>();
     public OnIngridentEvent event;
     final IGR_TYPE dirType;
 
@@ -53,8 +51,8 @@ public class IngridentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void setItems(ArrayList<Ingredients> items) {
-        ingridents.clear();
-        ingridents.addAll(items);
+        this.ingridents = new ArrayList<>();
+        ingridents = items;
         notifyDataSetChanged();
     }
 
@@ -75,47 +73,29 @@ public class IngridentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public void onBind(Ingredients item, int position) {
             binding.ingridenName.setText(item.Name);
             binding.quantitive.setText("" + item.Quantitative);
-            binding.ingridenName.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    event.onNameChange(item, s.toString(), position);
+            binding.ingridenName.setOnFocusChangeListener((v, hasFocus) -> {
+                if (!hasFocus) {
+                    item.Name = binding.ingridenName.getText().toString();
+                    event.onNameChange(item);
                 }
             });
 
             binding.icRemoveItem.setOnClickListener(v -> {
                 event.onRemove(item, position);
             });
-            binding.quantitive.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            binding.quantitive.setOnFocusChangeListener((v, hasFocus) -> {
+                if (!hasFocus) {
 
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    event.onQuantitiveChange(item, s.toString(), position);
+                    item.Quantitative = Float.parseFloat(binding.quantitive.getText().toString());
+                    event.onNameChange(item);
                 }
             });
         }
     }
 
 
-    public class PreviewIngridentViewholder extends RecyclerView.ViewHolder {
+    public static class PreviewIngridentViewholder extends RecyclerView.ViewHolder {
         private final ItemIngredentsViewPreviewBinding binding;
 
         PreviewIngridentViewholder(ItemIngredentsViewPreviewBinding binding) {
@@ -149,9 +129,9 @@ public class IngridentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
     public interface OnIngridentEvent {
-        void onNameChange(Ingredients ingredients, String value, int postion);
+        void onNameChange(Ingredients ingredients);
 
-        void onQuantitiveChange(Ingredients ingredients, String value, int postion);
+        void onQuantitiveChange(Ingredients ingredients);
 
         void onRemove(Ingredients id, int pos);
     }

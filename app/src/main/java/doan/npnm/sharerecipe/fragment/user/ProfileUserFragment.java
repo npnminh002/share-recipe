@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -15,6 +16,7 @@ import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.MyRecipeViewAdapter;
 import doan.npnm.sharerecipe.adapter.users.RecipeRecentViewAdapter;
 import doan.npnm.sharerecipe.adapter.users.RecipeSaveViewAdapter;
+import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.RecentView;
@@ -22,11 +24,13 @@ import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.databinding.FragmentProfileUserBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
 import doan.npnm.sharerecipe.fragment.user.addrecipe.FirstRecipeFragment;
+import doan.npnm.sharerecipe.fragment.user.addrecipe.ThirdRecipeFragment;
 import doan.npnm.sharerecipe.interfaces.OnRecipeEvent;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
 public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding> {
     private UserViewModel viewModel;
+    private RecipeViewModel recipeViewModel;
 
     public ProfileUserFragment(UserViewModel viewModel) {
         this.viewModel = viewModel;
@@ -43,7 +47,11 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
             viewModel.isSingApp.postValue(true);
         });
 
-        binding.icAddRecipe.setOnClickListener(v -> addFragment(new FirstRecipeFragment(viewModel), android.R.id.content, true));
+        binding.icAddRecipe.setOnClickListener(v -> {
+            recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
+            recipeViewModel.recipeLiveData.postValue(new Recipe());
+            addFragment(new FirstRecipeFragment(viewModel, recipeViewModel), android.R.id.content, true);
+        });
     }
 
     @Override
@@ -165,23 +173,25 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
 
             binding.rcvRecentView.setAdapter(recentViewAdapter);
             ArrayList<RecentView> recentViews = (ArrayList<RecentView>) viewModel.database.recentViewDao().getListRecentView();
-            if (recentViews.size() == 0) {
+            if (recentViews.isEmpty()) {
                 binding.txtNo1.setVisibility(View.VISIBLE);
             }
             recentViewAdapter.setItems(recentViews);
 
             ArrayList<SaveRecipe> saveRecipes = (ArrayList<SaveRecipe>) viewModel.database.saveRecipeDao().getListRecentView();
-            if (saveRecipes.size() == 0) {
+            if (saveRecipes.isEmpty()) {
                 binding.txtNo2.setVisibility(View.VISIBLE);
             }
             binding.rcvSaveRecipe.setAdapter(saveViewAdapter);
             saveViewAdapter.setItems(saveRecipes);
-            if (viewModel.myRecipeArr.size() == 0) {
+            if (viewModel.myRecipeArr.isEmpty()) {
+
                 binding.txtNo3.setVisibility(View.VISIBLE);
             }
 
             binding.rcvMyRecipe.setAdapter(myViewAdapter);
             myViewAdapter.setItems(viewModel.myRecipeArr);
+            binding.txtRecipe.setText(""+viewModel.myRecipeArr.size());
         }
     }
 }

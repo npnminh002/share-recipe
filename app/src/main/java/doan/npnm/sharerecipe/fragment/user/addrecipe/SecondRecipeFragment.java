@@ -7,25 +7,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import doan.npnm.sharerecipe.R;
+import doan.npnm.sharerecipe.adapter.users.CategoryAdapter;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
+import doan.npnm.sharerecipe.databinding.FragmentSecondRecipeBinding;
 import doan.npnm.sharerecipe.interfaces.OnAddedSuccess;
 import doan.npnm.sharerecipe.model.recipe.CookTime;
 import doan.npnm.sharerecipe.model.recipe.PrepareTime;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
-import doan.npnm.sharerecipe.databinding.FragmentSecondRecipeBinding;
 
 public class SecondRecipeFragment extends BaseFragment<FragmentSecondRecipeBinding> {
     public UserViewModel viewModel;
 
     public RecipeViewModel recipeViewModel;
-    private OnAddedSuccess onAddedSuccess;
 
-    public SecondRecipeFragment(UserViewModel viewModel, RecipeViewModel recipeViewModel, OnAddedSuccess onAddedSuccess) {
+    public SecondRecipeFragment(UserViewModel viewModel, RecipeViewModel recipeViewModel) {
         this.viewModel = viewModel;
         this.recipeViewModel = recipeViewModel;
-        this.onAddedSuccess = onAddedSuccess;
     }
 
     private Recipe recipe;
@@ -39,6 +38,7 @@ public class SecondRecipeFragment extends BaseFragment<FragmentSecondRecipeBindi
     public PrepareTime prepareTime;
     public ArrayList<String> listTimeType;
     public ArrayList<String> listLever;
+    private CategoryAdapter categoryAdapter;
 
     @Override
     protected void initView() {
@@ -70,8 +70,24 @@ public class SecondRecipeFragment extends BaseFragment<FragmentSecondRecipeBindi
             binding.selectMinutePP.setText(cookTime.TimeType == null ? "s" : cookTime.TimeType);
             binding.txtLever.setText(data.Level == null ? "" : data.Level);
 
-
         });
+        categoryAdapter = new CategoryAdapter(category -> {
+            recipeViewModel.categoty.postValue(category);
+        });
+        binding.rcvCategory.setAdapter(categoryAdapter);
+        viewModel.categoriesArr.observe(this, categories -> {
+            if (!categories.isEmpty()) {
+                recipeViewModel.categoty.observe(this, data -> {
+                    if (data != null) {
+                        categoryAdapter.currentPosition = categories.indexOf(data);
+                    } else {
+                        categoryAdapter.currentPosition = -1;
+                    }
+                });
+                categoryAdapter.setItems(viewModel.categoriesArr.getValue());
+            }
+        });
+
     }
 
     private int indexPpTime = 0;
@@ -92,9 +108,11 @@ public class SecondRecipeFragment extends BaseFragment<FragmentSecondRecipeBindi
 
         });
         binding.btnNext.setOnClickListener(v -> {
-
-            addFragment(new ThirdRecipeFragment(viewModel, recipeViewModel, onAddedSuccess), android.R.id.content, true);
             postValue();
+            if(checkData()){
+                addFragment(new ThirdRecipeFragment(viewModel, recipeViewModel), android.R.id.content, true);
+            }
+
         });
 
         binding.changePPtime.setOnClickListener(v -> changePpTime());
@@ -104,6 +122,23 @@ public class SecondRecipeFragment extends BaseFragment<FragmentSecondRecipeBindi
             closeFragment(SecondRecipeFragment.this);
             postValue();
         });
+    }
+
+    private boolean checkData() {
+        if(recipe.CookTime.Time.equals("0")){
+            showToast(getString(R.string.time_dif_0));
+            return false;
+        }
+        if (recipe.PrepareTime.Time.equals("0")){
+            showToast(getString(R.string.time_dif_0));
+            return false;
+        }
+        if(recipeViewModel.categoty.getValue()==null){
+            showToast(getString(R.string.no_category));
+            return false;
+        }
+
+        return true;
     }
 
     private void postValue() {

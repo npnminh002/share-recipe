@@ -124,4 +124,13 @@
     <string name="reasons">Reasons</string>
     <string name="no_us">You have not logged in. Please login and continue</string>
     <string name="sign_in">Sign In</string>
+    <string name="time_dif_0">Time should be different from 0</string>
+    <string name="no_category">You have not selected the category for the recipe</string>
+    <string name="category_manager">Category Manager</string>
+    <string name="category_name">Category name</string>
+    <string name="category_id">Category id</string>
+    <string name="delete">Delete</string>
+    <string name="approve">Approve</string>
+    <string name="auth">Auth</string>
+    <string name="edit">Edit</string>
 </resources>

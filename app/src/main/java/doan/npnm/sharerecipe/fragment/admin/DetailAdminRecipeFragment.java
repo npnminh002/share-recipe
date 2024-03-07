@@ -64,7 +64,7 @@ public class DetailAdminRecipeFragment extends BaseFragment<FragmentDetailAdminR
                     viewModel.firestore.collection(Constant.RECIPE).document(data.Id)
                             .update("View", data.View + 1);
                     binding.llAnErr.setVisibility(View.GONE);
-                    loadImage(data.ImgUrl, binding.imgProduct);
+                    loadImage(Objects.equals(data.ImgUrl, "") ?R.drawable.img_1: users.UrlImg,binding.imgProduct);
                     binding.userName.setText(users.UserName);
                     binding.txtRecipe.setText(users.Recipe + " " + getString(R.string.recipe));
                     binding.imgUsers.loadImage(users.UrlImg);
@@ -117,7 +117,7 @@ public class DetailAdminRecipeFragment extends BaseFragment<FragmentDetailAdminR
                         discussions.add(dcs);
                     }
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                        new DiscussionTableAdapter(binding.tableLayout, disscusAuth -> {
+                        new DiscussionTableAdapter(binding.tableLayout,getContext(), disscusAuth -> {
 
                         }).onFinih(() -> binding.progessLoad.setVisibility(View.GONE)).setData(discussions);
                     }

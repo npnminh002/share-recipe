@@ -1,6 +1,7 @@
 package doan.npnm.sharerecipe.adapter.admin;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.widget.TableLayout;
@@ -15,13 +16,15 @@ import doan.npnm.sharerecipe.model.disscus.DisscusAuth;
 
 public class DiscussionTableAdapter extends BaseTableAdapter<Discussion, RowDiscussionViewAdminBinding> {
     private final Consumer<DisscusAuth> event;
-    public DiscussionTableAdapter(TableLayout tableLayout, Consumer<DisscusAuth> us) {
-        super(tableLayout);
-        this.event=us;
+
+    public DiscussionTableAdapter(TableLayout tableLayout, Context context, Consumer<DisscusAuth> event) {
+        super(tableLayout, context);
+        this.event = event;
     }
 
+
     @Override
-    protected RowDiscussionViewAdminBinding initLayout() {
+    protected RowDiscussionViewAdminBinding initLayout(Context context) {
         return RowDiscussionViewAdminBinding.inflate(LayoutInflater.from(AppContext.getContext()));
     }
 

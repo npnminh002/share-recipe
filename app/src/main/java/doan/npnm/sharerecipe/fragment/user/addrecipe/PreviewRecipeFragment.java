@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.DirectionsAdapter;
@@ -76,6 +77,8 @@ public class PreviewRecipeFragment extends BaseFragment<FragmentPreviewRecipeBin
             binding.timeCook.setText(data.CookTime.Time);
             binding.selectMinutePP.setText(data.CookTime.TimeType);
             binding.txtLever.setText(data.Level);
+            Collections.sort(data.Directions,((o1, o2) -> String.valueOf(o1.Id).compareTo(String.valueOf(o2.Id))));
+            Collections.sort(data.Ingredients,((o1, o2) -> String.valueOf(o1.Id).compareTo(String.valueOf(o2.Id))));
 
             directionsAdapter.setItems(data.Directions);
             ingridentsAdapter.setItems(data.Ingredients);

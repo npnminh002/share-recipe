@@ -39,9 +39,11 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
                                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
                                 finish();
                             } else {
-                                startActivity(new Intent(SplashActivity.this,
-                                        userViewModel.users.getValue().AccountType == 0 ?
-                                                MainActivity.class : AdminMainActivity.class));
+                                if (userViewModel.users.getValue().AccountType == 0) {
+                                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                                } else {
+                                    startActivity(new Intent(SplashActivity.this, AdminMainActivity.class));
+                                }
                                 finish();
                             }
 

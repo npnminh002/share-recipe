@@ -13,6 +13,7 @@ import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
 import doan.npnm.sharerecipe.model.recipe.Directions;
+import doan.npnm.sharerecipe.model.recipe.Ingredients;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.databinding.FragmentFourRecipeBinding;
 
@@ -42,10 +43,11 @@ public class FourRecipeFragment extends BaseFragment<FragmentFourRecipeBinding> 
         });
         directionsAdapter = new DirectionsAdapter(DirectionsAdapter.DIR_TYPE.EDIT, new DirectionsAdapter.OnDirectionEvent() {
             @Override
-            public void onNameChange(Directions directions, String value, int postion) {
-                int indexOf = listDefDirection.indexOf(directions);
-                if (indexOf != -1) {
-                    listDefDirection.get(indexOf).Name = value;
+            public void onNameChange(Directions directions) {
+                for (Directions id : recipe.Directions) {
+                    if (id.Id == directions.Id) {
+                        id.Name = directions.Name;
+                        break;  }
                 }
             }
 

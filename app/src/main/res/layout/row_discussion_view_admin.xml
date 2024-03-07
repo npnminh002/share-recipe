@@ -15,7 +15,7 @@
 
         <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
 
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="@dimen/_52sdp"
             android:paddingHorizontal="@dimen/_5sdp"
             android:paddingVertical="@dimen/_4sdp"
@@ -54,7 +54,7 @@
 
         <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
 
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="@dimen/_252sdp"
             android:paddingHorizontal="@dimen/_5sdp"
             android:paddingVertical="@dimen/_4sdp"
@@ -73,7 +73,7 @@
 
         <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
 
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="@dimen/_137sdp"
             android:paddingHorizontal="@dimen/_5sdp"
             android:paddingVertical="@dimen/_4sdp"
@@ -93,7 +93,7 @@
 
         <doan.npnm.sharerecipe.lib.widget.CornerLinearLayout
 
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="@dimen/_200sdp"
             android:paddingHorizontal="@dimen/_5sdp"
             android:paddingVertical="@dimen/_4sdp"

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -74,20 +75,10 @@ public class DirectionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public void onBind(Directions item, int position) {
             binding.ingridenName.setText(item.Name);
-            binding.ingridenName.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    event.onNameChange(item, s.toString(), position);
+            binding.ingridenName.setOnFocusChangeListener((v, hasFocus) -> {
+                if(!hasFocus){
+                    item.Name=binding.ingridenName.getText().toString();
+                    event.onNameChange(item);
                 }
             });
 
@@ -130,7 +121,7 @@ public class DirectionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
     public interface OnDirectionEvent {
-        void onNameChange(Directions directions, String value, int postion);
+        void onNameChange(Directions directions);
 
         void onRemove(Directions id, int pos);
     }

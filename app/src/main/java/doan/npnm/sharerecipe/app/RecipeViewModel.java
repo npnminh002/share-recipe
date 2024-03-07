@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 
+import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
 public class RecipeViewModel extends ViewModel {
@@ -15,4 +16,5 @@ public class RecipeViewModel extends ViewModel {
 
     public Uri imgUri= null;
     public MutableLiveData<ArrayList<Uri>> listSelect= new MutableLiveData<>(new ArrayList<>());
+    public MutableLiveData<Category> categoty= new MutableLiveData<>(null);
 }

@@ -10,24 +10,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 
 import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
-import doan.npnm.sharerecipe.interfaces.OnAddedSuccess;
+import doan.npnm.sharerecipe.databinding.FragmentFirstRecipeBinding;
 import doan.npnm.sharerecipe.lib.widget.TextValue;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
-import doan.npnm.sharerecipe.databinding.FragmentFirstRecipeBinding;
 
 public class FirstRecipeFragment extends BaseFragment<FragmentFirstRecipeBinding> {
     public UserViewModel viewModel;
     private RecipeViewModel recipeViewModel;
     private Recipe recipe;
-    private OnAddedSuccess onAddedSuccess;
 
-    public FirstRecipeFragment(UserViewModel viewModel) {
+
+    public FirstRecipeFragment(UserViewModel viewModel, RecipeViewModel recipeViewModel) {
         this.viewModel = viewModel;
+        this.recipeViewModel = recipeViewModel;
     }
 
     @Override
@@ -37,21 +36,12 @@ public class FirstRecipeFragment extends BaseFragment<FragmentFirstRecipeBinding
 
     @Override
     protected void initView() {
-        if(recipe==null){
-            recipe= new Recipe();
-        }
-        name = new TextValue(binding.nameOfRecipe).onValueChange(s->recipe.Name=s);
-        description = new TextValue(binding.description).onValueChange(s->recipe.Description=s);
+
+        name = new TextValue(binding.nameOfRecipe).onValueChange(s -> recipe.Name = s);
+        description = new TextValue(binding.description).onValueChange(s -> recipe.Description = s);
         viewModel.isAddRecipe.observe(this, val -> {
             if (val) closeFragment(FirstRecipeFragment.this);
         });
-        onAddedSuccess = () -> {
-
-            recipeViewModel = new ViewModelProvider(FirstRecipeFragment.this).get(RecipeViewModel.class);
-            showToast("Add Success");
-
-        };
-        recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 
         recipeViewModel.recipeLiveData.observe(this, data -> {
             this.recipe = data;
@@ -81,7 +71,7 @@ public class FirstRecipeFragment extends BaseFragment<FragmentFirstRecipeBinding
                     recipe = new Recipe();
                 }
                 recipeViewModel.recipeLiveData.postValue(recipe);
-                addFragment(new SecondRecipeFragment(viewModel, recipeViewModel, onAddedSuccess), android.R.id.content, true);
+                addFragment(new SecondRecipeFragment(viewModel, recipeViewModel), android.R.id.content, true);
                 hideKeyboard();
             }
 
@@ -100,14 +90,11 @@ public class FirstRecipeFragment extends BaseFragment<FragmentFirstRecipeBinding
         if (recipe.Name.isEmpty()) {
             name.onError();
             return false;
-        } else if (recipe.Description==null || recipe.Description.equals("") ) {
+        } else if (recipe.Description == null || recipe.Description.equals("")) {
             description.onError();
             return false;
-        }
-        else return recipeViewModel.imgUri != null;
+        } else return recipeViewModel.imgUri != null;
     }
-
-
 
 
     private void openImagePicker() {

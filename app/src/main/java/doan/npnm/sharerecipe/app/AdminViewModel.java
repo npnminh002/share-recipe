@@ -1,15 +1,14 @@
 package doan.npnm.sharerecipe.app;
 
-import android.os.Build;
+import android.content.ContentResolver;
+import android.net.Uri;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -17,18 +16,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
 import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.database.AppDatabase;
 import doan.npnm.sharerecipe.database.AppDatabaseProvider;
+import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.model.recipe.RecipeStatus;
 import doan.npnm.sharerecipe.utility.Constant;
-import doan.npnm.sharerecipe.interfaces.FetchByID;
 
 public class AdminViewModel extends ViewModel {
     public FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -45,20 +45,35 @@ public class AdminViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Users>> usersLiveData = new MutableLiveData<>();
     public MutableLiveData<Users> userLogin = new MutableLiveData<>();
 
-    public MutableLiveData<ArrayList<Category>> categoryMutableLiveData= new MutableLiveData<>(new ArrayList<>());
+    public MutableLiveData<ArrayList<Category>> categoryMutableLiveData = new MutableLiveData<>(new ArrayList<>());
 
     public AdminViewModel() {
         initRecipeData();
         initGetAuth();
-        initGetRecipe();
+        initCategory();
     }
 
-    private void initGetRecipe() {
+    public void putImgToStorage(StorageReference storageReference, Uri uri, UserViewModel.OnPutImageListener onPutImage) {
+        StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + file_extension(uri));
+
+        UploadTask uploadTask = fileRef.putFile(uri);
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            fileRef.getDownloadUrl().addOnSuccessListener(uri1 -> onPutImage.onComplete(uri1.toString()))
+                    .addOnFailureListener(ex -> onPutImage.onFailure(ex.getMessage()));
+        }).addOnFailureListener(e -> onPutImage.onFailure(e.getMessage()));
+    }
+    private String file_extension(Uri uri) {
+        ContentResolver cr = AppContext.getContext().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+    public void initCategory() {
         ArrayList<Category> categories = new ArrayList<>();
         firestore.collection(Constant.CATEGORY)
                 .get()
                 .addOnCompleteListener(task -> {
-                    for (DocumentSnapshot doc : task.getResult()){
+                    for (DocumentSnapshot doc : task.getResult()) {
                         categories.add(doc.toObject(Category.class));
                     }
                     categoryMutableLiveData.postValue(categories);
@@ -71,11 +86,10 @@ public class AdminViewModel extends ViewModel {
     private void initGetAuth() {
         ArrayList<Users> users = new ArrayList<>();
         firestore.collection(Constant.KEY_USER)
-                .addSnapshotListener((value, error) -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        value.getDocuments().forEach(documentSnapshot -> {
-                            users.add(documentSnapshot.toObject(Users.class));
-                        });
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                        users.add(doc.toObject(Users.class));
                     }
                     usersLiveData.postValue(users);
                 });
