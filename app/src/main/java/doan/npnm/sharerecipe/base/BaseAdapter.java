@@ -40,23 +40,6 @@ public abstract class BaseAdapter<T, VB extends ViewBinding> extends RecyclerVie
         bind(holder.binding, item, position);
     }
 
-    public String formatToCurrency(float value) {
-        Locale locale = new Locale("vi", "VN"); // Set the Vietnamese locale
-        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(locale);
-        return currencyFormat.format(value);
-    }
-    public  String dateFromString(String inputDate) {
-        try {
-            SimpleDateFormat inputDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.US);
-            Date date = inputDateFormat.parse(inputDate);
-
-            SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
-            return outputDateFormat.format(date);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
     @Override
     public int getItemCount() {
         return listItem.size();

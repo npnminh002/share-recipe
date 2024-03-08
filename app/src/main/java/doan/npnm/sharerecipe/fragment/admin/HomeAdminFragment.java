@@ -89,8 +89,8 @@ public class HomeAdminFragment extends BaseFragment<FragmentAdminHomeBinding> {
                         }
 
                         @Override
-                        public void onEdit(Recipe recipe) {
-
+                        public void onClassify(Recipe recipe) {
+                            replaceFullViewFragment(new ClassifyCategoryFragment(recipe,viewModel),android.R.id.content,true);
                         }
 
                         @Override

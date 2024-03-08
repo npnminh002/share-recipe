@@ -68,7 +68,6 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
 
         String key = getData("Key").toString();
         if (key.length() != 0) {
-            showToast(key);
             Category ct = checkIDCategory(key);
             if (ct != null) {
                 binding.edtSearchData.setText(ct.Name);

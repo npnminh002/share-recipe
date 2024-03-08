@@ -25,7 +25,6 @@ import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.databinding.FragmentProfileUserBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
 import doan.npnm.sharerecipe.fragment.user.addrecipe.FirstRecipeFragment;
-import doan.npnm.sharerecipe.fragment.user.addrecipe.ThirdRecipeFragment;
 import doan.npnm.sharerecipe.interfaces.OnRecipeEvent;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
@@ -79,16 +78,17 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
             binding.llProfile.setVisibility(View.VISIBLE);
             binding.llNoProfile.setVisibility(View.GONE);
             viewModel.users.observe(this, users -> {
-                if (!Objects.equals(users.UrlImg, "")) {
-                    loadImage(users.UrlImg, binding.ImgUser);
+                if (users != null) {
+                    if (!Objects.equals(users.UrlImg, "")) {
+                        loadImage(users.UrlImg, binding.ImgUser);
+                    }
+                    binding.txtEmail.setText(users.Email);
+                    binding.userName.setText(users.UserName);
+                    binding.txtRecipe.setText("" + users.Recipe);
+                    binding.txtFollow.setText("" + users.Follow);
+                    binding.txtFollower.setText("" + users.Follower);
+                    binding.txtNickName.setText("#" + users.NickName);
                 }
-                binding.txtEmail.setText(users.Email);
-                binding.userName.setText(users.UserName);
-                binding.txtRecipe.setText("" + users.Recipe);
-                binding.txtFollow.setText("" + users.Follow);
-                binding.txtFollower.setText("" + users.Follower);
-                binding.txtNickName.setText("#" + users.NickName);
-
             });
 
 
@@ -188,18 +188,15 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
             binding.rcvSaveRecipe.setAdapter(saveViewAdapter);
             saveViewAdapter.setItems(loveRecipes);
 
-            viewModel.myRecipeArr.observe(this,data->{
-                if(data.isEmpty()){
+            viewModel.myRecipeArr.observe(this, data -> {
+                if (data.isEmpty()) {
                     binding.txtNo3.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     binding.txtNo3.setVisibility(View.GONE);
-                    binding.txtRecipe.setText(""+data.size());
+                    binding.txtRecipe.setText("" + data.size());
                     myViewAdapter.setItems(data);
                 }
             });
-
-            showToast(viewModel.database.loveRecipeDao().getLoveArr().size());
             binding.rcvMyRecipe.setAdapter(myViewAdapter);
 
         }

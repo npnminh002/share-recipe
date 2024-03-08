@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout5"
         android:layout_width="match_parent"
@@ -174,6 +175,7 @@
                     app:layout_constraintStart_toEndOf="@id/imgUsers"
                     app:layout_constraintTop_toTopOf="parent" />
 
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvRecipe"
                     android:layout_width="match_parent"
@@ -184,7 +186,9 @@
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="2"
                     tools:listitem="@layout/item_recipe_home" />
+
             </LinearLayout>
+
         </androidx.core.widget.NestedScrollView>
 
 

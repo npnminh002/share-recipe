@@ -47,6 +47,7 @@ import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.app.lang.LanguageUtil;
 import doan.npnm.sharerecipe.dialog.LoaddingDialog;
 import doan.npnm.sharerecipe.lib.shared_preference.SharedPreference;
+import doan.npnm.sharerecipe.utility.Constant;
 
 public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActivity {
 
@@ -75,14 +76,22 @@ public abstract class BaseActivity<V extends ViewBinding> extends AppCompatActiv
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
 
-        userViewModel.users.observe(this, users -> {
-            if (users != null) {
-                userViewModel.updateToken(users.UserID);
-            }
-        });
         decorView = getWindow().getDecorView();
         createView();
         OnClick();
+
+        userViewModel.users.observe(this, users -> {
+            if (users != null) {
+                firestore.collection(Constant.KEY_USER)
+                        .document(users.UserID)
+                        .get()
+                        .addOnSuccessListener(documentSnapshot -> userViewModel.updateToken(users.UserID))
+                        .addOnFailureListener(e -> {
+
+                        });
+
+            }
+        });
         LanguageUtil.setupLanguage(this);
 
 

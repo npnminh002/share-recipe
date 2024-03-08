@@ -157,6 +157,7 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
                     Collections.sort(data.Ingredients,((o1, o2) -> String.valueOf(o1.Id).compareTo(String.valueOf(o2.Id))));
                     directionsAdapter.setItems(data.Directions);
                     ingridentsAdapter.setItems(data.Ingredients);
+
                     adapter.setItems(data.ImagePreview);
                     discussionAdapter = new DiscussionAdapter(DiscussType.DISSCUS, new DiscussionAdapter.OnDiscussionEvent() {
                         @Override
@@ -200,7 +201,10 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
                         Discussion dcs = childSnapshot.getValue(Discussion.class);
                         discussions.add(dcs);
                     }
-                    discussionAdapter.setItem(discussions);
+                    if(discussionAdapter!=null){
+                        discussionAdapter.setItem(discussions);
+                    }
+
                 }
             }
 

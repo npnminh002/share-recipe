@@ -275,8 +275,9 @@ public class UserViewModel extends ViewModel {
         ArrayList<String> myRecipe= new ArrayList<>();
         ArrayList<Recipe> rcpList = new ArrayList<>();
         firestore.collection(Constant.RECIPE)
-                .addSnapshotListener((value, error) -> {
-                    for (DocumentSnapshot documentSnapshot : value) {
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
                         if (documentSnapshot.exists()) {
                             Recipe rcp = documentSnapshot.toObject(Recipe.class);
                             if (rcp != null) {

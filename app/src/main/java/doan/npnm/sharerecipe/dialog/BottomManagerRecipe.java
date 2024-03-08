@@ -32,7 +32,7 @@ public class BottomManagerRecipe extends BaseBottomSheet<BottomSheetRecipeManage
         binding.btnDetail.setOnClickListener(v -> event.onDetail(recipe));
         binding.btnAuth.setOnClickListener(v -> event.onAuth(recipe.RecipeAuth));
         binding.btnLoked.setOnClickListener(v -> event.onLocked(recipe));
-        binding.btnEdit.setOnClickListener(v -> event.onEdit(recipe));
+        binding.btnClassify.setOnClickListener(v -> event.onClassify(recipe));
     }
 
     public interface OnBottomSheetEvent{
@@ -40,7 +40,7 @@ public class BottomManagerRecipe extends BaseBottomSheet<BottomSheetRecipeManage
         void onAuth(String authID);
         void onApprove(Recipe recipe);
         void onDelete(Recipe rcp);
-        void onEdit(Recipe recipe);
+        void onClassify(Recipe recipe);
         void onLocked(Recipe recipe);
     }
 
