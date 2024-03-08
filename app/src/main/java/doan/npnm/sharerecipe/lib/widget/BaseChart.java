@@ -1,7 +1,5 @@
 package doan.npnm.sharerecipe.lib.widget;
 
-import static doan.npnm.sharerecipe.app.context.AppContext.getContext;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -16,7 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import doan.npnm.sharerecipe.R;
-import kotlin.jvm.JvmOverloads;
 
 public abstract class BaseChart extends FrameLayout {
 

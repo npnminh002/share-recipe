@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/bg_menu_item_select"
+    android:layout_margin="@dimen/_3ssp"
+    android:layout_height="@dimen/_30sdp">
+    <TextView
+        android:id="@+id/llNameItem"
+        android:layout_centerInParent="true"
+        android:text="@string/recipe"
+        android:textSize="@dimen/_9sdp"
+        android:textColor="@color/appcolor"
+        android:fontFamily="@font/poppins_semibold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>
