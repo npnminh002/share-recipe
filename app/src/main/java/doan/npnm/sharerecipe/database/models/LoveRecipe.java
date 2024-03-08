@@ -10,4 +10,6 @@ public class LoveRecipe {
     public int Id;
     @ColumnInfo(name = "RecipeID")
     public String RecipeID;
+    @ColumnInfo(name = "Recipe")
+    public String Recipe;
 }

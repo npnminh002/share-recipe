@@ -5,9 +5,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.IngridentsAdapter;
@@ -57,7 +55,8 @@ public class ThirdRecipeFragment extends BaseFragment<FragmentThirdRecipeBinding
                 for (Ingredients id : recipe.Ingredients) {
                     if (id.Id == ingredients.Id) {
                         id.Name = ingredients.Name;
-                        break;  }
+                        break;
+                    }
                 }
             }
 
@@ -67,7 +66,8 @@ public class ThirdRecipeFragment extends BaseFragment<FragmentThirdRecipeBinding
                 for (Ingredients id : recipe.Ingredients) {
                     if (id.Id == ingredients.Id) {
                         id.Quantitative = ingredients.Quantitative;
-                        break;  }
+                        break;
+                    }
                 }
             }
 
@@ -86,7 +86,7 @@ public class ThirdRecipeFragment extends BaseFragment<FragmentThirdRecipeBinding
             } else {
                 listDefautIngrident = data.Ingredients;
             }
-            ingridentsAdapter.setItems(recipe.Ingredients);
+            setToView(recipe.Ingredients);
         });
 
     }
@@ -94,8 +94,13 @@ public class ThirdRecipeFragment extends BaseFragment<FragmentThirdRecipeBinding
     private void removeIngridents(Ingredients id, int pos) {
         new ConfirmDialog(ThirdRecipeFragment.this.getContext(), getString(R.string.cf_delete), () -> {
             recipe.Ingredients.remove(pos);
-            ingridentsAdapter.setItems(recipe.Ingredients);
+            setToView(recipe.Ingredients);
         }).show();
+    }
+
+    private void setToView(ArrayList<Ingredients> ingredients) {
+        Collections.sort(ingredients, (o1, o2) -> String.valueOf(o1.Id).compareTo(String.valueOf(o2.Id)));
+        ingridentsAdapter.setItems(ingredients);
     }
 
     @Override
@@ -127,7 +132,7 @@ public class ThirdRecipeFragment extends BaseFragment<FragmentThirdRecipeBinding
         int index = recipe.Ingredients.size() + 1;
         Ingredients newIngredient = new Ingredients(index, getString(R.string.ingredients) + " " + index, 0f);
         recipe.Ingredients.add(newIngredient);
-        Collections.sort(recipe.Ingredients, (o1, o2) -> String.valueOf(o2.Id).compareTo(String.valueOf(o1.Id)));
+
         recipeViewModel.recipeLiveData.postValue(recipe);
     }
 

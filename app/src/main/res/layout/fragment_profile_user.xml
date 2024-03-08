@@ -298,7 +298,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="@string/save_recipes"
+                    android:text="@string/love_recipe"
                     android:textColor="@color/textcolor"
                     android:textSize="@dimen/_13sdp"
                     app:layout_constraintEnd_toEndOf="parent"

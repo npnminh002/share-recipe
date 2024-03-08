@@ -59,9 +59,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         userViewModel.searchKey.observe(this, key -> {
             if (!key.isEmpty()) {
                 this.key = key;
-                userViewModel.database.searchDao().addRecentView(new Search() {{
-                    CurrentKey = key;
-                }});
                 binding.bottomNavigation.setSelectedItemId(R.id.icon_search_user);
             }
 

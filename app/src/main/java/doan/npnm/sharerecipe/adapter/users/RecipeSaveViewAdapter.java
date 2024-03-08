@@ -6,12 +6,12 @@ import android.view.ViewGroup;
 import java.util.Objects;
 
 import doan.npnm.sharerecipe.R;
-import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.base.BaseAdapter;
+import doan.npnm.sharerecipe.database.models.LoveRecipe;
 import doan.npnm.sharerecipe.databinding.ItemRecipeRecentBinding;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
-public class RecipeSaveViewAdapter extends BaseAdapter<SaveRecipe, ItemRecipeRecentBinding> {
+public class RecipeSaveViewAdapter extends BaseAdapter<LoveRecipe, ItemRecipeRecentBinding> {
 
     final OnRecipeEvent event;
 
@@ -25,24 +25,26 @@ public class RecipeSaveViewAdapter extends BaseAdapter<SaveRecipe, ItemRecipeRec
     }
 
     @Override
-    protected void bind(doan.npnm.sharerecipe.databinding.ItemRecipeRecentBinding binding, SaveRecipe recent, int position) {
+    protected void bind(doan.npnm.sharerecipe.databinding.ItemRecipeRecentBinding binding, LoveRecipe recent, int position) {
         Recipe item = new Recipe().fromJson(recent.Recipe);
 
-        binding.txtTimeCook.setText((item.CookTime.Time + item.CookTime.TimeType).equals("s") ? "second" : Objects.equals(item.CookTime.TimeType, "m") ? "minute" : "hour");
-        binding.chefName.setText(item.Name);
-        binding.llSaveRecipe.setOnClickListener(v -> {
-            event.onRemove(item,position);
-        });
+        if (item != null) {
+            binding.txtTimeCook.setText((item.CookTime.Time + item.CookTime.TimeType).equals("s") ? "second" : Objects.equals(item.CookTime.TimeType, "m") ? "minute" : "hour");
+            binding.chefName.setText(item.Name);
+            binding.llSaveRecipe.setOnClickListener(v -> {
+                event.onRemove(item, position);
+            });
 
-        binding.llSaveRecipe.setImageResource(R.drawable.ic_delete_outline);
-        binding.getRoot().setOnClickListener(v -> event.onView(item));
-        loadImage(item.ImgUrl, binding.imgChef);
+            binding.llSaveRecipe.setImageResource(R.drawable.ic_delete_outline);
+            binding.getRoot().setOnClickListener(v -> event.onView(item));
+            loadImage(item.ImgUrl, binding.imgChef);
+        }
 
     }
 
     public interface OnRecipeEvent {
         void onView(Recipe rcp);
 
-        void onRemove(Recipe recipe,int pos);
+        void onRemove(Recipe recipe, int pos);
     }
 }

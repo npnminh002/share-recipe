@@ -216,8 +216,10 @@ public class UserViewModel extends ViewModel {
                 .get()
                 .addOnCompleteListener(task -> {
                     for (DataSnapshot doc : task.getResult().getChildren()) {
+
                         database.loveRecipeDao().saveNewLove(new LoveRecipe() {{
                             RecipeID = doc.getKey();
+                            Recipe= doc.getValue().toString();
                         }});
                     }
                 })
@@ -264,11 +266,13 @@ public class UserViewModel extends ViewModel {
 
 
     public MutableLiveData<ArrayList<Users>> recipeAuth = new MutableLiveData<>();
-    public ArrayList<String> myRecipeArr = new ArrayList<>();
+    public MutableLiveData<ArrayList<String>> myRecipeArr = new MutableLiveData<>(new ArrayList<>());
 
 
     public void onGetRecipeData() {
         recipeLiveData.postValue(new ArrayList<>());
+        String uid= auth.getCurrentUser().getUid();
+        ArrayList<String> myRecipe= new ArrayList<>();
         ArrayList<Recipe> rcpList = new ArrayList<>();
         firestore.collection(Constant.RECIPE)
                 .addSnapshotListener((value, error) -> {
@@ -276,6 +280,9 @@ public class UserViewModel extends ViewModel {
                         if (documentSnapshot.exists()) {
                             Recipe rcp = documentSnapshot.toObject(Recipe.class);
                             if (rcp != null) {
+                                if(rcp.RecipeAuth.equals(uid)){
+                                    myRecipe.add(rcp.toJson());
+                                }
                                 if(rcp.RecipeStatus== RecipeStatus.PREVIEW){
                                     rcpList.add(rcp);
                                 }
@@ -291,6 +298,7 @@ public class UserViewModel extends ViewModel {
                         }
                     }
                     recipeLiveData.postValue(rcpList);
+                    myRecipeArr.postValue(myRecipe);
                 });
     }
 
@@ -354,11 +362,12 @@ public class UserViewModel extends ViewModel {
         fbDatabase.getReference(Constant.LOVE)
                 .child(users.getValue().UserID)
                 .child(rcp.Id)
-                .setValue(rcp.Id)
+                .setValue(rcp.toJson())
                 .addOnSuccessListener(unused -> {
                     if(!database.loveRecipeDao().checkExist(rcp.Id)){
                         database.loveRecipeDao().saveNewLove(new LoveRecipe(){{
                             RecipeID= rcp.Id;
+                            Recipe= rcp.toJson();
                         }});
 
                         firestore.collection(Constant.RECIPE)

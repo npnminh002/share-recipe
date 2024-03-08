@@ -15,6 +15,7 @@
         android:background="@drawable/bg_input_start_disable"
         android:backgroundTint="@color/aliceblue"
         android:paddingStart="@dimen/_6sdp"
+        android:textColorHint="@color/textcolor"
         android:textColor="@color/textcolor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout"

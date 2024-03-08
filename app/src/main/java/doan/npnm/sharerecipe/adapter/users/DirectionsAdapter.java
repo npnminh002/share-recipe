@@ -74,11 +74,14 @@ public class DirectionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public void onBind(Directions item, int position) {
-            binding.ingridenName.setText(item.Name);
+            binding.ingridenName.setHint(item.Name);
             binding.ingridenName.setOnFocusChangeListener((v, hasFocus) -> {
                 if(!hasFocus){
-                    item.Name=binding.ingridenName.getText().toString();
-                    event.onNameChange(item);
+                    if(binding.ingridenName.getText().length()!=0){
+                        item.Name=binding.ingridenName.getText().toString();
+                        event.onNameChange(item);
+                    }
+
                 }
             });
 

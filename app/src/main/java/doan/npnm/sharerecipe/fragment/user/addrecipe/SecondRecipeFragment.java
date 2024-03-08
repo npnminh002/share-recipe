@@ -38,8 +38,6 @@ public class SecondRecipeFragment extends BaseFragment<FragmentSecondRecipeBindi
     public PrepareTime prepareTime;
     public ArrayList<String> listTimeType;
     public ArrayList<String> listLever;
-    private CategoryAdapter categoryAdapter;
-
     @Override
     protected void initView() {
         viewModel.isAddRecipe.observe(this, val -> {
@@ -63,30 +61,25 @@ public class SecondRecipeFragment extends BaseFragment<FragmentSecondRecipeBindi
             } else {
                 cookTime = data.CookTime;
             }
+            if(prepareTime.Time==null||prepareTime.Time.equals("0")||prepareTime.Time==""){
+                binding.timePrepare.setHint("0");
+            }
+            else {
+                binding.timePrepare.setText(prepareTime.Time);
+            }
 
-            binding.timePrepare.setText(prepareTime.Time == null ? "0" : prepareTime.Time);
+            if(cookTime.Time==null||cookTime.Time.equals("0")||prepareTime.Time==""){
+                binding.timeCook.setHint("0");
+            }
+            else {
+                binding.timeCook.setText(cookTime.Time);
+            }
             binding.selectMinutePP.setText(prepareTime.TimeType == null ? "s" : prepareTime.TimeType);
-            binding.timeCook.setText(cookTime.Time == null ? "0" : cookTime.Time);
             binding.selectMinutePP.setText(cookTime.TimeType == null ? "s" : cookTime.TimeType);
             binding.txtLever.setText(data.Level == null ? "" : data.Level);
 
         });
-        categoryAdapter = new CategoryAdapter(category -> {
-            recipeViewModel.categoty.postValue(category);
-        });
-        binding.rcvCategory.setAdapter(categoryAdapter);
-        viewModel.categoriesArr.observe(this, categories -> {
-            if (!categories.isEmpty()) {
-                recipeViewModel.categoty.observe(this, data -> {
-                    if (data != null) {
-                        categoryAdapter.currentPosition = categories.indexOf(data);
-                    } else {
-                        categoryAdapter.currentPosition = -1;
-                    }
-                });
-                categoryAdapter.setItems(viewModel.categoriesArr.getValue());
-            }
-        });
+
 
     }
 
@@ -133,11 +126,6 @@ public class SecondRecipeFragment extends BaseFragment<FragmentSecondRecipeBindi
             showToast(getString(R.string.time_dif_0));
             return false;
         }
-        if(recipeViewModel.categoty.getValue()==null){
-            showToast(getString(R.string.no_category));
-            return false;
-        }
-
         return true;
     }
 

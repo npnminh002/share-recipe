@@ -167,6 +167,9 @@ public class PreviewRecipeFragment extends BaseFragment<FragmentPreviewRecipeBin
                     showToast("Add data success full");
                     loaddingDialog.dismiss();
                     viewModel.isAddRecipe.postValue(true);
+//                    ArrayList<String> arrAdd= viewModel.myRecipeArr.getValue();
+//                    arrAdd.add(value.toJson());
+//                    viewModel.myRecipeArr.postValue(arrAdd);
                     postNotification(recipe);
 
                 }).addOnFailureListener(e -> {

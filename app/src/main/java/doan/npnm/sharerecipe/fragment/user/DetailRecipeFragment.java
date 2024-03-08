@@ -36,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.DirectionsAdapter;
@@ -149,6 +150,9 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
                     loadImage(data.ImgUrl, binding.imgProduct);
 
                     binding.foodName.setText(data.Name == null ? "" : data.Name);
+                    binding.timeCook.setText(data.CookTime.Time +" "+( data.CookTime.TimeType.equals("s") ? "second" : Objects.equals(data.CookTime.TimeType, "m") ? "minute" : "hour"));
+                    binding.txtIngrident.setText(""+data.Ingredients.size()+ " "+ getString(R.string.ingredients));
+
                     Collections.sort(data.Directions,((o1, o2) -> String.valueOf(o1.Id).compareTo(String.valueOf(o2.Id))));
                     Collections.sort(data.Ingredients,((o1, o2) -> String.valueOf(o1.Id).compareTo(String.valueOf(o2.Id))));
                     directionsAdapter.setItems(data.Directions);
@@ -228,7 +232,7 @@ public class DetailRecipeFragment extends BaseFragment<FragmentDetailRecipeBindi
 
         binding.backIcon2.setOnClickListener(v -> closeFragment(DetailRecipeFragment.this));
         binding.icSendDiscuss.setOnClickListener(v -> {
-            if (us == null) {
+            if (us != null) {
                 sendDisscuss();
             } else {
                 new NoUserDialog(requireContext(), () -> {

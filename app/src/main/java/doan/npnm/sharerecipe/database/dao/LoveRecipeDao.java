@@ -14,7 +14,7 @@ import doan.npnm.sharerecipe.database.models.SaveRecipe;
 public interface LoveRecipeDao {
 
     @Query("SELECT * FROM LoveRecipe")
-    List<SaveRecipe> getLoveArr();
+    List<LoveRecipe> getLoveArr();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void saveNewLove(LoveRecipe recipe);

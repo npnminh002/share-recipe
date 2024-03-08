@@ -5,6 +5,9 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.DirectionsAdapter;
@@ -66,18 +69,24 @@ public class FourRecipeFragment extends BaseFragment<FragmentFourRecipeBinding> 
                         new Directions(2, getContext().getString(R.string.directions) + " 2"),
                         new Directions(3, getContext().getString(R.string.directions) + " 3")
                 ));
+                data.Directions=listDefDirection;
             } else {
                 listDefDirection = data.Directions;
             }
-            directionsAdapter.setItems(listDefDirection);
+            setDataToView(data.Directions);
         });
 
+    }
+
+    private void setDataToView(ArrayList<Directions> directions) {
+        Collections.sort(directions, (o1, o2) -> String.valueOf(o1.Id).compareTo(String.valueOf(o2.Id)));
+        directionsAdapter.setItems(directions);
     }
 
     private void removeDirection(Directions id, int pos) {
         new ConfirmDialog(FourRecipeFragment.this.getContext(), getString(R.string.cf_delete), () -> {
             listDefDirection.remove(pos);
-            directionsAdapter.setItems(listDefDirection);
+            setDataToView(listDefDirection);
         }).show();
     }
 
@@ -94,7 +103,7 @@ public class FourRecipeFragment extends BaseFragment<FragmentFourRecipeBinding> 
         binding.icAddIngrident.setOnClickListener(v -> {
             int index = listDefDirection.size() + 1;
             listDefDirection.add(0, new Directions(index, getString(R.string.ingredients) + " " + index));
-            directionsAdapter.setItems(listDefDirection);
+           setDataToView(listDefDirection);
         });
 
         binding.btnPrev.setOnClickListener(v -> {

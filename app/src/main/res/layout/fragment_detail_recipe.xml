@@ -56,6 +56,7 @@
             android:backgroundTint="#8ABABABA"
             android:layout_marginEnd="@dimen/_8sdp"
             android:padding="@dimen/_3sdp"
+            android:visibility="gone"
             android:src="@drawable/ic_bookmark_add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/llReport"
@@ -175,7 +176,7 @@
                             android:src="@drawable/ic_access_time" />
 
                         <TextView
-                            android:id="@+id/recipeView"
+                            android:id="@+id/timeCook"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"

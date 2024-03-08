@@ -71,24 +71,27 @@ public class IngridentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public void onBind(Ingredients item, int position) {
-            binding.ingridenName.setText(item.Name);
-            binding.quantitive.setText("" + item.Quantitative);
+            binding.ingridenName.setHint(item.Name);
+            binding.quantitive.setHint("" + item.Quantitative);
 
             binding.ingridenName.setOnFocusChangeListener((v, hasFocus) -> {
                 if (!hasFocus) {
-                    item.Name = binding.ingridenName.getText().toString();
-                    event.onNameChange(item);
+                    if (binding.ingridenName.getText().length() != 0) {
+                        item.Name = binding.ingridenName.getText().toString();
+                        event.onNameChange(item);
+                    }
+
                 }
             });
-
             binding.icRemoveItem.setOnClickListener(v -> {
                 event.onRemove(item, position);
             });
             binding.quantitive.setOnFocusChangeListener((v, hasFocus) -> {
                 if (!hasFocus) {
-
-                    item.Quantitative = Float.parseFloat(binding.quantitive.getText().toString());
-                    event.onNameChange(item);
+                    if (binding.quantitive.getText().length() != 0) {
+                        item.Quantitative = Float.parseFloat(binding.quantitive.getText().toString());
+                        event.onNameChange(item);
+                    }
                 }
             });
         }

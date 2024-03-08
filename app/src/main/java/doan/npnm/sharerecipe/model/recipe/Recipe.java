@@ -21,7 +21,7 @@ public class Recipe implements Serializable {
     public ArrayList<Directions> Directions = new ArrayList<>();
 
     public int View = 0, Love = 0, Share = 0;
-    public RecipeStatus RecipeStatus = doan.npnm.sharerecipe.model.recipe.RecipeStatus.PREVIEW;
+    public RecipeStatus RecipeStatus = doan.npnm.sharerecipe.model.recipe.RecipeStatus.WAIT_CONFIRM;
     public ArrayList<String> Category = new ArrayList<>();
     public ArrayList<String> ImagePreview = new ArrayList<>();
     public ArrayList<String> History = new ArrayList<>();

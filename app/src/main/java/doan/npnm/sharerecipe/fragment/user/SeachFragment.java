@@ -25,13 +25,12 @@ import doan.npnm.sharerecipe.adapter.users.SearchCategoryAdapter;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.database.models.RecentView;
-import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.database.models.Search;
+import doan.npnm.sharerecipe.databinding.FragmentSearchBinding;
 import doan.npnm.sharerecipe.interfaces.OnGetEvent;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
-import doan.npnm.sharerecipe.databinding.FragmentSearchBinding;
 
 public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
     private UserViewModel viewModel;
@@ -69,14 +68,13 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
 
         String key = getData("Key").toString();
         if (key.length() != 0) {
-            Category ct = checkCategory(key);
-
+            showToast(key);
+            Category ct = checkIDCategory(key);
             if (ct != null) {
-                binding.edtSearchData.setText(key);
+                binding.edtSearchData.setText(ct.Name);
             } else {
                 binding.edtSearchData.setText(key);
             }
-
             searchValue(key, this::setToView);
         }
         binding.rcvManufact.setAdapter(categoryAdapter);
@@ -98,7 +96,7 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
             }
 
             @Override
-            public void onLove(Recipe rcp,boolean isLove) {
+            public void onLove(Recipe rcp, boolean isLove) {
                 if (viewModel.auth.getCurrentUser() == null) {
                     showToast(getString(R.string.no_us));
                 } else {
@@ -114,10 +112,20 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
 
     }
 
-    private Category checkCategory(String key) {
+    private Category checkIDCategory(String key) {
         ArrayList<Category> categories = viewModel.categoriesArr.getValue();
         for (Category ct : categories) {
             if (ct.Id.equals(key)) {
+                return ct;
+            }
+        }
+        return null;
+    }
+
+    private Category checkCategory(String key) {
+        ArrayList<Category> categories = viewModel.categoriesArr.getValue();
+        for (Category ct : categories) {
+            if (ct.Name.equals(key)) {
                 return ct;
             }
         }
@@ -146,7 +154,6 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode) {
             case REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == RESULT_OK && null != data) {
@@ -157,21 +164,19 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
                 }
                 break;
             }
-
         }
     }
 
     @Override
     public void OnClick() {
         binding.icSearch.setOnClickListener(v -> {
-            viewModel.database.searchDao().addRecentView(new Search() {{
-                CurrentKey = binding.edtSearchData.getText().toString();
-            }});
             searchValue(binding.edtSearchData.getText().toString(), this::setToView);
         });
 
         binding.icBack.setOnClickListener(v -> {
+            searchAdapter.setItems((ArrayList<Search>) viewModel.database.searchDao().getListCurrent());
             binding.llResult.setVisibility(View.GONE);
+
         });
         binding.icInputSpeech.setOnClickListener(v -> {
             promptSpeechInput();
@@ -179,6 +184,17 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
     }
 
     private void setToView(ArrayList<Recipe> data) {
+        String key = binding.edtSearchData.toString();
+        Category ct = checkCategory(key);
+        if (ct != null) {
+            viewModel.database.searchDao().addRecentView(new Search() {{
+                CurrentKey = ct.Name;
+            }});
+        } else {
+            viewModel.database.searchDao().addRecentView(new Search() {{
+                CurrentKey = binding.edtSearchData.getText().toString();
+            }});
+        }
         hideKeyboard();
         binding.llResult.setVisibility(View.VISIBLE);
         binding.txtResult.setText(binding.edtSearchData.getText().toString());

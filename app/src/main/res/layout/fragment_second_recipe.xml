@@ -122,6 +122,7 @@
                         android:weightSum="3">
 
                         <EditText
+
                             android:id="@+id/timePrepare"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -131,11 +132,11 @@
                             android:paddingVertical="@dimen/_3sdp"
                             android:paddingStart="@dimen/_12sdp"
                             android:paddingEnd="@dimen/_3sdp"
-                            android:text="0"
+                            android:hint="0"
                             android:inputType="number"
                             android:textAlignment="textEnd"
                             android:textColor="@color/black"
-                            android:textColorHint="@color/darkgray"
+                            android:textColorHint="@color/textcolor"
                             android:textSize="@dimen/_14sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/selectMinutePP"
@@ -213,11 +214,11 @@
                             android:paddingVertical="@dimen/_3sdp"
                             android:paddingStart="@dimen/_12sdp"
                             android:paddingEnd="@dimen/_3sdp"
-                            android:text="10"
+                            android:hint="0"
                             android:inputType="number"
                             android:textAlignment="textEnd"
                             android:textColor="@color/black"
-                            android:textColorHint="@color/darkgray"
+                            android:textColorHint="@color/textcolor"
                             android:textSize="@dimen/_14sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/selectMinuteCook"
@@ -322,24 +323,6 @@
                             app:tint="#BFBFBF" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
-
-                <TextView
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:text="@string/category"
-                    android:textColor="@color/textcolor"
-                    android:textSize="@dimen/_16sdp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="2"
-                    android:orientation="vertical"
-                    android:id="@+id/rcvCategory"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:layout_height="match_parent"/>
 
             </LinearLayout>
         </ScrollView>

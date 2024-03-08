@@ -401,17 +401,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_semibold"
-                        android:text="@string/optional"
+                        android:text="@string/gallery"
                         android:textColor="@color/textcolor"
                         android:textSize="@dimen/_16sdp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="@string/gallery"
-                        android:textColor="@color/textcolor"
-                        android:textSize="@dimen/_12sdp" />
+
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/listImg"
