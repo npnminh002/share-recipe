@@ -47,7 +47,6 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
     SearchCategoryAdapter categoryAdapter;
     SearchAdapter searchAdapter;
     RecipeAdapter recipeAdapter;
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initView() {
