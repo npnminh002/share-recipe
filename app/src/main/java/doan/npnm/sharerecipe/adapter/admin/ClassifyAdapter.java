@@ -32,12 +32,14 @@ public class ClassifyAdapter extends BaseAdapter<Category, ItemCategoryClassifyB
     protected void bind(ItemCategoryClassifyBinding binding, Category item, int position) {
         binding.imgPreivew.loadImage(item.Image);
         binding.txtName.setText(item.Name);
-        if(classifyManager==ClassifyManager.ADD){
-            binding.btnAdd.setOnClickListener(v -> eventCategory.onAdd(item));
+        if(classifyManager==ClassifyManager.REMOVE){
+            binding.btnAdd.setOnClickListener(v -> eventCategory.onRemove(item));
+            binding.btnAdd.setImageResource(R.drawable.ic_delete_outline);
         }
         else {
-            binding.btnAdd.setImageResource(R.drawable.ic_delete_outline);
-            eventCategory.onRemove(item);
+
+            binding.btnAdd.setOnClickListener(v -> eventCategory.onAdd(item));
+
         }
 
     }

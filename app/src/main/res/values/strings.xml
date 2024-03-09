@@ -135,4 +135,5 @@
     <string name="edit">Edit</string>
     <string name="love_recipe">Love recipe</string>
     <string name="classify">Classify</string>
+    <string name="last_loggin">Last Login</string>
 </resources>

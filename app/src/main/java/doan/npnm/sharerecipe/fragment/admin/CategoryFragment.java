@@ -100,9 +100,8 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
             binding.btnRemove.setClickable(false);
             binding.bntSave.setClickable(false);
             selectCategory.postValue(null);
-            viewModel.initCategory();
+            viewModel.ongetCategory();
         });
-
         binding.btnAdd.setOnClickListener(v -> {
             addNewCategory();
         });
@@ -150,7 +149,7 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
                                 .set(ct)
                                 .addOnSuccessListener(documentReference -> {
                                     showToast("Add new  success");
-                                    viewModel.initCategory();
+                                    viewModel.ongetCategory();
 
                                 });
                         initView();
@@ -174,7 +173,7 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
                                     .update(obj)
                                     .addOnSuccessListener(unused -> {
                                         showToast("Update success");
-                                        viewModel.initCategory();
+                                        viewModel.ongetCategory();
                                     }).addOnFailureListener(e -> showToast(e.getMessage()));
                         }
 
@@ -191,7 +190,7 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
                             .update("Name", binding.nameCategory.getText().toString().trim())
                             .addOnSuccessListener(unused -> {
                                 showToast("Update success");
-                                viewModel.initCategory();
+                                viewModel.ongetCategory();
 
                             }).addOnFailureListener(e -> showToast(e.getMessage()));
                     initView();
@@ -218,7 +217,7 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
                         .delete()
                         .addOnCompleteListener(task -> {
                             showToast("Delete success");
-                            viewModel.initCategory();
+                            viewModel.ongetCategory();
                             initView();
                         })
                         .addOnFailureListener(e -> {

@@ -349,7 +349,6 @@
             android:layout_gravity="center"
             android:paddingHorizontal="@dimen/_5sdp"
             android:paddingVertical="@dimen/_1sdp"
-            android:weightSum="3"
             app:cornerRadius="0dp"
             app:strokeColor="#ccc"
             app:strokeWidth="0sp">
@@ -362,7 +361,6 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_marginEnd="@dimen/_6sdp"
-
                 android:background="@drawable/bg_menu_item_select"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/detail"

@@ -12,9 +12,11 @@ import doan.npnm.sharerecipe.app.AdminViewModel;
 import doan.npnm.sharerecipe.base.BaseActivity;
 import doan.npnm.sharerecipe.databinding.ActivityAdminMainBinding;
 import doan.npnm.sharerecipe.fragment.admin.CategoryFragment;
+import doan.npnm.sharerecipe.fragment.admin.ClassifyCategoryFragment;
 import doan.npnm.sharerecipe.fragment.admin.HomeAdminFragment;
 import doan.npnm.sharerecipe.fragment.admin.ReportAdminFragment;
 import doan.npnm.sharerecipe.fragment.admin.UsersAdminFragment;
+import doan.npnm.sharerecipe.model.recipe.Recipe;
 
 public class AdminMainActivity extends BaseActivity<ActivityAdminMainBinding> {
 
