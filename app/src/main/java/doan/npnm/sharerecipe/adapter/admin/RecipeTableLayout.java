@@ -44,13 +44,16 @@ public class RecipeTableLayout extends BaseTableAdapter<Recipe, RowAdminRecipeVi
     protected void onBind(RowAdminRecipeViewBinding binding, Recipe item, int pos) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (item.RecipeStatus == RecipeStatus.LOCKED) {
-                binding.getRoot().setBackgroundColor(Color.parseColor("#50FF0000"));
+                binding.getRoot().setBackgroundColor(Color.parseColor("#50FC7D13"));
             }
             else if(item.RecipeStatus==RecipeStatus.WAS_REPORT){
                 binding.getRoot().setBackgroundColor(Color.parseColor("#50FC8713"));
             }
             else if(item.RecipeStatus==RecipeStatus.WAIT_CONFIRM){
                 binding.getRoot().setBackgroundColor(Color.parseColor("#5013FCEA"));
+            }
+            else if(item.RecipeStatus== RecipeStatus.DELETED) {
+                binding.getRoot().setBackgroundColor(Color.parseColor("#50FF0000"));
             }
         }
 
@@ -80,8 +83,6 @@ public class RecipeTableLayout extends BaseTableAdapter<Recipe, RowAdminRecipeVi
                 getSatuts(item.RecipeStatus));
         binding.btnManager.setOnClickListener(v -> eventSelect.onManager(item));
         binding.btnView.setOnClickListener(v -> eventSelect.onView(item));
-//        binding.getRoot().setOnClickListener(v -> eventSelect.onView(item));
-
     }
 
     public interface OnEventSelect {

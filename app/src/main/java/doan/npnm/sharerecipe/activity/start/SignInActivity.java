@@ -54,6 +54,7 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
         auth.signInWithEmailAndPassword(email, pass).addOnSuccessListener(authResult -> {
             userViewModel.getDataFromUserId(authResult.getUser().getUid());
             userViewModel.firstStartApp(authResult.getUser().getUid());
+
             showToast("Sign-in successful");
         }).addOnFailureListener(e -> {
 

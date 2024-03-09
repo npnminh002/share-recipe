@@ -1,30 +1,24 @@
 package doan.npnm.sharerecipe.app;
 
 import android.content.ContentResolver;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -32,24 +26,26 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.Executors;
 
-import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.database.AppDatabase;
 import doan.npnm.sharerecipe.database.AppDatabaseProvider;
 import doan.npnm.sharerecipe.database.models.Follower;
 import doan.npnm.sharerecipe.database.models.LoveRecipe;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
-import doan.npnm.sharerecipe.lib.BitmapUtils;
+import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.model.recipe.RecipeStatus;
 import doan.npnm.sharerecipe.utility.Constant;
-import doan.npnm.sharerecipe.interfaces.FetchByID;
 
 public class UserViewModel extends ViewModel {
     public FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -60,7 +56,7 @@ public class UserViewModel extends ViewModel {
 
     public MutableLiveData<Users> users = new MutableLiveData<>();
 
-    public MutableLiveData<Boolean> isSingApp= new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> isSingApp = new MutableLiveData<>(false);
 
     public MutableLiveData<Boolean> isAddRecipe = new MutableLiveData<>(false);
 
@@ -69,11 +65,11 @@ public class UserViewModel extends ViewModel {
     public AppDatabase database = AppDatabaseProvider.getDatabase();
     public ArrayList<Uri> listDeleted = new ArrayList<>();
 
-    public MutableLiveData<String> searchKey= new MutableLiveData<>("");
+    public MutableLiveData<String> searchKey = new MutableLiveData<>("");
 
     public MutableLiveData<ArrayList<Category>> categoriesArr = new MutableLiveData<>();
 
-    public MutableLiveData<Recipe> onChangeLove= new MutableLiveData<>(null);
+    public MutableLiveData<Recipe> onChangeLove = new MutableLiveData<>(null);
 
     public UserViewModel() {
         if (auth.getCurrentUser() != null) {
@@ -85,7 +81,7 @@ public class UserViewModel extends ViewModel {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 new Thread(this::onGetAuth).start();
             }
-        }else {
+        } else {
             new Thread(() -> {
                 ongetCategory();
                 onGetRecipeDataNoUser();
@@ -104,7 +100,7 @@ public class UserViewModel extends ViewModel {
                         if (documentSnapshot.exists()) {
                             Recipe rcp = documentSnapshot.toObject(Recipe.class);
                             if (rcp != null) {
-                                if(rcp.RecipeStatus== RecipeStatus.PREVIEW){
+                                if (rcp.RecipeStatus == RecipeStatus.PREVIEW) {
                                     rcpList.add(rcp);
                                 }
 
@@ -121,7 +117,7 @@ public class UserViewModel extends ViewModel {
                 });
     }
 
-    private  void ongetCategory() {
+    private void ongetCategory() {
         ArrayList<Category> categories = new ArrayList<>();
         firestore.collection(Constant.CATEGORY)
                 .get().addOnCompleteListener(task -> {
@@ -203,8 +199,67 @@ public class UserViewModel extends ViewModel {
         this.isFollow.postValue(isFollow);
     }
 
+    private  String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        }
+        return capitalize(manufacturer) + " " + model;
+    }
+
+    private  String capitalize(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
+        }
+        char[] arr = str.toCharArray();
+        boolean capitalizeNext = true;
+        String phrase = "";
+        for (char c : arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+                phrase += Character.toUpperCase(c);
+                capitalizeNext = false;
+                continue;
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+            }
+            phrase += c;
+        }
+        return phrase;
+    }
+
+    public String formatToCurrency(float value) {
+        Locale locale = new Locale("vi", "VN"); // Set the Vietnamese locale
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(locale);
+        return currencyFormat.format(value);
+    }
+
+    public String formatTimes(Object timestamp) {
+        if (timestamp instanceof Long) {
+            long timestampLong = (Long) timestamp;
+            Date date = new Date(timestampLong);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+            return sdf.format(date);
+        }
+        return "";
+    }
+
+    public String getTimeNow() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date());
+    }
+
 
     public void firstStartApp(String uId) {
+
+        ArrayList<String> hstr= getUsers().getValue().History;
+        hstr.add("Login at: "+getDeviceName()+" at: "+getTimeNow());
+        firestore.collection(Constant.KEY_USER)
+                        .document(uId)
+                                .update("History",hstr)
+                                        .addOnSuccessListener(unused -> {
+
+                                        });
         onLoadFollower(uId);
         loadSaveRecipe(uId);
         loadOnLoveRecipe(uId);
@@ -219,7 +274,7 @@ public class UserViewModel extends ViewModel {
 
                         database.loveRecipeDao().saveNewLove(new LoveRecipe() {{
                             RecipeID = doc.getKey();
-                            Recipe= doc.getValue().toString();
+                            Recipe = doc.getValue().toString();
                         }});
                     }
                 })
@@ -271,8 +326,8 @@ public class UserViewModel extends ViewModel {
 
     public void onGetRecipeData() {
         recipeLiveData.postValue(new ArrayList<>());
-        String uid= auth.getCurrentUser().getUid();
-        ArrayList<String> myRecipe= new ArrayList<>();
+        String uid = auth.getCurrentUser().getUid();
+        ArrayList<String> myRecipe = new ArrayList<>();
         ArrayList<Recipe> rcpList = new ArrayList<>();
         firestore.collection(Constant.RECIPE)
                 .get()
@@ -281,10 +336,10 @@ public class UserViewModel extends ViewModel {
                         if (documentSnapshot.exists()) {
                             Recipe rcp = documentSnapshot.toObject(Recipe.class);
                             if (rcp != null) {
-                                if(rcp.RecipeAuth.equals(uid)){
+                                if (rcp.RecipeAuth.equals(uid)&&rcp.RecipeStatus!=RecipeStatus.DELETED) {
                                     myRecipe.add(rcp.toJson());
                                 }
-                                if(rcp.RecipeStatus== RecipeStatus.PREVIEW){
+                                if (rcp.RecipeStatus == RecipeStatus.PREVIEW) {
                                     rcpList.add(rcp);
                                 }
 
@@ -329,7 +384,6 @@ public class UserViewModel extends ViewModel {
     }
 
 
-
     public void putImgToStorage(StorageReference storageReference, Uri uri, OnPutImageListener onPutImage) {
         StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + file_extension(uri));
 
@@ -360,45 +414,57 @@ public class UserViewModel extends ViewModel {
     }
 
     public void onLoveRecipe(Recipe rcp) {
+        database.loveRecipeDao().saveNewLove(new LoveRecipe() {{
+            RecipeID = rcp.Id;
+            Recipe = rcp.toJson();
+        }});
         fbDatabase.getReference(Constant.LOVE)
                 .child(users.getValue().UserID)
                 .child(rcp.Id)
-                .setValue(rcp.toJson())
+                .setValue(rcp.Id)
                 .addOnSuccessListener(unused -> {
-                    if(!database.loveRecipeDao().checkExist(rcp.Id)){
-                        database.loveRecipeDao().saveNewLove(new LoveRecipe(){{
-                            RecipeID= rcp.Id;
-                            Recipe= rcp.toJson();
-                        }});
+                    if (!database.loveRecipeDao().checkExist(rcp.Id)) {
+                        Executors.newCachedThreadPool().execute(() -> {
 
-                        firestore.collection(Constant.RECIPE)
-                                .document(rcp.Id)
-                                .update("Love",rcp.Love+1)
-                                .addOnFailureListener(e -> {
-                                    Log.d("TAG", "onLoveRecipe: "+e.getMessage());
-                                });
+                            firestore.collection(Constant.RECIPE)
+                                    .document(rcp.Id)
+                                    .update("Love", FieldValue.increment(1))
+                                    .addOnFailureListener(e -> {
+                                        Log.d("TAG", "onLoveRecipe: " + e.getMessage());
+                                    });
+                        });
                     }
-
                 })
                 .addOnFailureListener(e -> showToast(e.getMessage()));
     }
 
+
     public void onUnlove(Recipe rcp) {
+        database.loveRecipeDao().unLove(rcp.Id);
         fbDatabase.getReference(Constant.LOVE)
                 .child(users.getValue().UserID)
                 .child(rcp.Id)
                 .removeValue((error, ref) -> {
-                    if(database.loveRecipeDao().checkExist(rcp.Id)){
-                        database.loveRecipeDao().unLove(rcp.Id);
-                        firestore.collection(Constant.RECIPE)
-                                .document(rcp.Id)
-                                .update("Love",rcp.Love-1)
-                                .addOnFailureListener(e -> {
-                                    Log.d("TAG", "onLoveRecipe: "+e.getMessage());
-                                });
+                    if (error != null) {
+                        // Handle error if needed
+                        Log.d("TAG", "onUnlove: Error removing value");
+                        return;
+                    }
+
+                    if (database.loveRecipeDao().checkExist(rcp.Id)) {
+                        Executors.newCachedThreadPool().execute(() -> {
+
+                            firestore.collection(Constant.RECIPE)
+                                    .document(rcp.Id)
+                                    .update("Love", FieldValue.increment(-1))
+                                    .addOnFailureListener(e -> {
+                                        Log.d("TAG", "onUnlove: " + e.getMessage());
+                                    });
+                        });
                     }
                 });
     }
+
 
     public interface OnPutImageListener {
         void onComplete(String url);

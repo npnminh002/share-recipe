@@ -11,11 +11,11 @@ import doan.npnm.sharerecipe.database.models.LoveRecipe;
 import doan.npnm.sharerecipe.databinding.ItemRecipeRecentBinding;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
-public class RecipeSaveViewAdapter extends BaseAdapter<LoveRecipe, ItemRecipeRecentBinding> {
+public class RecipeLoveViewAdapter extends BaseAdapter<LoveRecipe, ItemRecipeRecentBinding> {
 
     final OnRecipeEvent event;
 
-    public RecipeSaveViewAdapter(OnRecipeEvent event) {
+    public RecipeLoveViewAdapter(OnRecipeEvent event) {
         this.event = event;
     }
 

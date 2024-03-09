@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.Objects;
 
+import doan.npnm.sharerecipe.app.context.AppContext;
 import doan.npnm.sharerecipe.base.BaseAdapter;
 import doan.npnm.sharerecipe.database.AppDatabase;
 import doan.npnm.sharerecipe.databinding.ItemRecipeHomeBinding;
@@ -37,18 +39,14 @@ public class RecipeAdapter extends BaseAdapter<Recipe, ItemRecipeHomeBinding> {
         } else {
             binding.llIcLove.setColorFilter(Color.parseColor("#ffffff"));
         }
+
         binding.txtView.setText("" + item.View);
         binding.txtTimeCook.setText(item.CookTime.Time + " " + (item.CookTime.TimeType.equals("s") ? "second" :
                 Objects.equals(item.CookTime.TimeType, "m") ? "minute" : "hour"));
         binding.chefName.setText(item.Name);
         binding.llIcLove.setOnClickListener(v -> {
-            event.onLove(item, isLove);
-            boolean isLove2 = database.loveRecipeDao().checkExist(item.Id);
-            if (isLove2) {
-                binding.llIcLove.setColorFilter(Color.parseColor("#FF0000"));
-            } else {
-                binding.llIcLove.setColorFilter(Color.parseColor("#ffffff"));
-            }
+            event.onLove(item,position,isLove);
+            Toast.makeText(AppContext.getContext(), ""+isLove, Toast.LENGTH_SHORT).show();
         });
         binding.getRoot().setOnClickListener(v -> event.onView(item));
         loadImage(item.ImgUrl, binding.imgChef);
@@ -57,6 +55,6 @@ public class RecipeAdapter extends BaseAdapter<Recipe, ItemRecipeHomeBinding> {
     public interface OnRecipeEvent {
         void onView(Recipe rcp);
 
-        void onLove(Recipe recipe, boolean isLove);
+        void onLove(Recipe recipe,int pos,boolean isLove);
     }
 }

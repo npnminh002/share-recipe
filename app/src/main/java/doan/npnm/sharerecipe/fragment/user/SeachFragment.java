@@ -47,6 +47,7 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
     SearchCategoryAdapter categoryAdapter;
     SearchAdapter searchAdapter;
     RecipeAdapter recipeAdapter;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initView() {
@@ -94,15 +95,19 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
             }
 
             @Override
-            public void onLove(Recipe rcp, boolean isLove) {
+            public void onLove(Recipe rcp, int pos, boolean isLove) {
                 if (viewModel.auth.getCurrentUser() == null) {
                     showToast(getString(R.string.no_us));
                 } else {
-                    if (isLove) {
+                    showToast(isLove);
+                    if (!isLove) {
                         viewModel.onLoveRecipe(rcp);
+                        recipeAdapter.notifyItemChanged(pos);
                     } else {
                         viewModel.onUnlove(rcp);
+                        recipeAdapter.notifyItemChanged(pos);
                     }
+
                 }
             }
         }, viewModel.database);

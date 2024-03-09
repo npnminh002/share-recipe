@@ -15,7 +15,7 @@ import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentAdminHomeBinding;
 import doan.npnm.sharerecipe.dialog.BottomManagerRecipe;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
-import doan.npnm.sharerecipe.dialog.DeleteDialog;
+import doan.npnm.sharerecipe.dialog.ReportDialog;
 import doan.npnm.sharerecipe.interfaces.FetchByID;
 import doan.npnm.sharerecipe.model.Users;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
@@ -85,7 +85,7 @@ public class HomeAdminFragment extends BaseFragment<FragmentAdminHomeBinding> {
 
                         @Override
                         public void onDelete(Recipe rcp) {
-                            new DeleteDialog(requireContext(), () -> {
+                            new ReportDialog(requireContext(), () -> {
                                 firestore.collection(Constant.RECIPE)
                                         .document(recipe.Id)
                                         .delete()

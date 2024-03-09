@@ -6,16 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 import doan.npnm.sharerecipe.R;
 import doan.npnm.sharerecipe.adapter.users.MyRecipeViewAdapter;
 import doan.npnm.sharerecipe.adapter.users.RecipeRecentViewAdapter;
-import doan.npnm.sharerecipe.adapter.users.RecipeSaveViewAdapter;
+import doan.npnm.sharerecipe.adapter.users.RecipeLoveViewAdapter;
 import doan.npnm.sharerecipe.app.RecipeViewModel;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
@@ -24,9 +29,12 @@ import doan.npnm.sharerecipe.database.models.RecentView;
 import doan.npnm.sharerecipe.database.models.SaveRecipe;
 import doan.npnm.sharerecipe.databinding.FragmentProfileUserBinding;
 import doan.npnm.sharerecipe.dialog.ConfirmDialog;
+import doan.npnm.sharerecipe.dialog.DeleteDialog;
 import doan.npnm.sharerecipe.fragment.user.addrecipe.FirstRecipeFragment;
 import doan.npnm.sharerecipe.interfaces.OnRecipeEvent;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
+import doan.npnm.sharerecipe.model.recipe.RecipeStatus;
+import doan.npnm.sharerecipe.utility.Constant;
 
 public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding> {
     private UserViewModel viewModel;
@@ -38,7 +46,6 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
 
     @Override
     public void OnClick() {
-
         binding.icSetting.setOnClickListener(v -> {
             addFragment(new SettingFragment(viewModel), android.R.id.content, true);
         });
@@ -60,7 +67,7 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
     }
 
     private RecipeRecentViewAdapter recentViewAdapter;
-    private RecipeSaveViewAdapter saveViewAdapter;
+    private RecipeLoveViewAdapter loveViewAdapter;
 
     private MyRecipeViewAdapter myViewAdapter;
 
@@ -121,7 +128,7 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
                     }});
                 }
             });
-            saveViewAdapter = new RecipeSaveViewAdapter(new RecipeSaveViewAdapter.OnRecipeEvent() {
+            loveViewAdapter = new RecipeLoveViewAdapter(new RecipeLoveViewAdapter.OnRecipeEvent() {
                 @Override
                 public void onView(Recipe rcp) {
                     if (viewModel.database.recentViewDao().checkExistence(rcp.Id)) {
@@ -140,8 +147,8 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
                 @Override
                 public void onRemove(Recipe recipe, int pos) {
                     viewModel.database.saveRecipeDao().removeRecent(recipe.Id);
-
-                    saveViewAdapter.removeItem(pos);
+                    viewModel.onUnlove(recipe);
+                    loveViewAdapter.removeItem(pos);
                 }
             });
 
@@ -154,8 +161,20 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
 
                 @Override
                 public void onRemove(Recipe recipe, int pos) {
-                    new ConfirmDialog(ProfileUserFragment.this.requireContext(), getString(R.string.cf_delete), () -> {
-
+                    new DeleteDialog(ProfileUserFragment.this.requireContext(), getString(R.string.cf_delete), () -> {
+                        HashMap<String,Object> update= new HashMap<>();
+                        update.put("RecipeStatus",RecipeStatus.DELETED);
+                        ArrayList<String> hstr= recipe.History;
+                        hstr.add("Auth want delete :"+getTimeNow());
+                        update.put("History",hstr);
+                        firestore.collection(Constant.RECIPE)
+                                .document(recipe.Id)
+                                .update(update)
+                                .addOnSuccessListener(unused -> {
+                                    showToast(R.string.del_suc_rcp);
+                                }).addOnFailureListener(e -> {
+                                    showToast(e.getMessage());
+                                });
                     }).show();
                 }
 
@@ -185,8 +204,8 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
             if (loveRecipes.isEmpty()) {
                 binding.txtNo2.setVisibility(View.VISIBLE);
             }
-            binding.rcvSaveRecipe.setAdapter(saveViewAdapter);
-            saveViewAdapter.setItems(loveRecipes);
+            binding.rcvSaveRecipe.setAdapter(loveViewAdapter);
+            loveViewAdapter.setItems(loveRecipes);
 
             viewModel.myRecipeArr.observe(this, data -> {
                 if (data.isEmpty()) {

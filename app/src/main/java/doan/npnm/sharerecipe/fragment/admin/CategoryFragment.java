@@ -11,15 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 
 import java.util.HashMap;
 
@@ -29,7 +22,7 @@ import doan.npnm.sharerecipe.app.AdminViewModel;
 import doan.npnm.sharerecipe.app.UserViewModel;
 import doan.npnm.sharerecipe.base.BaseFragment;
 import doan.npnm.sharerecipe.databinding.FragmentAdminCategoryBinding;
-import doan.npnm.sharerecipe.dialog.DeleteDialog;
+import doan.npnm.sharerecipe.dialog.ReportDialog;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.utility.Constant;
 
@@ -211,7 +204,7 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
     }
     private void deleteCategory(){
         if(selectCategory.getValue()!=null){
-            new DeleteDialog(requireContext(), () -> {
+            new ReportDialog(requireContext(), () -> {
                 firestore.collection(Constant.CATEGORY)
                         .document(selectCategory.getValue().Id)
                         .delete()

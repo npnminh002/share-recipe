@@ -34,8 +34,6 @@ public class DetailAuthAdminFragment extends BaseFragment<FragmentDetailAuthAdmi
 
     private AdminViewModel viewModel;
     private Users users;
-
-
     public DetailAuthAdminFragment(AdminViewModel viewModel, Users idAuth) {
         this.viewModel = viewModel;
         this.users = idAuth;
@@ -68,7 +66,7 @@ public class DetailAuthAdminFragment extends BaseFragment<FragmentDetailAuthAdmi
             }
 
             @Override
-            public void onLove(Recipe rcp, boolean isLove) {
+            public void onLove(Recipe rcp, int pos,boolean isLove) {
             }
         }, viewModel.database);
         binding.rcvRecipe.setAdapter(recipeAdapter);

@@ -95,15 +95,19 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
             }
 
             @Override
-            public void onLove(Recipe rcp, boolean isLove) {
+            public void onLove(Recipe rcp, int pos,boolean isLove) {
                 if (homeviewModel.auth.getCurrentUser() == null) {
                     showToast(getString(R.string.no_us));
                 } else {
+                    showToast(isLove);
                     if (!isLove) {
                         homeviewModel.onLoveRecipe(rcp);
+                        recipeAdapter.notifyItemChanged(pos);
                     } else {
                         homeviewModel.onUnlove(rcp);
+                        recipeAdapter.notifyItemChanged(pos);
                     }
+
                 }
             }
 

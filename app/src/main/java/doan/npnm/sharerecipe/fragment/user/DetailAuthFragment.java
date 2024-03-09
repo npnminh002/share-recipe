@@ -60,15 +60,19 @@ public class DetailAuthFragment extends BaseFragment<FragmentDetailAuthBinding> 
             }
 
             @Override
-            public void onLove(Recipe rcp, boolean isLove) {
+            public void onLove(Recipe rcp, int  pos,boolean isLove) {
                 if (viewModel.auth.getCurrentUser() == null) {
                     showToast(getString(R.string.no_us));
                 } else {
+                    showToast(isLove);
                     if (!isLove) {
                         viewModel.onLoveRecipe(rcp);
+                        recipeAdapter.notifyItemChanged(pos);
                     } else {
                         viewModel.onUnlove(rcp);
+                        recipeAdapter.notifyItemChanged(pos);
                     }
+
                 }
             }
         }, viewModel.database);

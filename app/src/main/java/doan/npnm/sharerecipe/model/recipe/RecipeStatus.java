@@ -5,5 +5,6 @@ public enum RecipeStatus {
     PREVIEW,
     LOCKED,
     WAS_REPORT,
+    DELETED
 
 }
