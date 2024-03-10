@@ -13,9 +13,9 @@
         android:title="@string/category"
         tools:ignore="MenuTitle" />
     <item
-        android:id="@+id/icon_report_admin"
-        android:icon="@drawable/ic_report_gmailerrorred"
-        android:title="@string/report" />
+        android:id="@+id/icon_account_admin"
+        android:icon="@drawable/ic_supervised_user"
+        android:title="@string/account" />
     <item
         android:id="@+id/icon_users_admin"
         android:icon="@drawable/ic_person"

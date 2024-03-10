@@ -102,6 +102,8 @@ public class RecipeTableLayout extends BaseTableAdapter<Recipe, RowAdminRecipeVi
                 return AppContext.getContext().getString(R.string.locked);
             case WAIT_CONFIRM:
                 return AppContext.getContext().getString(R.string.wait_cf);
+            case DELETED:
+                return "Deleted";
             default:
                 return "";
         }

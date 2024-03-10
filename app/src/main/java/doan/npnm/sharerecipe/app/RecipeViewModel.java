@@ -16,5 +16,5 @@ public class RecipeViewModel extends ViewModel {
 
     public Uri imgUri= null;
     public MutableLiveData<ArrayList<Uri>> listSelect= new MutableLiveData<>(new ArrayList<>());
-    public MutableLiveData<Category> categoty= new MutableLiveData<>(null);
+
 }

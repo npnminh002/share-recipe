@@ -19,22 +19,31 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
     private TextValue email;
     private TextValue password;
 
+    // Khoi tao chung duoc ke thua tu base
     @Override
     protected ActivitySignInBinding getViewBinding() {
         return ActivitySignInBinding.inflate(getLayoutInflater());
     }
 
+    // khoi tao view doc kke thua tu base
     @Override
     protected void createView() {
         email=new TextValue(binding.email);
         password= new TextValue(binding.passs);
+
+        // dung viewmodel du lieu song trong suot vong doi ung dung
+        // usertViewModel lang ghe su thay doi cap nhat du lieu nguoi dung tu ham getUse()  kiem tra neu != nul bat dau man mo
+        // kiem tra neu du lieu nguoi dung thay doi neu AccoutnType= 1 bat dau man Main cua Admin nguoc lai bat dat man Main cua nguoi dung
         userViewModel.getUsers().observe(this, users -> {
             if (users != null) {
 
                 startActivity(new Intent(SignInActivity.this, users.AccountType==1? AdminMainActivity.class : MainActivity.class));
+                // finhsh: xoa bo man truoc khong cho phep quay tro lai
                 finish();
             }
         });
+
+
 
         binding.signIn.setOnClickListener(v -> {
             startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
