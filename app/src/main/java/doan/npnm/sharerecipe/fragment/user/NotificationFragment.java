@@ -50,6 +50,7 @@ public class NotificationFragment extends BaseFragment<FragmentNotificationBindi
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initView() {
+        // Khởi tạo adapter cho danh sách thông báo
         childNotiAdapter = new ChildNotiAdapter(notification -> {
             redirectToView(notification);
         });
@@ -59,9 +60,9 @@ public class NotificationFragment extends BaseFragment<FragmentNotificationBindi
         });
         binding.rcvNotification.setAdapter(adapter);
         getNotification();
-
     }
 
+    // Chuyển hướng đến màn hình xem thông báo chi tiết
     private void redirectToView(Notification notification) {
         if (notification.NotyType.equals(NotyType.USER_ADD)) {
             viewModel.getRecipeByID(notification.Value, new FetchByID<Recipe>() {
@@ -78,7 +79,7 @@ public class NotificationFragment extends BaseFragment<FragmentNotificationBindi
         }
     }
 
-
+    // Lấy danh sách thông báo từ Firebase
     private void getNotification() {
         viewModel.fbDatabase.getReference(Constant.NOTIFICATION)
                 .child(viewModel.getUsers().getValue().UserID)
@@ -90,7 +91,7 @@ public class NotificationFragment extends BaseFragment<FragmentNotificationBindi
                         ArrayList<Notification> sortData = new ArrayList<>();
                         parentNotifications = new ArrayList<>();
 
-
+                        // Lấy dữ liệu từ Firebase và sắp xếp theo thời gian
                         for (DataSnapshot doc : snapshot.getChildren()) {
                             Notification notification = doc.getValue(Notification.class);
                             sortData.add(notification);
@@ -100,7 +101,6 @@ public class NotificationFragment extends BaseFragment<FragmentNotificationBindi
                         Collections.sort(sortData, (o1, o2) -> o2.Time.compareTo(o1.Time));
 
                         for (Notification notification : sortData) {
-
                             if (!currentTime.equals(notification.Time.substring(0, 10))) {
                                 if (!listNoti.isEmpty()) {
                                     Collections.sort(listNoti, (o1, o2) -> o2.Time.compareTo(o1.Time));
@@ -126,13 +126,13 @@ public class NotificationFragment extends BaseFragment<FragmentNotificationBindi
                 });
     }
 
-
+    // Xử lý sự kiện khi người dùng tìm kiếm thông báo
     @Override
     public void OnClick() {
         binding.icSearch.setOnClickListener(v -> {
             ArrayList<Notification> searchArr = new ArrayList<>();
             String serachKey = binding.edtSearchNoti.getText().toString();
-            if (serachKey != "") {
+            if (!serachKey.isEmpty()) {
                 for (Notification noti : listNoti) {
                     if (noti.Time.contains(serachKey) || noti.Content.contains(serachKey)) {
                         searchArr.add(noti);
@@ -156,13 +156,12 @@ public class NotificationFragment extends BaseFragment<FragmentNotificationBindi
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().equals("")) {
+                if (s.toString().isEmpty()) {
                     adapter.setItems(parentNotifications);
                     binding.rcvNotification.setAdapter(adapter);
                 }
 
             }
         });
-
     }
 }

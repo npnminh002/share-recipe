@@ -70,6 +70,7 @@ public class AdminViewModel extends ViewModel {
     }
 
 
+    // lay ra danh sach tat ca cac danh muc du tren fibase
     public void ongetCategory() {
         ArrayList<Category> categories = new ArrayList<>();
         firestore.collection(Constant.CATEGORY)
@@ -83,6 +84,8 @@ public class AdminViewModel extends ViewModel {
                 });
     }
 
+    // lay ra tat ca danh sach tai khoan
+
     private void initGetAuth() {
         ArrayList<Users> users = new ArrayList<>();
         firestore.collection(Constant.KEY_USER)
@@ -95,49 +98,63 @@ public class AdminViewModel extends ViewModel {
                 });
     }
 
+    // Hàm khởi tạo dữ liệu công thức
     public void initRecipeData() {
-        ArrayList<Recipe> recipes = new ArrayList<>();
-        ArrayList<Recipe> recipesApprove = new ArrayList<>();
-        ArrayList<Recipe> recipesReport = new ArrayList<>();
+        // Khởi tạo các danh sách công thức
+        ArrayList<Recipe> recipes = new ArrayList<>(); // Danh sách tất cả công thức
+        ArrayList<Recipe> recipesApprove = new ArrayList<>(); // Danh sách công thức chờ xác nhận
+        ArrayList<Recipe> recipesReport = new ArrayList<>(); // Danh sách công thức bị báo cáo
+
+        // Lắng nghe thay đổi dữ liệu trong bộ sưu tập "RECIPE" trên Firestore
         firestore.collection(Constant.RECIPE)
                 .addSnapshotListener((value, error) -> {
+                    // Duyệt qua các công thức trong bộ sưu tập
                     for (DocumentSnapshot documentSnapshot : value) {
                         if (documentSnapshot.exists()) {
+                            // Chuyển đổi dữ liệu thành đối tượng công thức
                             Recipe rcp = documentSnapshot.toObject(Recipe.class);
                             if (rcp != null) {
+                                // Thêm công thức vào danh sách chung
                                 recipes.add(rcp);
-                                if (rcp.RecipeStatus.equals(RecipeStatus.WAIT_CONFIRM)) {
+
+                                // Phân loại công thức theo trạng thái
+                                if (rcp.RecipeStatus.equals(RecipeStatus.WAIT_CONFIRM)) { // Công thức chờ xác nhận
                                     recipesApprove.add(rcp);
-                                }
-                                if (rcp.RecipeStatus == RecipeStatus.WAS_REPORT) {
+                                } else if (rcp.RecipeStatus == RecipeStatus.WAS_REPORT) { // Công thức bị báo cáo
                                     recipesReport.add(rcp);
                                 }
 
-
+                                // Cập nhật các LiveData để hiển thị dữ liệu lên giao diện
                                 recipeLiveData.postValue(recipes);
                                 recipeApproveLiveData.postValue(recipesApprove);
                                 recipeReportLiveData.postValue(recipesReport);
                             }
                         }
                     }
-
                 });
     }
 
+    // Hàm lấy dữ liệu người dùng theo ID
     public void getDataFromUserId(String recipeAuth, FetchByID<Users> view) {
+        // Lắng nghe thay đổi dữ liệu của tài liệu có ID tương ứng trong bộ sưu tập "KEY_USER" trên Firestore
         firestore.collection(Constant.KEY_USER)
                 .document(recipeAuth)
                 .addSnapshotListener((value, error) -> {
+                    // Nếu lấy dữ liệu thành công
                     if (value != null) {
+                        // Chuyển đổi dữ liệu thành đối tượng người dùng
                         Users us = value.toObject(Users.class);
+                        // Gọi hàm onSuccess của đối tượng view để xử lý kết quả
                         view.onSuccess(us);
                     } else {
-                        showToast("Error: " + error.getMessage());
+                        // Nếu xảy ra lỗi
+                        showToast("Error: " + error.getMessage()); // Hiển thị Toast thông báo lỗi
+                        // Gọi hàm onErr của đối tượng view để xử lý lỗi
                         view.onErr(error);
                     }
-
                 });
     }
+
 
     public void showToast(String mess) {
         Toast.makeText(AppContext.getContext(), mess, Toast.LENGTH_LONG).show();

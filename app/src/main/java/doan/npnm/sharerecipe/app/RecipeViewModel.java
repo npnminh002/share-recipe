@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 
+// khoi tao du lieu liveData khi them cong thuc moi giups chuyen giua cac man  du lieu khong bi mat
+
+
 public class RecipeViewModel extends ViewModel {
 
     public MutableLiveData<Recipe> recipeLiveData= new MutableLiveData<>();

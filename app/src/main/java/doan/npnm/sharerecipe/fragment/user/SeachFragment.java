@@ -31,41 +31,55 @@ import doan.npnm.sharerecipe.interfaces.OnGetEvent;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
-
-public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
+public class SeachFragment extends BaseFragment<FragmentSearchBinding>
+{
+    // ViewModel của người dùng
     private UserViewModel viewModel;
 
+    // Constructor nhận ViewModel của người dùng
     public SeachFragment(UserViewModel userViewModel) {
         this.viewModel = userViewModel;
     }
 
+    // Phương thức lấy dữ liệu Binding
     @Override
     protected FragmentSearchBinding getBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentSearchBinding.inflate(inflater);
     }
 
+    // Adapter cho danh sách các mục tìm kiếm
     SearchCategoryAdapter categoryAdapter;
+    // Adapter cho danh sách kết quả tìm kiếm
     SearchAdapter searchAdapter;
+    // Adapter cho danh sách công thức
     RecipeAdapter recipeAdapter;
 
+    // Phương thức khởi tạo giao diện
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initView() {
+        // Khởi tạo adapter cho danh sách tìm kiếm
         searchAdapter = new SearchAdapter(s -> {
+            // Xử lý sự kiện khi chọn mục tìm kiếm
             binding.edtSearchData.setText(s);
             searchValue(s, this::setToView);
         });
+        // Thiết lập dữ liệu cho adapter từ Cơ sở dữ liệu Room
         searchAdapter.setItems((ArrayList<Search>) viewModel.database.searchDao().getListCurrent());
 
+        // Khởi tạo adapter cho danh sách các mục tìm kiếm theo danh mục
         categoryAdapter = new SearchCategoryAdapter(category -> {
+            // Xử lý sự kiện khi chọn một danh mục tìm kiếm
             searchValue(category.Id, this::setToView);
             binding.edtSearchData.setText(category.Name);
         });
 
+        // Lắng nghe thay đổi danh sách các danh mục từ ViewModel
         viewModel.categoriesArr.observe(this, data -> {
             categoryAdapter.setItems(data);
         });
 
+        // Lấy dữ liệu từ Bundle để tìm kiếm ngay khi Fragment được tạo
         String key = getData("Key").toString();
         if (key.length() != 0) {
             Category ct = checkIDCategory(key);
@@ -76,11 +90,16 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
             }
             searchValue(key, this::setToView);
         }
+
+        // Thiết lập adapter cho RecyclerView
         binding.rcvManufact.setAdapter(categoryAdapter);
         binding.rcvCurrent.setAdapter(searchAdapter);
+
+        // Khởi tạo và thiết lập adapter cho danh sách kết quả tìm kiếm
         recipeAdapter = new RecipeAdapter(new RecipeAdapter.OnRecipeEvent() {
             @Override
             public void onView(Recipe rcp) {
+                // Xử lý sự kiện khi nhấn xem công thức
                 if (viewModel.database.recentViewDao().checkExistence(rcp.Id)) {
                     viewModel.database.recentViewDao().removeRecent(rcp.Id);
                 }
@@ -96,6 +115,7 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
 
             @Override
             public void onLove(Recipe rcp, int pos, boolean isLove) {
+                // Xử lý sự kiện khi nhấn yêu thích hoặc bỏ yêu thích công thức
                 if (viewModel.auth.getCurrentUser() == null) {
                     showToast(getString(R.string.no_us));
                 } else {
@@ -107,14 +127,15 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
                         viewModel.onUnlove(rcp);
                         recipeAdapter.notifyItemChanged(pos);
                     }
-
                 }
             }
         }, viewModel.database);
-        binding.rcvResultSreach.setAdapter(recipeAdapter);
 
+        // Thiết lập adapter cho RecyclerView hiển thị kết quả tìm kiếm
+        binding.rcvResultSreach.setAdapter(recipeAdapter);
     }
 
+    // Phương thức kiểm tra danh mục theo ID
     private Category checkIDCategory(String key) {
         ArrayList<Category> categories = viewModel.categoriesArr.getValue();
         for (Category ct : categories) {
@@ -125,6 +146,7 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
         return null;
     }
 
+    // Phương thức kiểm tra danh mục theo tên
     private Category checkCategory(String key) {
         ArrayList<Category> categories = viewModel.categoriesArr.getValue();
         for (Category ct : categories) {
@@ -133,9 +155,9 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
             }
         }
         return null;
-
     }
 
+    // Phương thức mở chức năng nhận diện giọng nói
     private void promptSpeechInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -152,15 +174,16 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
         }
     }
 
+    // Mã yêu cầu cho kết quả nhận diện giọng nói
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
+    // Xử lý kết quả trả về từ việc nhận diện giọng nói
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == RESULT_OK && null != data) {
-
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     binding.edtSearchData.setText(result.get(0));
@@ -170,53 +193,68 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
         }
     }
 
+    // Xử lý sự kiện click trên giao diện
     @Override
     public void OnClick() {
+        // Xử lý sự kiện tìm kiếm khi nhấn nút tìm kiếm
         binding.icSearch.setOnClickListener(v -> {
             searchValue(binding.edtSearchData.getText().toString(), this::setToView);
         });
 
+        // Xử lý sự kiện quay lại khi nhấn nút quay lại
         binding.icBack.setOnClickListener(v -> {
+            // Thiết lập lại dữ liệu tìm kiếm về mặc định
             searchAdapter.setItems((ArrayList<Search>) viewModel.database.searchDao().getListCurrent());
             binding.llResult.setVisibility(View.GONE);
-
         });
+
+        // Xử lý sự kiện khi nhấn nút nhận diện giọng nói
         binding.icInputSpeech.setOnClickListener(v -> {
             promptSpeechInput();
         });
     }
 
+    // Phương thức cập nhật kết quả tìm kiếm lên giao diện
     private void setToView(ArrayList<Recipe> data) {
         String key = binding.edtSearchData.toString();
+        // Kiểm tra xem có phải là danh mục không
         Category ct = checkCategory(key);
         if (ct != null) {
+            // Thêm mục tìm kiếm vào Cơ sở dữ liệu Room
             viewModel.database.searchDao().addRecentView(new Search() {{
                 CurrentKey = ct.Name;
             }});
         } else {
+            // Thêm mục tìm kiếm vào Cơ sở dữ liệu Room
             viewModel.database.searchDao().addRecentView(new Search() {{
                 CurrentKey = binding.edtSearchData.getText().toString();
             }});
         }
+        // Ẩn bàn phím ảo
         hideKeyboard();
+        // Hiển thị kết quả tìm kiếm
         binding.llResult.setVisibility(View.VISIBLE);
         binding.txtResult.setText(binding.edtSearchData.getText().toString());
         if (data == null || data.size() == 0) {
+            // Hiển thị thông báo khi không tìm thấy kết quả
             binding.llNoResult.setVisibility(View.VISIBLE);
             binding.rcvResultSreach.setVisibility(View.GONE);
         } else {
+            // Hiển thị kết quả tìm kiếm
             binding.rcvResultSreach.setVisibility(View.VISIBLE);
             recipeAdapter.setItems(data);
             binding.llNoResult.setVisibility(View.GONE);
         }
     }
 
+    // Phương thức tìm kiếm giá trị
     private void searchValue(String string, OnGetEvent<Recipe> event) {
         loaddingDialog.show();
         if (string.isEmpty()) {
             event.onSuccess(null);
         } else {
             ArrayList<Recipe> arrayList = new ArrayList<>();
+            // Truy vấn Cơ sở dữ liệu Firestore để tìm kiếm
             viewModel.firestore.collection(Constant.RECIPE)
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -227,9 +265,9 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
                                 arrayList.add(recipe);
                             }
                         }
+                        // Gửi kết quả tìm kiếm qua sự kiện
                         event.onSuccess(arrayList);
                         loaddingDialog.dismiss();
-
                     }).addOnFailureListener(exception -> {
                         loaddingDialog.dismiss();
                         event.onSuccess(null);
@@ -237,10 +275,10 @@ public class SeachFragment extends BaseFragment<FragmentSearchBinding> {
         }
     }
 
+    // Kiểm tra giá trị có chứa trong danh sách không
     private boolean checkContaintValue(String string, ArrayList<String> category) {
         for (String s : category) {
             if (string.contains(s)) {
-
                 return true;
             }
         }

@@ -26,16 +26,21 @@ public class CategoryAdapter extends BaseAdapter<Category, ItemCategoryFoodBindi
     @Override
     protected void bind(ItemCategoryFoodBinding binding, Category item, int position) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding.llItem.setBackgroundColor(position == currentPosition ? Color.parseColor("#FFE0FFFF") :Color.parseColor("#FFe5e5e5"));
+            // Đặt màu nền cho item trong danh sách
+            binding.llItem.setBackgroundColor(position == currentPosition ? Color.parseColor("#FFE0FFFF") : Color.parseColor("#FFe5e5e5"));
         }
+        // Load hình ảnh cho item
         loadImage(item.Image, binding.imgItem);
+        // Đặt tên cho item
         binding.txtName.setText(item.Name);
+        // Thiết lập sự kiện khi item được chọn
         binding.getRoot().setOnClickListener(v -> {
             event.onSelect(item);
-           setCurrentPos(position);
+            setCurrentPos(position);
         });
     }
 
+    // Interface để xử lý sự kiện khi một category được chọn
     public interface OnCategoryEvent {
         void onSelect(Category category);
     }

@@ -89,6 +89,8 @@ public class FollowerFragment extends BaseFragment<FragmentFollowerBinding> {
 
     }
 
+    // lay danh sach ca nhan nguoi khac theo doi
+
     private void loadFollower(String userID) {
         viewModel.fbDatabase.getReference(Constant.FOLLOW_USER)
                 .child(userID)
@@ -109,6 +111,7 @@ public class FollowerFragment extends BaseFragment<FragmentFollowerBinding> {
                 });
     }
 
+    // lay danh sach ca nhan minh theo doi
     private void loadFollow(String userID) {
         viewModel.fbDatabase.getReference(Constant.FOLLOW_USER)
                 .child(userID)

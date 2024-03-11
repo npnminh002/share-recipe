@@ -25,14 +25,15 @@ import doan.npnm.sharerecipe.databinding.FragmentAdminCategoryBinding;
 import doan.npnm.sharerecipe.dialog.ReportDialog;
 import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.utility.Constant;
-
 public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding> {
     private AdminViewModel viewModel;
 
+    // Constructor nhận một viewModel của Admin
     public CategoryFragment(AdminViewModel userViewModel) {
         this.viewModel = userViewModel;
     }
 
+    // LiveData để lưu trữ danh mục được chọn và trạng thái chỉnh sửa danh mục
     private MutableLiveData<Category> selectCategory = new MutableLiveData<>(null);
     private MutableLiveData<Boolean> isEditCategory = new MutableLiveData<>(false);
 
@@ -43,6 +44,7 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
 
     @Override
     protected void initView() {
+        // Quan sát sự thay đổi trong selectCategory và cập nhật giao diện tương ứng
         selectCategory.observe(this, category -> {
             if (category != null) {
                 loadImage(category.Image, binding.imgPreview);
@@ -56,7 +58,6 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
                 binding.bntSave.setClickable(false);
                 binding.btnRemove.setBackgroundResource(R.drawable.bg_click_start_disable);
                 binding.bntSave.setBackgroundResource(R.drawable.bg_click_start_disable);
-
                 loadImage("", binding.imgPreview);
                 binding.categoryID.setText("");
                 binding.nameCategory.setText("");
@@ -64,15 +65,16 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
             }
         });
 
+        // Quan sát sự thay đổi trong isEditCategory và cập nhật trạng thái của nút lưu
         isEditCategory.observe(this, data -> {
             binding.bntSave.setClickable(data);
             binding.bntSave.setBackgroundResource(data ? R.drawable.bg_click_start_enable : R.drawable.bg_click_start_disable);
         });
 
+        // Quan sát danh sách các danh mục và cập nhật RecyclerView
         viewModel.categoryMutableLiveData.observe(this, data -> {
             new CategoryTableAdapter(binding.tableLayout, getContext(), category -> {
                 selectCategory.postValue(category);
-
             }).onFinih(() -> {
                 binding.progressLoad.setVisibility(View.GONE);
             }).setData(data);
@@ -81,6 +83,7 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
 
     @Override
     public void OnClick() {
+        // Xử lý sự kiện click trên nút chỉnh sửa hình ảnh
         binding.icEitImage.setOnClickListener(v -> {
             if (allPermissionsGranted()) {
                 permissionLauncher.launch(permissions);
@@ -88,6 +91,8 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
                 openImagePicker();
             }
         });
+
+        // Xử lý sự kiện click trên nút làm mới
         binding.reloaIcon.setOnClickListener(v -> {
             initView();
             binding.btnRemove.setClickable(false);
@@ -95,15 +100,16 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
             selectCategory.postValue(null);
             viewModel.ongetCategory();
         });
+
+        // Xử lý sự kiện click trên nút thêm mới danh mục
         binding.btnAdd.setOnClickListener(v -> {
             addNewCategory();
         });
 
+        // Xử lý sự kiện thay đổi văn bản của tên danh mục
         binding.nameCategory.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -117,93 +123,31 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
+        // Xử lý sự kiện click trên nút xóa danh mục
         binding.btnRemove.setOnClickListener(v -> {
             deleteCategory();
         });
 
+        // Xử lý sự kiện click trên nút lưu danh mục
         binding.bntSave.setOnClickListener(v -> {
             if (isAddNew) {
-                viewModel.putImgToStorage(storageReference.child(Constant.CATEGORY), uriImg, new UserViewModel.OnPutImageListener() {
-                    @Override
-                    public void onComplete(String url) {
-                        Category ct = new Category(
-                                String.valueOf(viewModel.categoryMutableLiveData.getValue().size() + 1),
-                                binding.nameCategory.getText().toString(),
-                                url
-                        );
-                        firestore.collection(Constant.CATEGORY)
-                                .document(ct.Id)
-                                .set(ct)
-                                .addOnSuccessListener(documentReference -> {
-                                    showToast("Add new  success");
-                                    viewModel.ongetCategory();
-
-                                });
-                        initView();
-                    }
-
-                    @Override
-                    public void onFailure(String mess) {
-
-                    }
-                });
+                // Xử lý thêm mới danh mục
+                addNewCategory();
             } else {
-                if (isEditImage) {
-                    viewModel.putImgToStorage(storageReference.child(Constant.CATEGORY), uriImg, new UserViewModel.OnPutImageListener() {
-                        @Override
-                        public void onComplete(String url) {
-                            HashMap<String, Object> obj = new HashMap<>();
-                            obj.put("Name", binding.nameCategory.getText().toString().trim());
-                            obj.put("Image", url);
-                            firestore.collection(Constant.CATEGORY)
-                                    .document(selectCategory.getValue().Id)
-                                    .update(obj)
-                                    .addOnSuccessListener(unused -> {
-                                        showToast("Update success");
-                                        viewModel.ongetCategory();
-                                    }).addOnFailureListener(e -> showToast(e.getMessage()));
-                        }
-
-                        @Override
-                        public void onFailure(String mess) {
-                            showToast("Upload Img: " + mess);
-                        }
-
-                    });
-                    initView();
-                } else {
-                    firestore.collection(Constant.CATEGORY)
-                            .document(selectCategory.getValue().Id)
-                            .update("Name", binding.nameCategory.getText().toString().trim())
-                            .addOnSuccessListener(unused -> {
-                                showToast("Update success");
-                                viewModel.ongetCategory();
-
-                            }).addOnFailureListener(e -> showToast(e.getMessage()));
-                    initView();
-                }
+                // Xử lý cập nhật danh mục
+                updateCategory();
             }
+            // Ẩn bàn phím sau khi xử lý xong
             hideKeyboard();
-
         });
-
-
     }
 
-    private void addNewCategory() {
-        isAddNew=true;
-
-        selectCategory.postValue(null);
-        isEditCategory.postValue(true);
-    }
-    private void deleteCategory(){
-        if(selectCategory.getValue()!=null){
+    // Phương thức xóa danh mục
+    private void deleteCategory() {
+        if (selectCategory.getValue() != null) {
             new ReportDialog(requireContext(), () -> {
                 firestore.collection(Constant.CATEGORY)
                         .document(selectCategory.getValue().Id)
@@ -220,18 +164,20 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
         }
     }
 
+    // Biến và hằng số cho việc chọn hình ảnh và lưu trữ dữ liệu
     private final int REQUEST_CODE_PICK_IMAGE = 100;
+    private boolean isAddNew = false;
+    private boolean isEditImage = false;
+    private Uri uriImg;
 
+    // Phương thức mở trình chọn hình ảnh
     private void openImagePicker() {
         isEditImage = true;
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
     }
 
-
-    private boolean isAddNew = false;
-    private Uri uriImg;
-
+    // Xử lý kết quả trả về từ trình chọn hình ảnh
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -240,10 +186,50 @@ public class CategoryFragment extends BaseFragment<FragmentAdminCategoryBinding>
                 uriImg = data.getData();
                 loadImage(uriImg, binding.imgPreview);
                 isEditCategory.postValue(true);
-
             }
         }
     }
 
-    private boolean isEditImage = false;
+    // Phương thức thêm mới danh mục
+    private void addNewCategory() {
+        isAddNew = true;
+        selectCategory.postValue(null);
+        isEditCategory.postValue(true);
+    }
+
+    // Phương thức cập nhật danh mục
+    private void updateCategory() {
+        if (isEditImage) {
+            viewModel.putImgToStorage(storageReference.child(Constant.CATEGORY), uriImg, new UserViewModel.OnPutImageListener() {
+                @Override
+                public void onComplete(String url) {
+                    HashMap<String, Object> obj = new HashMap<>();
+                    obj.put("Name", binding.nameCategory.getText().toString().trim());
+                    obj.put("Image", url);
+                    firestore.collection(Constant.CATEGORY)
+                            .document(selectCategory.getValue().Id)
+                            .update(obj)
+                            .addOnSuccessListener(unused -> {
+                                showToast("Update success");
+                                viewModel.ongetCategory();
+                                initView();
+                            }).addOnFailureListener(e -> showToast(e.getMessage()));
+                }
+
+                @Override
+                public void onFailure(String mess) {
+                    showToast("Upload Img: " + mess);
+                }
+            });
+        } else {
+            firestore.collection(Constant.CATEGORY)
+                    .document(selectCategory.getValue().Id)
+                    .update("Name", binding.nameCategory.getText().toString().trim())
+                    .addOnSuccessListener(unused -> {
+                        showToast("Update success");
+                        viewModel.ongetCategory();
+                        initView();
+                    }).addOnFailureListener(e -> showToast(e.getMessage()));
+        }
+    }
 }

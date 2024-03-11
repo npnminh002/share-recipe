@@ -34,10 +34,13 @@ public class LanguageFragment extends BaseFragment<FragmentLanguageBinding> {
 
 
     public void OnClick() {
+        // Xử lý sự kiện khi người dùng nhấn nút lưu
         binding.icSaveIcon.setOnClickListener(v -> changeLanguage());
+        // Xử lý sự kiện khi người dùng nhấn nút quay lại
         binding.backIcon.setOnClickListener(v -> closeFragment(LanguageFragment.this));
     }
 
+    // Phương thức để thay đổi ngôn ngữ
     private void changeLanguage() {
         LanguageUtil.setLanguageCode(languageCode);
         LanguageUtil.changeLang(LanguageUtil.getLanguageCode(), LanguageFragment.this.requireContext());
@@ -80,6 +83,7 @@ public class LanguageFragment extends BaseFragment<FragmentLanguageBinding> {
         initAdapter();
     }
 
+    // Khởi tạo Adapter
     private void initAdapter() {
         languageAdapter = new LanguageAdapter((language, position) -> {
             languageCode = language.getLocale();
@@ -90,6 +94,7 @@ public class LanguageFragment extends BaseFragment<FragmentLanguageBinding> {
     }
 
 
+    // Khởi tạo dữ liệu ngôn ngữ
     private void initData() {
         listLanguages = new ArrayList<>();
         listLanguages.add(new Language(R.drawable.flag_en, getString(R.string.language_english), "en"));

@@ -29,7 +29,6 @@ import doan.npnm.sharerecipe.model.disscus.Discussion;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.utility.Constant;
 import doan.npnm.sharerecipe.databinding.FragmentDetailAdminRecipeBinding;
-
 public class DetailAdminRecipeFragment extends BaseFragment<FragmentDetailAdminRecipeBinding> {
     private Recipe data;
     private AdminViewModel viewModel;
@@ -43,7 +42,6 @@ public class DetailAdminRecipeFragment extends BaseFragment<FragmentDetailAdminR
     CallbackManager callbackManager;
     ShareDialog shareDialog;
 
-
     @Override
     protected FragmentDetailAdminRecipeBinding getBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentDetailAdminRecipeBinding.inflate(inflater);
@@ -52,6 +50,7 @@ public class DetailAdminRecipeFragment extends BaseFragment<FragmentDetailAdminR
     private DirectionsAdapter directionsAdapter;
     private IngridentsAdapter ingridentsAdapter;
     private ImageStringAdapter adapter;
+
     @Override
     protected void initView() {
         listenerDiscussion();
@@ -64,7 +63,7 @@ public class DetailAdminRecipeFragment extends BaseFragment<FragmentDetailAdminR
                     viewModel.firestore.collection(Constant.RECIPE).document(data.Id)
                             .update("View", data.View + 1);
                     binding.llAnErr.setVisibility(View.GONE);
-                    loadImage(Objects.equals(data.ImgUrl, "") ?R.drawable.img_1: users.UrlImg,binding.imgProduct);
+                    loadImage(Objects.equals(data.ImgUrl, "") ? R.drawable.img_1 : users.UrlImg, binding.imgProduct);
                     binding.userName.setText(users.UserName);
                     binding.txtRecipe.setText(users.Recipe + " " + getString(R.string.recipe));
                     binding.imgUsers.loadImage(users.UrlImg);
@@ -85,20 +84,18 @@ public class DetailAdminRecipeFragment extends BaseFragment<FragmentDetailAdminR
                     ingridentsAdapter.setItems(data.Ingredients);
                     adapter.setItems(data.ImagePreview);
 
-                    String history="";
-                    for (String s:data.History){
-                        history+="\n"+s;
+                    String history = "";
+                    for (String s : data.History) {
+                        history += "\n" + s;
                     }
                     binding.txtHistory.setText(history);
 
-                    new Handler(Looper.myLooper()).postDelayed(()->{
+                    new Handler(Looper.myLooper()).postDelayed(() -> {
                         loaddingDialog.dismiss();
-
-                    },1500);
+                    }, 1500);
                 }
-
-
             }
+
             @Override
             public void onErr(Object err) {
                 binding.llAnErr.setVisibility(View.VISIBLE);
@@ -117,7 +114,7 @@ public class DetailAdminRecipeFragment extends BaseFragment<FragmentDetailAdminR
                         discussions.add(dcs);
                     }
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                        new DiscussionTableAdapter(binding.tableLayout,getContext(), disscusAuth -> {
+                        new DiscussionTableAdapter(binding.tableLayout, getContext(), disscusAuth -> {
 
                         }).onFinih(() -> binding.progessLoad.setVisibility(View.GONE)).setData(discussions);
                     }
@@ -128,12 +125,13 @@ public class DetailAdminRecipeFragment extends BaseFragment<FragmentDetailAdminR
 
     @Override
     public void OnClick() {
+        // Xử lý sự kiện click trên nút quay lại
         binding.backIcon2.setOnClickListener(v -> closeFragment(DetailAdminRecipeFragment.this));
+        // Xử lý sự kiện click trên nút lưu công thức
         binding.llSaveRecipe.setOnClickListener(v -> viewModel.database.followerDao().addRecentView(new Follower() {{
             AuthID = data.Id;
         }}));
-
+        // Xử lý sự kiện click trên hình ảnh sản phẩm
         binding.imgProduct.setOnClickListener(v -> replaceFragment(ImagePreviewFragment.newInstance(data.ImgUrl), 0, true));
     }
-
 }

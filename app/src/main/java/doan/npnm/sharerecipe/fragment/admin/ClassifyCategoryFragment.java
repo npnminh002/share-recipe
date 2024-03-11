@@ -20,7 +20,6 @@ import doan.npnm.sharerecipe.model.Category;
 import doan.npnm.sharerecipe.model.recipe.Recipe;
 import doan.npnm.sharerecipe.model.recipe.RecipeStatus;
 import doan.npnm.sharerecipe.utility.Constant;
-
 public class ClassifyCategoryFragment extends BaseFragment<FragmentClassifyCateogryBinding> {
 
     private Recipe recipe;
@@ -32,6 +31,7 @@ public class ClassifyCategoryFragment extends BaseFragment<FragmentClassifyCateo
     private ArrayList<Category> categories = new ArrayList<>();
     private ArrayList<Category> classifies = new ArrayList<>();
 
+    // Constructor nhận một recipe và viewModel của Admin
     public ClassifyCategoryFragment(Recipe recipe, AdminViewModel viewModel) {
         this.recipe = recipe;
         this.viewModel = viewModel;
@@ -42,30 +42,33 @@ public class ClassifyCategoryFragment extends BaseFragment<FragmentClassifyCateo
         return FragmentClassifyCateogryBinding.inflate(getLayoutInflater());
     }
 
+    // Phương thức để lấy danh sách category từ Firestore
     public void ongetCategory(OnGetEvent<Category> categoryOnGetEvent) {
         ArrayList<Category> categories = new ArrayList<>();
         firestore.collection(Constant.CATEGORY).get().addOnCompleteListener(task -> {
-            for (DocumentSnapshot doc : task.getResult()) {
-                categories.add(doc.toObject(Category.class));
+            if (task.isSuccessful()) {
+                for (DocumentSnapshot doc : task.getResult()) {
+                    categories.add(doc.toObject(Category.class));
+                }
+                categoryOnGetEvent.onSuccess(categories);
+            } else {
+                showToast("Error: " + task.getException().getMessage());
             }
-            categoryOnGetEvent.onSuccess(categories);
-        }).addOnFailureListener(e -> {
-            showToast(e.getMessage());
         });
     }
 
-
     @Override
     protected void initView() {
-
+        // Khởi tạo adapter cho RecyclerView hiển thị danh mục và nhóm
         classifyAdapter = new ClassifyAdapter(ClassifyAdapter.ClassifyManager.REMOVE, new ClassifyAdapter.OnEventCategory() {
             @Override
             public void onAdd(Category ct) {
-
+                // Phương thức này được gọi khi một danh mục được thêm vào nhóm
             }
 
             @Override
             public void onRemove(Category ct) {
+                // Phương thức này được gọi khi một danh mục được xóa khỏi nhóm
                 categories.add(ct);
                 classifies.remove(ct);
                 classifyAdapter.removeItem(ct);
@@ -76,6 +79,7 @@ public class ClassifyCategoryFragment extends BaseFragment<FragmentClassifyCateo
         categoryAdapter = new ClassifyAdapter(ClassifyAdapter.ClassifyManager.ADD, new ClassifyAdapter.OnEventCategory() {
             @Override
             public void onAdd(Category ct) {
+                // Phương thức này được gọi khi một danh mục được thêm vào nhóm
                 classifies.add(ct);
                 categories.remove(ct);
                 categoryAdapter.removeItem(ct);
@@ -84,20 +88,26 @@ public class ClassifyCategoryFragment extends BaseFragment<FragmentClassifyCateo
 
             @Override
             public void onRemove(Category ct) {
-
+                // Phương thức này được gọi khi một danh mục được xóa khỏi nhóm
             }
         });
 
+        // Thiết lập adapter cho RecyclerView hiển thị danh mục và nhóm
         binding.rcvCategory.setAdapter(categoryAdapter);
         binding.rcvClassify.setAdapter(classifyAdapter);
 
+        // Gọi phương thức để lấy danh sách category từ Firestore và cập nhật RecyclerView sau khi lấy dữ liệu thành công
         ongetCategory(data -> {
-            categories = data;
-            refreshItem();
-
+            if (data != null) {
+                categories = data;
+                refreshItem();
+            } else {
+                showToast("Failed to retrieve categories.");
+            }
         });
     }
 
+    // Phương thức để cập nhật RecyclerView hiển thị danh mục và nhóm
     private void refreshItem() {
         categoryAdapter.setItems(categories);
         classifyAdapter.setItems(classifies);
@@ -105,30 +115,37 @@ public class ClassifyCategoryFragment extends BaseFragment<FragmentClassifyCateo
 
     @Override
     public void OnClick() {
+        // Xử lý sự kiện click trên nút lưu
         binding.btnSave.setOnClickListener(v -> {
-            new ConfirmDialog(requireContext(), "Do you want save change", () -> {
+            // Hiển thị dialog xác nhận trước khi lưu thay đổi
+            new ConfirmDialog(requireContext(), "Do you want to save changes?", () -> {
+                // Tạo một danh sách categoryId để lưu danh mục đã được phân loại
                 ArrayList<String> categoryId = new ArrayList<>();
                 for (Category ct : classifies) {
                     categoryId.add(ct.Id);
                 }
+                // Tạo một hashMap để lưu dữ liệu cập nhật vào Firestore
                 HashMap<String, Object> data = new HashMap<>();
                 data.put("Category", categoryId);
                 data.put("RecipeStatus", RecipeStatus.PREVIEW);
+                // Hiển thị dialog loading
                 loaddingDialog.show();
+                // Cập nhật dữ liệu vào Firestore
                 firestore.collection(Constant.RECIPE).document(recipe.Id).update(data).addOnSuccessListener(unused -> {
                     showToast("Success");
+                    // Cập nhật lại dữ liệu cho viewModel và đóng fragment sau khi lưu thành công
                     viewModel.initRecipeData();
                     new Handler(Looper.myLooper()).postDelayed(() -> {
                         closeFragment(ClassifyCategoryFragment.this);
                         loaddingDialog.dismiss();
                     }, 2000);
-
                 }).addOnFailureListener(e -> {
-                    showToast(e.getMessage());
+                    showToast("Error: " + e.getMessage());
                     loaddingDialog.dismiss();
                 });
             }).show();
         });
+        // Xử lý sự kiện click trên nút quay lại
         binding.backIcon.setOnClickListener(v -> {
             closeFragment(ClassifyCategoryFragment.this);
         });

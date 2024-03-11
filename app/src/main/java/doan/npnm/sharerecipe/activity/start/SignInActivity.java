@@ -43,16 +43,18 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
             }
         });
 
-
-
         binding.signIn.setOnClickListener(v -> {
+            // Khi người dùng nhấn vào nút đăng nhập, mở SignUpActivity và kết thúc SignInActivity
             startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
             finish();
         });
         binding.signInApp.setOnClickListener(v -> {
+            // Khi người dùng nhấn vào nút đăng nhập ứng dụng
             if (TextUtils.isEmpty(email.value()) || TextUtils.isEmpty(password.value())) {
-                showToast("Please input all values");
+                // Nếu ô nhập email hoặc mật khẩu trống, hiển thị thông báo
+                showToast("Vui lòng nhập đầy đủ thông tin");
             } else {
+                // Ngược lại, thực hiện đăng nhập với email và mật khẩu đã nhập
                 signIn(email.value(), password.value());
             }
         });
@@ -60,16 +62,20 @@ public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
 
 
     private void signIn(String email, String pass) {
+        // Phương thức để thực hiện đăng nhập với email và mật khẩu
         auth.signInWithEmailAndPassword(email, pass).addOnSuccessListener(authResult -> {
+            // Nếu đăng nhập thành công
+            // Lấy dữ liệu người dùng từ ID của người dùng
             userViewModel.getDataFromUserId(authResult.getUser().getUid());
+            // Kiểm tra xem người dùng có đăng nhập ứng dụng lần đầu hay không
             userViewModel.firstStartApp(authResult.getUser().getUid());
 
-            showToast("Sign-in successful");
+            // Hiển thị thông báo đăng nhập thành công
+            showToast("Đăng nhập thành công");
         }).addOnFailureListener(e -> {
-
-            showToast("Authentication failed: " + e.getMessage());
+            // Nếu đăng nhập thất bại, hiển thị thông báo lỗi
+            showToast("Xác thực thất bại: " + e.getMessage());
         });
-
-
     }
+
 }

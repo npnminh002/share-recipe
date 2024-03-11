@@ -28,6 +28,7 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
 
     @Override
     public void OnClick() {
+        // Xử lý sự kiện khi người dùng nhấn vào nút tìm kiếm
         binding.icSearch.setOnClickListener(v -> {
             if (searchKey.value().isEmpty()) {
                 searchKey.onError();
@@ -55,29 +56,35 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
 
         searchKey = new TextValue(binding.txtSearch);
 
+        // Quan sát LiveData để cập nhật adapter khi có dữ liệu công thức thay đổi
         homeviewModel.recipeLiveData.observe(this, arr -> {
             recipeAdapter.setItems(arr);
         });
 
+        // Quan sát LiveData để cập nhật adapter danh mục khi có dữ liệu thay đổi
         homeviewModel.categoriesArr.observe(this, data -> {
             categoryAdapter.setItems(data);
         });
 
         topChefAdapter = new TopChefAdapter(us -> {
+            // Chuyển đến màn hình chi tiết của người dùng
             addFragment(new DetailAuthFragment(homeviewModel, us), android.R.id.content, true);
         });
+        // Quan sát LiveData để cập nhật adapter top chef khi có dữ liệu thay đổi
         homeviewModel.recipeAuth.observe(this, arr -> {
             topChefAdapter.setItems(arr);
         });
         binding.rcvTopChef.setAdapter(topChefAdapter);
 
         categoryAdapter = new CategoryAdapter(category -> {
+            // Gửi yêu cầu tìm kiếm theo danh mục
             homeviewModel.searchKey.postValue(category.Id);
         });
 
         recipeAdapter = new RecipeAdapter(new RecipeAdapter.OnRecipeEvent() {
             @Override
             public void onView(Recipe rcp) {
+                // Xử lý sự kiện khi người dùng xem công thức
                 if (homeviewModel.database.recentViewDao().checkExistence(rcp.Id)) {
                     homeviewModel.database.recentViewDao().removeRecent(rcp.Id);
                 }
@@ -95,7 +102,8 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
             }
 
             @Override
-            public void onLove(Recipe rcp, int pos,boolean isLove) {
+            public void onLove(Recipe rcp, int pos, boolean isLove) {
+                // Xử lý sự kiện khi người dùng yêu thích công thức
                 if (homeviewModel.auth.getCurrentUser() == null) {
                     showToast(getString(R.string.no_us));
                 } else {
@@ -112,11 +120,8 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
             }
 
         }, homeviewModel.database);
-//        binding.imgUsers.setOnClickListener(v -> {
-//            startActivity(new Intent(this.getContext(), AddDataActivity.class));
-//
-//        });
 
+        // Cập nhật danh sách yêu thích khi có thay đổi
         homeviewModel.onChangeLove.observe(this, data -> {
             categoryAdapter.setCurrentPos(homeviewModel.recipeLiveData.getValue().indexOf(data));
         });
@@ -127,6 +132,7 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
         binding.rcvRecipe.setAdapter(recipeAdapter);
     }
 
+    // Cập nhật số lượt xem của công thức trên Firestore
     private void updateView(Recipe rcp) {
         new Thread(() -> {
             firestore.collection(Constant.RECIPE)
@@ -143,7 +149,7 @@ public class HomeUserFragment extends BaseFragment<FragmentHomeUserBinding> {
         }).start();
     }
 
-
+    // Lấy chỉ số của công thức trong danh sách dựa trên ID
     private int getIndexById(Recipe rcp) {
         ArrayList<Recipe> recipes = homeviewModel.recipeLiveData.getValue();
         return recipes.indexOf(recipes);
