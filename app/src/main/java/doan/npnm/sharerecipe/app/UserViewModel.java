@@ -488,11 +488,9 @@ public class UserViewModel extends ViewModel {
                             // Sắp xếp danh sách người dùng theo số lượng công thức giảm dần
                             usersArr.sort(Comparator.comparingInt(o -> -o.Recipe));
 
-                            // Lấy 15 người dùng có nhiều công thức nhất
-                            usersArr = usersArr.subList(0, 15);
+                            ArrayList<Users> sublist = new ArrayList<>(usersArr.subList(0, 15));
+                            this.recipeAuth.postValue(sublist);
 
-                            // Cập nhật LiveData với danh sách người dùng đã sắp xếp
-                            this.recipeAuth.postValue((ArrayList<Users>) usersArr);
                         }
                     }
                 })

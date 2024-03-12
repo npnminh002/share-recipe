@@ -90,9 +90,7 @@ public class ProfileUserFragment extends BaseFragment<FragmentProfileUserBinding
             viewModel.users.observe(this, users -> {
                 if (users != null) {
                     // Load ảnh đại diện người dùng nếu có
-                    if (!Objects.equals(users.UrlImg, "")) {
-                        loadImage(users.UrlImg, binding.ImgUser);
-                    }
+                    loadImage(users.UrlImg == null || users.UrlImg.isEmpty() ? R.drawable.img_1 : users.UrlImg, binding.ImgUser);
                     // Hiển thị thông tin người dùng
                     binding.txtEmail.setText(users.Email);
                     binding.userName.setText(users.UserName);
