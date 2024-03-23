@@ -41,13 +41,25 @@ public class AdminViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Recipe>> recipeApproveLiveData = new MutableLiveData<>();
     public MutableLiveData<ArrayList<Recipe>> recipeReportLiveData = new MutableLiveData<>();
     public MutableLiveData<ArrayList<Users>> usersLiveData = new MutableLiveData<>();
-    public MutableLiveData<Users> userLogin = new MutableLiveData<>();
+    public MutableLiveData<Users> userLogin = new MutableLiveData<>(null);
 
     public MutableLiveData<ArrayList<Category>> categoryMutableLiveData = new MutableLiveData<>(new ArrayList<>());
 
     public MutableLiveData<Boolean> updateValue= new MutableLiveData<>(false);
 
     public AdminViewModel() {
+        getDataFromUserId(auth.getCurrentUser().getUid(), new FetchByID<Users>() {
+            @Override
+            public void onSuccess(Users data) {
+             userLogin.postValue(data);
+            }
+
+            @Override
+            public void onErr(Object err) {
+
+            }
+        });
+
         initRecipeData();
         initGetAuth();
         ongetCategory();

@@ -9,6 +9,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -341,22 +342,32 @@ public class UserViewModel extends ViewModel {
 
     // Hàm thực hiện các tác vụ khi khởi động ứng dụng lần đầu
     public void firstStartApp(String uId) {
-        // Lấy danh sách lịch sử của người dùng và thêm thông tin đăng nhập mới
-        ArrayList<String> hstr = getUsers().getValue().History;
-        hstr.add("Đăng nhập trên: " + getDeviceName() + " lúc: " + getTimeNow());
+        getDataFromUserId(uId, new FetchByID<Users>() {
+            @Override
+            public void onSuccess(Users data) {
+                ArrayList<String> hstr = data.History;
+                hstr.add("Đăng nhập trên: " + getDeviceName() + " lúc: " + getTimeNow());
 
-        // Cập nhật lịch sử đăng nhập lên Firestore
-        firestore.collection(Constant.KEY_USER)
-                .document(uId)
-                .update("History", hstr)
-                .addOnSuccessListener(unused -> {
-                    // Lắng nghe thành công
-                });
+                // Cập nhật lịch sử đăng nhập lên Firestore
+                firestore.collection(Constant.KEY_USER)
+                        .document(uId)
+                        .update("History", hstr)
+                        .addOnSuccessListener(unused -> {
+                            // Lắng nghe thành công
+                        });
+            }
 
+            @Override
+            public void onErr(Object err) {
+
+            }
+        });
         // Tải dữ liệu liên quan
         onLoadFollower(uId);
         loadSaveRecipe(uId);
         loadOnLoveRecipe(uId);
+
+
     }
 
     // Tải các công thức đã yêu thích từ Firebase và lưu vào database cục bộ

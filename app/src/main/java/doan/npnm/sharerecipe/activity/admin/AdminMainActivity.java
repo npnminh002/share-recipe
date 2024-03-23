@@ -29,6 +29,8 @@ public class AdminMainActivity extends BaseActivity<ActivityAdminMainBinding> {
     @SuppressLint("NewApi")
     @Override
     protected void createView() {
+
+        adminViewModel= new ViewModelProvider(this).get(AdminViewModel.class);
         // Khởi tạo ViewModel cho activity.
         adminViewModel = new ViewModelProvider(this).get(AdminViewModel.class);
         // Gán người dùng đăng nhập vào LiveData của ViewModel.
